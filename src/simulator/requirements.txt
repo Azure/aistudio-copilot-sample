@@ -1,0 +1,7 @@
+ipykernel
+python-dotenv
+
+--extra-index-url=https://azuremlsdktestpypi.azureedge.net/test-azure-ai-tools/azure-ai-tools
+azure-ai-tools==0.1.3
+
+azure-ai-ml

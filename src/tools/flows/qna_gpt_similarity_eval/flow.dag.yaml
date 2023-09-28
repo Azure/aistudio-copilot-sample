@@ -1,0 +1,47 @@
+inputs:
+  question:
+    type: string
+  ground_truth:
+    type: string
+  answer:
+    type: string
+outputs:
+  gpt_similarity:
+    type: object
+    reference: ${concat_scores.output.gpt_similarity}
+nodes:
+- name: similarity_score
+  type: llm
+  source:
+    type: code
+    path: similarity_score.jinja2
+  inputs:
+    question: ${inputs.question}
+    ground_truth: ${inputs.ground_truth}
+    answer: ${inputs.answer}
+    max_tokens: '256'
+    deployment_name: 'gpt-4'
+    temperature: '0.0'
+  api: chat
+  provider: AzureOpenAI
+  module: promptflow.tools.aoai
+  connection: 'azure_open_ai_connection'
+- name: concat_scores
+  type: python
+  source:
+    type: code
+    path: concat_scores.py
+  inputs:
+    similarity_score: ${similarity_score.output}
+- name: aggregate_variants_results
+  type: python
+  source:
+    type: code
+    path: aggregate_variants_results.py
+  inputs:
+    results: ${concat_scores.output}
+  aggregation: true
+id: QnA_gpt_similarity_eval
+name: QnA GPT Similarity Evaluation
+environment:
+    python_requirements_txt: requirements.txt

@@ -1,0 +1,42 @@
+_type: prompt
+input_variables:
+- customer_info
+- chat_history
+output_parser: null
+partial_variables: {}
+template: |
+    You are given a list of orders with item_numbers from a customer and a statement from the customer. It is your job to identify
+    the item_number of the item the customer is referring to in their statement. You are supposed to only reply with the item_number
+    and no additional information.
+
+    For instance if you are give the following list of orders:
+
+    Order: 2020230
+    Date: 2023-04-23
+    Store Location: SeattleStore
+    Items:
+    - Roof Rack, color black, price $199.99
+        item_number: 101010
+    - Running Boots, size 10, color blue, price $99.99
+        item_number: 202020
+
+    You are given the following customer statements:
+    - I am having issues with the shoes I bought.
+
+    Then you should answer with the item_number of the shoes alone like so:
+    item_number: 202020
+
+    Here is the acutal problem you need to solve:
+
+    From the following is some customer information and a list of orders. 
+
+    {customer_info}
+
+    And here are the customer statements:
+
+    {chat_history}
+
+    Which product id is the customer talkign about? Reply only with the item number of the item the customer is asking about. If none of the above orders seem to match, reply with "none of the above".
+
+template_format: f-string
+validate_template: true

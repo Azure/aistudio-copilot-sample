@@ -1,0 +1,175 @@
+{
+    "package": {
+        "promptflow.tools.embedding.embedding": {
+            "name": "Embedding",
+            "type": "python",
+            "inputs": {
+                "connection": {
+                    "type": [
+                        "AzureOpenAIConnection",
+                        "OpenAIConnection"
+                    ]
+                },
+                "deployment_name": {
+                    "type": [
+                        "string"
+                    ],
+                    "enabled_by": "connection",
+                    "enabled_by_type": [
+                        "AzureOpenAIConnection"
+                    ],
+                    "model_list": [
+                        "text-embedding-ada-002",
+                        "text-search-ada-doc-001",
+                        "text-search-ada-query-001"
+                    ],
+                    "capabilities": {
+                        "completion": false,
+                        "chat_completion": false,
+                        "embeddings": true
+                    }
+                },
+                "model": {
+                    "type": [
+                        "string"
+                    ],
+                    "enum": [
+                        "text-embedding-ada-002",
+                        "text-search-ada-doc-001",
+                        "text-search-ada-query-001"
+                    ],
+                    "enabled_by": "connection",
+                    "enabled_by_type": [
+                        "OpenAIConnection"
+                    ]
+                },
+                "input": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "description": "Use Open AI's embedding model to create an embedding vector representing the input text.",
+            "module": "promptflow.tools.embedding",
+            "function": "embedding",
+            "is_builtin": true,
+            "package": "promptflow-tools"
+        },
+        "promptflow_vectordb.tool.vector_index_lookup.VectorIndexLookup.search": {
+            "name": "search_question_from_indexed_docs",
+            "type": "python",
+            "inputs": {
+                "path": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "query": {
+                    "type": [
+                        "list",
+                        "string"
+                    ]
+                },
+                "top_k": {
+                    "type": [
+                        "int"
+                    ],
+                    "default": "5"
+                }
+            },
+            "module": "promptflow_vectordb.tool.vector_index_lookup",
+            "class_name": "VectorIndexLookup",
+            "function": "search",
+            "is_builtin": true,
+            "package": "promptflow_vectordb"
+        }
+    },
+    "code": {
+        "generate_prompt_context.py": {
+            "type": "python",
+            "inputs": {
+                "search_result": {
+                    "type": [
+                        "object"
+                    ]
+                }
+            },
+            "function": "generate_prompt_context",
+            "is_builtin": false
+        },
+        "Prompt_variants.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "contexts": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "chat_history": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "chat_input": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "is_builtin": false
+        },
+        "Prompt_variants__variant_1.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "chat_input": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "contexts": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "chat_history": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "is_builtin": false
+        },
+        "Prompt_variants__variant_2.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "contexts": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "chat_history": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "chat_input": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "is_builtin": false
+        },
+        "chat_with_context.jinja2": {
+            "type": "llm",
+            "inputs": {
+                "prompt_text": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "is_builtin": false
+        }
+    }
+}

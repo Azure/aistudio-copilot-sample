@@ -1,0 +1,81 @@
+_type: prompt
+input_variables:
+- query
+- result
+- product_context
+- customer_info
+output_parser: null
+partial_variables: {}
+template: |
+  # You will be given a question posed by a customer (Human), some information about that customer and the response 
+  that was given by a customer service AI chatbot (System). 
+  This task is to check if factual information in the System's reply is grounded in the product context provided.
+
+  The information is presented to you in a YAML format below with the following fields:
+  query: The question posed by the Human.
+  result: The System's reply.
+  customer_info: Information about the customer including their most recent purchases. 
+  product_context: The context of the System's reply based on which the System should generate the reply.
+
+  - Background: The System refers to the product_context before responding to the Human. 
+  The product_context section of the YAML below contains the text that was retrieved.
+  The System's reply should be directly taken from the product_context, paraphrased from it, or 
+  inferred from it using common knowledge. When the System responds to information that is not mentioned or could not be 
+  inferred from the product_context, we call it a groundedness issue.
+
+  - Please review the conversation below between the Human and the System, and identify and list any information in the System's
+  reply that is not grounded. If the information is directly taken from the text of the product_context, paraphrased
+  from it, or inferred from it using common knowledge, we do not need to list it. If the information is from outside 
+  sources, we need to list it. You should not look at other content, but only the text of the product_context. 
+  You can follow the below steps:
+
+      1. Look for all the factual information in the System's reply and product_context.
+
+      2. Compare the facts in the reply with the facts in the product_context. Check if there are any facts that are not in the 
+      product_context at all, or that contradict or distort the facts in the product_context. If there are, write them down. If 
+      there are none, leave it blank. Note that some facts may be implied or suggested by the product_context, but not explicitly
+      stated. In that case, use your best judgment to decide if the fact is grounded or not. For example, if the product_context 
+      mentions that a product has a 2-year warranty, and the System states the same, you can consider that fact as grounded, 
+      as it is directly taken from the product_context. However, if the product_context does not mention the product's weight at
+      all, and the System states the weight, you should consider that fact as not grounded regardless of 
+      whether it is correct or not. If the product_context mentions the product has multiple colors, but not the exact colors, and the System 
+      states the exact colors, even if the colors are correct, you should still consider that fact as ungrounded. 
+      Subjective claims are considered as grounded if the information is based on the product_context, we do not need any evidence.
+
+      3. Carefully check each piece of information in the reply, especially on the **number, date, product name, feature, 
+      etc.** to **make sure to list all the ungrounded facts before writing output**.
+
+      4. Finally, rate how well the System responds only using information from the product_context and common knowledge on a scale 
+      of 0-10 in "rating_out_of_10: X" format. If the System used information from outside sources, or if the System made claims that are not 
+      backed up by the product_context, give it a low score. If the System **only** used information from the product_context and general 
+      information, give it a 10.
+
+  ```yaml
+  query: "{query}"
+  result: "{result}"
+  customer: "{customer_info}"
+  product_context: "{product_context}"
+  ```
+
+  #Output
+  Reminder: please check each piece of information in the reply carefully, especially on the **number, date, product name, feature, etc.** to **make sure to list all the ungrounded facts before writing output**.
+
+  In YAML format repeat the User's question and the System's reply, then complete the ungrounded facts task described above. 
+  If you give a rating of less than 10, you always have to provide ungrounded facts. 
+  The resulting format should look like this:
+
+  ```yaml
+  question: <question>
+  reply: <reply>
+  ungrounded_facts:
+      - <fact 1>
+      - <fact 2>
+      - ...
+  rating_out_of_10: <X>
+  ```
+  Make sure to properly escape the question, reply and ungrounded_facts fields -- the resulting YAML should be valid.
+
+template_format: f-string
+validate_template: true
+
+

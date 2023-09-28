@@ -1,0 +1,21 @@
+_type: prompt
+input_variables:
+- chat_history
+- product_item_number
+- product_description
+output_parser: null
+partial_variables: {}
+template: |
+    Here is the history of the current chat session:
+    ```
+    {chat_history}
+    ```
+    Here is the item_number and description of the product the customer is referring to (if applicable):
+    item_number: {product_item_number}
+    description: {product_description}
+
+    Please write a reply to the customer based on the context provided and the chat history. 
+    Do not include any additional information. If you don't know what to reply, just write "I don't know".
+
+template_format: f-string
+validate_template: true

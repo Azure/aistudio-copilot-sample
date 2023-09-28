@@ -1,0 +1,25 @@
+_type: prompt
+input_variables:
+- customer_info
+- chat_history
+output_parser: null
+partial_variables: {}
+template: |
+    You are given a list of orders with item_numbers from a customer and a statement from the customer. It is your job to identify
+    the intent that the customer has with their statement. Possible intents can be: 
+    "product return", "exchange product", "general question", "product question", "other".
+    You are supposed to only reply with the intent and no additional information.
+
+    Here is the acutal problem you need to solve:
+
+    From the following is some customer information and a list of orders. 
+
+    {customer_info}
+
+    And here are the customer statements and replies from the customer service agent:
+
+    {chat_history}
+
+    What is the customer's intent here? "product return", "exchange product", "general question", "product question", "other"?
+template_format: f-string
+validate_template: true

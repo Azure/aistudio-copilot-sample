@@ -1,0 +1,1212 @@
+-   accuracy_score: 1.0
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: I recently bought the TrailMaster X4 Tent, and it leaked during
+                a light rain. This is unacceptable! I expected a reliable and waterproof
+                tent, but it failed to deliver. I'm extremely disappointed in the
+                quality.
+            role: customer
+        customer_id: 4
+        description: TrailMaster X4 Tent, quantity 1, price $250
+        intent: product return
+        item_number: 1
+        order_number: 2
+    predicted:
+        description: TrailMaster X4 Tent, quantity 1, price $250
+        intent: product return
+        item_number: 1
+        order_number: 2
+        raw_reply: 'intent: product return
+
+            order_number: 2
+
+            description: TrailMaster X4 Tent, quantity 1, price $250
+
+            item_number: 1'
+-   accuracy_score: 0.75
+    customer: customer_6
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased three TrailMaster X4 Tents for a family
+                camping trip. While overall they performed well, I noticed a couple
+                of minor issues. The zippers on one of the tents seemed a bit sticky,
+                and there was a small tear in the storage bag. These are small concerns,
+                but I thought I should bring them to your attention.
+            role: customer
+        customer_id: 6
+        description: TrailMaster X4 Tent, quantity 3, price $750
+        intent: product feedback
+        item_number: 1
+        order_number: 3
+    predicted:
+        description: TrailMaster X4 Tent, quantity 3, price $750
+        intent: product question
+        item_number: 1
+        order_number: 3
+        raw_reply: 'intent: product question
+
+            order_number: 3
+
+            description: TrailMaster X4 Tent, quantity 3, price $750
+
+            item_number: 1'
+-   accuracy_score: 1.0
+    customer: customer_1
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased two TrailMaster X4 Tents, and while the
+                overall quality is good, I noticed a minor issue. One of the tent
+                poles arrived slightly bent, making it challenging to assemble the
+                tent properly. I'm concerned that this may affect the stability of
+                the tent. Can you provide any guidance on how to address this?
+            role: customer
+        customer_id: 1
+        description: TrailMaster X4 Tent, quantity 2, price $500
+        intent: product question
+        item_number: 1
+        order_number: 1
+    predicted:
+        description: TrailMaster X4 Tent, quantity 2, price $500
+        intent: product question
+        item_number: 1
+        order_number: 1
+        raw_reply: 'intent: product question
+
+            order_number: 1
+
+            description: TrailMaster X4 Tent, quantity 2, price $500
+
+            item_number: 1'
+-   accuracy_score: 0.75
+    customer: customer_7
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the Adventurer Pro Backpack, and I'm excited
+                to use it for my upcoming camping trip. Can you provide some guidance
+                on the backpack's capacity and any special features I should be aware
+                of? I want to make sure I utilize it to its fullest potential.
+            role: customer
+        customer_id: 7
+        description: Adventurer Pro Backpack, quantity 3, price $270
+        intent: product question
+        item_number: 2
+        order_number: 8
+    predicted:
+        description: Adventurer Pro Backpack, quantity 1, price $90
+        intent: product question
+        item_number: 2
+        order_number: 8
+        raw_reply: 'intent: product question
+
+            order_number: 8
+
+            description: Adventurer Pro Backpack, quantity 1, price $90
+
+            item_number: 2'
+-   accuracy_score: 0.5
+    customer: customer_9
+    customer_interaction:
+        chat_history:
+        -   content: I recently received the Adventurer Pro Backpack I ordered, but
+                there seems to be a problem. One of the zippers on the main compartment
+                is jammed, making it difficult to open and close. This is quite frustrating,
+                as I was looking forward to using it on my upcoming hiking trip.
+            role: customer
+        customer_id: 9
+        description: Adventurer Pro Backpack, quantity 2, price $180
+        intent: product return
+        item_number: 2
+        order_number: 9
+    predicted:
+        description: Adventurer Pro Backpack, quantity 3, price $270
+        intent: product question
+        item_number: 2
+        order_number: 9
+        raw_reply: 'intent: product question
+
+            order_number: 9
+
+            description: Adventurer Pro Backpack, quantity 3, price $270
+
+            item_number: 2'
+-   accuracy_score: 1.0
+    customer: customer_11
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased two Adventurer Pro Backpacks, and I'm curious
+                to know if they are waterproof. I'm planning to go on a camping trip
+                where we might encounter some rain, and I want to make sure my belongings
+                stay dry.
+            role: customer
+        customer_id: 11
+        description: Adventurer Pro Backpack, quantity 2, price $180
+        intent: product question
+        item_number: 2
+        order_number: 10
+    predicted:
+        description: Adventurer Pro Backpack, quantity 2, price $180
+        intent: product question
+        item_number: 2
+        order_number: 10
+        raw_reply: 'intent: product question
+
+            order_number: 10
+
+            description: Adventurer Pro Backpack, quantity 2, price $180
+
+            item_number: 2'
+-   accuracy_score: 1.0
+    customer: customer_3
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the Summit Breeze Jacket, and I'm extremely
+                disappointed. The jacket doesn't provide the protection it claims.
+                I wore it during a light rain, and it soaked through within minutes.
+                This is completely unacceptable!
+            role: customer
+        customer_id: 3
+        description: Summit Breeze Jacket, quantity 1, price $120
+        intent: product return
+        item_number: 3
+        order_number: 11
+    predicted:
+        description: Summit Breeze Jacket, quantity 1, price $120
+        intent: product return
+        item_number: 3
+        order_number: 11
+        raw_reply: 'intent: product return
+
+            order_number: 11
+
+            description: Summit Breeze Jacket, quantity 1, price $120
+
+            item_number: 3'
+-   accuracy_score: 1.0
+    customer: customer_8
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the TrekReady Hiking Boots, and I must say
+                I'm disappointed. The boots started falling apart after just a few
+                uses. The stitching came undone, and the sole started detaching. I
+                expected better quality and durability from these boots. I'm not satisfied
+                with my purchase.
+            role: customer
+        customer_id: 8
+        description: TrekReady Hiking Boots, quantity 1, price $140
+        intent: product return
+        item_number: 4
+        order_number: 17
+    predicted:
+        description: TrekReady Hiking Boots, quantity 1, price $140
+        intent: product return
+        item_number: 4
+        order_number: 17
+        raw_reply: 'intent: product return
+
+            order_number: 17
+
+            description: TrekReady Hiking Boots, quantity 1, price $140
+
+            item_number: 4'
+-   accuracy_score: 1.0
+    customer: customer_6
+    customer_interaction:
+        chat_history:
+        -   content: I'm interested in purchasing the BaseCamp Folding Table. Can
+                you provide me with more details about its dimensions and weight?
+                I want to make sure it will fit well in my camping gear.
+            role: customer
+        customer_id: 6
+        description: BaseCamp Folding Table, quantity 1, price $60
+        intent: product question
+        item_number: 5
+        order_number: 21
+    predicted:
+        description: BaseCamp Folding Table, quantity 1, price $60
+        intent: product question
+        item_number: 5
+        order_number: 21
+        raw_reply: 'intent: product question
+
+            order_number: 21
+
+            description: BaseCamp Folding Table, quantity 1, price $60
+
+            item_number: 5'
+-   accuracy_score: 0.75
+    customer: customer_2
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased a camping cooker, but I'm disappointed with
+                its performance. It takes too long to heat up, and the flames seem
+                to be uneven. I expected better quality from this stove.
+            role: customer
+        customer_id: 2
+        description: EcoFire Camping Stove, quantity 1, price $80
+        intent: product question
+        item_number: 6
+        order_number: 23
+    predicted:
+        description: EcoFire Camping Stove, quantity 1, price $80
+        intent: product return
+        item_number: 6
+        order_number: 23
+        raw_reply: 'intent: product return
+
+            order_number: 23
+
+            description: EcoFire Camping Stove, quantity 1, price $80
+
+            item_number: 6'
+-   accuracy_score: 1.0
+    customer: customer_8
+    customer_interaction:
+        chat_history:
+        -   content: I'm interested in purchasing the a camping cooker. Can you tell
+                me more about its fuel efficiency and cooking capacity? I want to
+                make sure it will suit my camping needs.
+            role: customer
+        customer_id: 8
+        description: EcoFire Camping Stove, quantity 1, price $80
+        intent: product question
+        item_number: 6
+        order_number: 25
+    predicted:
+        description: EcoFire Camping Stove, quantity 1, price $80
+        intent: product question
+        item_number: 6
+        order_number: 25
+        raw_reply: 'intent: product question
+
+            order_number: 25
+
+            description: EcoFire Camping Stove, quantity 1, price $80
+
+            item_number: 6'
+-   accuracy_score: 1.0
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: Hi, I recently bought a sleeping Bag, and I'm having some trouble
+                with the zipper. It seems to get stuck every time I try to close it.
+                What should I do?
+            role: customer
+        customer_id: 4
+        description: CozyNights Sleeping Bag, quantity 1, price $100
+        intent: product question
+        item_number: 7
+        order_number: 26
+    predicted:
+        description: CozyNights Sleeping Bag, quantity 1, price $100
+        intent: product question
+        item_number: 7
+        order_number: 26
+        raw_reply: 'intent: product question
+
+            order_number: 26
+
+            description: CozyNights Sleeping Bag, quantity 1, price $100
+
+            item_number: 7'
+-   accuracy_score: 0.5
+    customer: customer_10
+    customer_interaction:
+        chat_history:
+        -   content: I received the sleeping bag I ordered, but it's not the color
+                I chose. I specifically selected the blue one, but I got a green one
+                instead. This is really disappointing!
+            role: customer
+        customer_id: 10
+        description: CozyNights Sleeping Bag, quantity 2, price $100
+        intent: product exchange
+        item_number: 7
+        order_number: 28
+    predicted:
+        description: CozyNights Sleeping Bag, quantity 1, price $100
+        intent: product return
+        item_number: 7
+        order_number: 28
+        raw_reply: 'intent: product return
+
+            order_number: 28
+
+            description: CozyNights Sleeping Bag, quantity 1, price $100
+
+            item_number: 7'
+-   accuracy_score: 0.25
+    customer: customer_1
+    customer_interaction:
+        chat_history:
+        -   content: Hi there! I recently purchased two Tents from your store. They
+                look great, but I wanted to know if they come with any additional
+                accessories like stakes or a rainfly?
+            role: customer
+        customer_id: 1
+        description: Alpine Explorer Tents, quantity 2, price $700
+        intent: product question
+        item_number: 8
+        order_number: 29
+    predicted:
+        description: TrailMaster X4 Tent, quantity 2, price $500
+        intent: product question
+        item_number: 1
+        order_number: 1
+        raw_reply: 'intent: product question
+
+            order_number: 1
+
+            description: TrailMaster X4 Tent, quantity 2, price $500
+
+            item_number: 1'
+-   accuracy_score: 0.75
+    customer: customer_3
+    customer_interaction:
+        chat_history:
+        -   content: I recently bought a Tent, and I have to say, I'm really disappointed.
+                The tent poles seem flimsy, and the zippers are constantly getting
+                stuck. It's not what I expected from a high-end tent.
+            role: customer
+        customer_id: 3
+        description: Alpine Explorer Tents, quantity 1, price $350
+        intent: product return
+        item_number: 8
+        order_number: 30
+    predicted:
+        description: Alpine Explorer Tent, quantity 1, price $350
+        intent: product return
+        item_number: 8
+        order_number: 30
+        raw_reply: 'intent: product return
+
+            order_number: 30
+
+            description: Alpine Explorer Tent, quantity 1, price $350
+
+            item_number: 8'
+-   accuracy_score: 0.25
+    customer: customer_6
+    customer_interaction:
+        chat_history:
+        -   content: I recently received the tent I ordered, but I'm having trouble
+                setting it up. The instructions provided are a bit unclear. Can you
+                guide me through the setup process?
+            role: customer
+        customer_id: 6
+        description: Alpine Explorer Tents, quantity 1, price $350
+        intent: product question
+        item_number: 8
+        order_number: 31
+    predicted:
+        description: TrailMaster X4 Tent, quantity 3, price $750
+        intent: product question
+        item_number: 1
+        order_number: 3
+        raw_reply: 'intent: product question
+
+            order_number: 3
+
+            description: TrailMaster X4 Tent, quantity 3, price $750
+
+            item_number: 1'
+-   accuracy_score: 0.25
+    customer: customer_2
+    customer_interaction:
+        chat_history:
+        -   content: Hi, I recently purchased the a backpack from your store. It looks
+                great, but I'm wondering if it has a separate compartment for a hydration
+                bladder?
+            role: customer
+        customer_id: 2
+        description: SummitClimber Backpack, quantity 1, price $120
+        intent: product question
+        item_number: 9
+        order_number: 32
+    predicted:
+        description: Adventurer Pro Backpack, quantity 1, price $90
+        intent: product question
+        item_number: 2
+        order_number: 6
+        raw_reply: 'intent: product question
+
+            order_number: 6
+
+            description: Adventurer Pro Backpack, quantity 1, price $90
+
+            item_number: 2'
+-   accuracy_score: 1.0
+    customer: customer_8
+    customer_interaction:
+        chat_history:
+        -   content: I recently received the Backpack I ordered, and I noticed that
+                one of the zippers is not closing smoothly. It seems to get stuck
+                halfway. Is there anything I can do to fix it?
+            role: customer
+        customer_id: 8
+        description: SummitClimber Backpack, quantity 1, price $120
+        intent: product question
+        item_number: 9
+        order_number: 34
+    predicted:
+        description: SummitClimber Backpack, quantity 1, price $120
+        intent: product question
+        item_number: 9
+        order_number: 34
+        raw_reply: 'intent: product question
+
+            order_number: 34
+
+            description: SummitClimber Backpack, quantity 1, price $120
+
+            item_number: 9'
+-   accuracy_score: 0.75
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the Pants from your store, but I'm disappointed
+                with the fit. They're too tight around the waist, and the length is
+                too short. Can I exchange them for a different size?
+            role: customer
+        customer_id: 4
+        description: TrailBlaze Hiking Pants, quantity 1, price $75
+        intent: product return
+        item_number: 10
+        order_number: 35
+    predicted:
+        description: TrailBlaze Hiking Pants, quantity 1, price $75
+        intent: product exchange
+        item_number: 10
+        order_number: 35
+        raw_reply: 'intent: product exchange
+
+            order_number: 35
+
+            description: TrailBlaze Hiking Pants, quantity 1, price $75
+
+            item_number: 10'
+-   accuracy_score: 0.75
+    customer: customer_7
+    customer_interaction:
+        chat_history:
+        -   content: Just wanted to share my excitement about the Pants I ordered.
+                They are absolutely fantastic! The fabric is lightweight and breathable,
+                perfect for hiking in warm weather. The design and fit are excellent
+                too. I can't wait to hit the trails with these pants!
+            role: customer
+        customer_id: 7
+        description: TrailBlaze Hiking Pants, quantity 2, price $150
+        intent: product feedback
+        item_number: 10
+        order_number: 36
+    predicted:
+        description: TrailBlaze Hiking Pants, quantity 2, price $150
+        intent: product question
+        item_number: 10
+        order_number: 36
+        raw_reply: 'intent: product question
+
+            order_number: 36
+
+            description: TrailBlaze Hiking Pants, quantity 2, price $150
+
+            item_number: 10'
+-   accuracy_score: 1.0
+    customer: customer_10
+    customer_interaction:
+        chat_history:
+        -   content: I recently received the Pants I ordered, and I noticed that they
+                have several pockets. Can you provide some information on the pocket
+                layout and their intended purposes?
+            role: customer
+        customer_id: 10
+        description: TrailBlaze Hiking Pants, quantity 1, price $75
+        intent: product question
+        item_number: 10
+        order_number: 37
+    predicted:
+        description: TrailBlaze Hiking Pants, quantity 1, price $75
+        intent: product question
+        item_number: 10
+        order_number: 37
+        raw_reply: 'intent: product question
+
+            order_number: 37
+
+            description: TrailBlaze Hiking Pants, quantity 1, price $75
+
+            item_number: 10'
+-   accuracy_score: 0.75
+    customer: customer_3
+    customer_interaction:
+        chat_history:
+        -   content: Hi there, I recently purchased the TrailWalker Hiking Shoes and
+                I just wanted to say that they are extremely comfortable and provide
+                excellent support on my hikes. Great product!
+            role: customer
+        customer_id: 3
+        description: TrailWalker Hiking Shoes, quantity 1, price $110
+        intent: product feedback
+        item_number: 11
+        order_number: 38
+    predicted:
+        description: TrailWalker Hiking Shoes, quantity 1, price $110
+        intent: product question
+        item_number: 11
+        order_number: 38
+        raw_reply: 'intent: product question
+
+            order_number: 38
+
+            description: TrailWalker Hiking Shoes, quantity 1, price $110
+
+            item_number: 11'
+-   accuracy_score: 1.0
+    customer: customer_6
+    customer_interaction:
+        chat_history:
+        -   content: I purchased two pairs of Hiking Shoes for myself and my husband
+                last month. While my pair is great, my husband's pair seems to be
+                slightly small. Is it possible to exchange them for a larger size?
+            role: customer
+        customer_id: 6
+        description: TrailWalker Hiking Shoes, quantity 2, price $220
+        intent: product exchange
+        item_number: 11
+        order_number: 39
+    predicted:
+        description: TrailWalker Hiking Shoes, quantity 2, price $220
+        intent: product exchange
+        item_number: 11
+        order_number: 39
+        raw_reply: 'intent: product exchange
+
+            order_number: 39
+
+            description: TrailWalker Hiking Shoes, quantity 2, price $220
+
+            item_number: 11'
+-   accuracy_score: 1.0
+    customer: customer_9
+    customer_interaction:
+        chat_history:
+        -   content: I just bought a pair of Hiking Shoes, and I'm planning a hiking
+                trip soon. Do you have any recommendations for maintaining the shoes
+                and increasing their lifespan?
+            role: customer
+        customer_id: 9
+        description: TrailWalker Hiking Shoes, quantity 1, price $110
+        intent: product question
+        item_number: 11
+        order_number: 40
+    predicted:
+        description: TrailWalker Hiking Shoes, quantity 1, price $110
+        intent: product question
+        item_number: 11
+        order_number: 40
+        raw_reply: 'intent: product question
+
+            order_number: 40
+
+            description: TrailWalker Hiking Shoes, quantity 1, price $110
+
+            item_number: 11'
+-   accuracy_score: 0.75
+    customer: customer_1
+    customer_interaction:
+        chat_history:
+        -   content: I recently bought a chair and used it for the first time on my
+                camping trip. It was incredibly comfortable and easy to set up. I'm
+                very happy with my purchase!
+            role: customer
+        customer_id: 1
+        description: TrekMaster Camping Chair, quantity 1, price $50
+        intent: product feedback
+        item_number: 12
+        order_number: 41
+    predicted:
+        description: TrekMaster Camping Chair, quantity 1, price $50
+        intent: product question
+        item_number: 12
+        order_number: 41
+        raw_reply: 'intent: product question
+
+            order_number: 41
+
+            description: TrekMaster Camping Chair, quantity 1, price $50
+
+            item_number: 12'
+-   accuracy_score: 0.25
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: I'm a Platinum member, and I just ordered two outdoor seats.
+                I was wondering if there is any assembly required and if any tools
+                are needed for that?
+            role: customer
+        customer_id: 4
+        description: TrekMaster Camping Chair, quantity 2, price $100
+        intent: product question
+        item_number: 12
+        order_number: 42
+    predicted:
+        description: Outdoor Seats
+        intent: product question
+        item_number: null
+        order_number: null
+        raw_reply: 'intent: product question
+
+            order_number: N/A
+
+            description: Outdoor Seats
+
+            item_number: N/A'
+-   accuracy_score: 1.0
+    customer: customer_7
+    customer_interaction:
+        chat_history:
+        -   content: I bought a camping Chair last month, and it seems to be slightly
+                wobbly when I sit on it. Is there any way to fix this issue?
+            role: customer
+        customer_id: 7
+        description: TrekMaster Camping Chair, quantity 1, price $50
+        intent: product question
+        item_number: 12
+        order_number: 43
+    predicted:
+        description: TrekMaster Camping Chair, quantity 1, price $50
+        intent: product question
+        item_number: 12
+        order_number: 43
+        raw_reply: 'intent: product question
+
+            order_number: 43
+
+            description: TrekMaster Camping Chair, quantity 1, price $50
+
+            item_number: 12'
+-   accuracy_score: 0.75
+    customer: customer_2
+    customer_interaction:
+        chat_history:
+        -   content: I recently used the PowerBurner Camping Stove on my camping trip,
+                and I must say, it was fantastic! It was easy to use, and the heat
+                control was impressive. Great product!
+            role: customer
+        customer_id: 2
+        description: PowerBurner Camping Stove, quantity 1, price $100
+        intent: product feedback
+        item_number: 13
+        order_number: 44
+    predicted:
+        description: PowerBurner Camping Stove, quantity 1, price $100
+        intent: product question
+        item_number: 13
+        order_number: 44
+        raw_reply: 'intent: product question
+
+            order_number: 44
+
+            description: PowerBurner Camping Stove, quantity 1, price $100
+
+            item_number: 13'
+-   accuracy_score: 0.25
+    customer: customer_5
+    customer_interaction:
+        chat_history:
+        -   content: I just bought an outdoor stove but I'm not sure how to attach
+                the fuel canister. Can you please guide me through the process?
+            role: customer
+        customer_id: 5
+        description: PowerBurner Camping Stove, quantity 2, price $200
+        intent: product question
+        item_number: 13
+        order_number: 45
+    predicted:
+        description: EcoFire Camping Stove, quantity 2, price $160
+        intent: product question
+        item_number: 6
+        order_number: 24
+        raw_reply: 'intent: product question
+
+            order_number: 24
+
+            description: EcoFire Camping Stove, quantity 2, price $160
+
+            item_number: 6'
+-   accuracy_score: 0.75
+    customer: customer_3
+    customer_interaction:
+        chat_history:
+        -   content: I just used the MountainDream Sleeping Bag on my recent camping
+                trip, and it was incredibly warm and cozy! The temperature got really
+                low at night, but I slept comfortably. Thank you for such a great
+                product!
+            role: customer
+        customer_id: 3
+        description: MountainDream Sleeping Bag, quantity 1, price $130
+        intent: product feedback
+        item_number: 14
+        order_number: 47
+    predicted:
+        description: MountainDream Sleeping Bag, quantity 1, price $130
+        intent: product question
+        item_number: 14
+        order_number: 47
+        raw_reply: 'intent: product question
+
+            order_number: 47
+
+            description: MountainDream Sleeping Bag, quantity 1, price $130
+
+            item_number: 14'
+-   accuracy_score: 1.0
+    customer: customer_6
+    customer_interaction:
+        chat_history:
+        -   content: I've ordered two Sleeping Bags for my upcoming camping trip.
+                I was wondering if they can be zipped together to create a double
+                sleeping bag?
+            role: customer
+        customer_id: 6
+        description: MountainDream Sleeping Bag, quantity 2, price $260
+        intent: product question
+        item_number: 14
+        order_number: 48
+    predicted:
+        description: MountainDream Sleeping Bag, quantity 2, price $260
+        intent: product question
+        item_number: 14
+        order_number: 48
+        raw_reply: 'intent: product question
+
+            order_number: 48
+
+            description: MountainDream Sleeping Bag, quantity 2, price $260
+
+            item_number: 14'
+-   accuracy_score: 1.0
+    customer: customer_9
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased a Sleeping Bag, and I'm wondering how to
+                properly clean and store it to ensure it lasts for a long time.
+            role: customer
+        customer_id: 9
+        description: MountainDream Sleeping Bag, quantity 1, price $130
+        intent: product question
+        item_number: 14
+        order_number: 49
+    predicted:
+        description: MountainDream Sleeping Bag, quantity 1, price $130
+        intent: product question
+        item_number: 14
+        order_number: 49
+        raw_reply: 'intent: product question
+
+            order_number: 49
+
+            description: MountainDream Sleeping Bag, quantity 1, price $130
+
+            item_number: 14'
+-   accuracy_score: 0.25
+    customer: customer_1
+    customer_interaction:
+        chat_history:
+        -   content: I just received my Tents, and they look amazing! I can't wait
+                to use them on our next camping trip. Quick question, though - what's
+                the best way to set up the tent?
+            role: customer
+        customer_id: 1
+        description: SkyView 2-Person Tent, quantity 2, price $400
+        intent: product question
+        item_number: 15
+        order_number: 50
+    predicted:
+        description: TrailMaster X4 Tent, quantity 2, price $500
+        intent: product question
+        item_number: 1
+        order_number: 1
+        raw_reply: 'intent: product question
+
+            order_number: 1
+
+            description: TrailMaster X4 Tent, quantity 2, price $500
+
+            item_number: 1'
+-   accuracy_score: 0
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: I ordered a Tent, and it arrived yesterday. However, I noticed
+                that one of the tent poles is damaged. How can I get a replacement
+                for the damaged pole?
+            role: customer
+        customer_id: 4
+        description: SkyView 2-Person Tent, quantity 1, price $200
+        intent: product return
+        item_number: 15
+        order_number: 51
+    predicted:
+        description: TrailMaster X4 Tent, quantity 1, price $250
+        intent: product question
+        item_number: 1
+        order_number: 2
+        raw_reply: 'intent: product question
+
+            order_number: 2
+
+            description: TrailMaster X4 Tent, quantity 1, price $250
+
+            item_number: 1'
+-   accuracy_score: 1.0
+    customer: customer_7
+    customer_interaction:
+        chat_history:
+        -   content: I'm considering buying the SkyView 2-Person Tent for an upcoming
+                camping trip. Can you please tell me more about the tent's ventilation
+                and how it performs in rainy conditions?
+            role: customer
+        customer_id: 7
+        description: SkyView 2-Person Tent, quantity 1, price $200
+        intent: product question
+        item_number: 15
+        order_number: 52
+    predicted:
+        description: SkyView 2-Person Tent, quantity 1, price $200
+        intent: product question
+        item_number: 15
+        order_number: 52
+        raw_reply: 'intent: product question
+
+            order_number: 52
+
+            description: SkyView 2-Person Tent, quantity 1, price $200
+
+            item_number: 15'
+-   accuracy_score: 0.75
+    customer: customer_2
+    customer_interaction:
+        chat_history:
+        -   content: I recently bought a Daypack, and it's been great for my day hikes.
+                It's lightweight, has plenty of pockets, and is very comfortable!
+                Thank you.
+            role: customer
+        customer_id: 2
+        description: TrailLite Daypack, quantity 1, price $60
+        intent: product feedback
+        item_number: 16
+        order_number: 53
+    predicted:
+        description: TrailLite Daypack, quantity 1, price $60
+        intent: product question
+        item_number: 16
+        order_number: 53
+        raw_reply: 'intent: product question
+
+            order_number: 53
+
+            description: TrailLite Daypack, quantity 1, price $60
+
+            item_number: 16'
+-   accuracy_score: 1.0
+    customer: customer_5
+    customer_interaction:
+        chat_history:
+        -   content: I purchased two Daypacks for my kids, and while one is perfect,
+                the other has a zipper issue that makes it difficult to open and close.
+                Can I get a replacement for the faulty daypack?
+            role: customer
+        customer_id: 5
+        description: TrailLite Daypack, quantity 2, price $120
+        intent: product return
+        item_number: 16
+        order_number: 54
+    predicted:
+        description: TrailLite Daypack, quantity 2, price $120
+        intent: product return
+        item_number: 16
+        order_number: 54
+        raw_reply: 'intent: product return
+
+            order_number: 54
+
+            description: TrailLite Daypack, quantity 2, price $120
+
+            item_number: 16'
+-   accuracy_score: 1.0
+    customer: customer_8
+    customer_interaction:
+        chat_history:
+        -   content: I just bought a TrailLite Daypack for my day hikes, and I was
+                wondering if it's water-resistant. Should I be concerned about my
+                belongings getting wet if it rains?
+            role: customer
+        customer_id: 8
+        description: TrailLite Daypack, quantity 1, price $60
+        intent: product question
+        item_number: 16
+        order_number: 55
+    predicted:
+        description: TrailLite Daypack, quantity 1, price $60
+        intent: product question
+        item_number: 16
+        order_number: 55
+        raw_reply: 'intent: product question
+
+            order_number: 55
+
+            description: TrailLite Daypack, quantity 1, price $60
+
+            item_number: 16'
+-   accuracy_score: 0.75
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the RainGuard Hiking Jacket, and it has
+                exceeded my expectations! It kept me dry during a heavy downpour on
+                my latest hike. I also love the breathable material. Great job!
+            role: customer
+        customer_id: 4
+        description: RainGuard Hiking Jacket, quantity 1, price $110
+        intent: product feedback
+        item_number: 17
+        order_number: 56
+    predicted:
+        description: RainGuard Hiking Jacket, quantity 1, price $110
+        intent: product question
+        item_number: 17
+        order_number: 56
+        raw_reply: 'intent: product question
+
+            order_number: 56
+
+            description: RainGuard Hiking Jacket, quantity 1, price $110
+
+            item_number: 17'
+-   accuracy_score: 1.0
+    customer: customer_7
+    customer_interaction:
+        chat_history:
+        -   content: I just bought two RainGuard Hiking Jackets for my wife and me.
+                Can you please provide some care instructions to ensure the jackets
+                maintain their water resistance and durability?
+            role: customer
+        customer_id: 7
+        description: RainGuard Hiking Jacket, quantity 2, price $220
+        intent: product question
+        item_number: 17
+        order_number: 57
+    predicted:
+        description: RainGuard Hiking Jacket, quantity 2, price $220
+        intent: product question
+        item_number: 17
+        order_number: 57
+        raw_reply: 'intent: product question
+
+            order_number: 57
+
+            description: RainGuard Hiking Jacket, quantity 2, price $220
+
+            item_number: 17'
+-   accuracy_score: 0.75
+    customer: customer_10
+    customer_interaction:
+        chat_history:
+        -   content: I bought the RainGuard Hiking Jacket a few weeks ago, but I noticed
+                that the seam tape on the inside is starting to peel off. Is there
+                anything I can do to fix this issue?
+            role: customer
+        customer_id: 10
+        description: RainGuard Hiking Jacket, quantity 1, price $110
+        intent: product return
+        item_number: 17
+        order_number: 58
+    predicted:
+        description: RainGuard Hiking Jacket, quantity 1, price $110
+        intent: product question
+        item_number: 17
+        order_number: 58
+        raw_reply: 'intent: product question
+
+            order_number: 58
+
+            description: RainGuard Hiking Jacket, quantity 1, price $110
+
+            item_number: 17'
+-   accuracy_score: 0.75
+    customer: customer_1
+    customer_interaction:
+        chat_history:
+        -   content: Hi, I purchased the TrekStar Hiking Sandals a few weeks ago,
+                and they feel a bit tight. Is there a break-in period for these sandals,
+                or should I exchange them for a larger size?
+            role: customer
+        customer_id: 1
+        description: TrekStar Hiking Sandals, quantity 1, price $70
+        intent: product question
+        item_number: 18
+        order_number: 59
+    predicted:
+        description: TrekStar Hiking Sandals, quantity 1, price $70
+        intent: product exchange
+        item_number: 18
+        order_number: 59
+        raw_reply: 'intent: product exchange
+
+            order_number: 59
+
+            description: TrekStar Hiking Sandals, quantity 1, price $70
+
+            item_number: 18'
+-   accuracy_score: 0.75
+    customer: customer_3
+    customer_interaction:
+        chat_history:
+        -   content: Hey there! I absolutely love my TrekStar Hiking Sandals that
+                I purchased last month. I was wondering if you have any recommendations
+                for cleaning and maintaining them?
+            role: customer
+        customer_id: 3
+        description: TrekStar Hiking Sandals, quantity 2, price $140
+        intent: product feedback
+        item_number: 18
+        order_number: 60
+    predicted:
+        description: TrekStar Hiking Sandals, quantity 2, price $140
+        intent: product question
+        item_number: 18
+        order_number: 60
+        raw_reply: 'intent: product question
+
+            order_number: 60
+
+            description: TrekStar Hiking Sandals, quantity 2, price $140
+
+            item_number: 18'
+-   accuracy_score: 1.0
+    customer: customer_6
+    customer_interaction:
+        chat_history:
+        -   content: Hi there, I'm interested in purchasing the TrekStar Hiking Sandals.
+                Can you tell me more about their features?
+            role: customer
+        customer_id: 6
+        description: TrekStar Hiking Sandals, quantity 1, price $70
+        intent: product question
+        item_number: 18
+        order_number: 61
+    predicted:
+        description: TrekStar Hiking Sandals, quantity 1, price $70
+        intent: product question
+        item_number: 18
+        order_number: 61
+        raw_reply: 'intent: product question
+
+            order_number: 61
+
+            description: TrekStar Hiking Sandals, quantity 1, price $70
+
+            item_number: 18'
+-   accuracy_score: 1.0
+    customer: customer_2
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the Adventure Dining Table, but I'm not
+                happy with its quality. The table arrived with scratches on the surface,
+                and one of the legs seems wobbly. I expected better craftsmanship
+                from your brand. This is disappointing.
+            role: customer
+        customer_id: 2
+        description: Adventure Dining Table, quantity 1, price $90
+        intent: product return
+        item_number: 19
+        order_number: 62
+    predicted:
+        description: Adventure Dining Table, quantity 1, price $90
+        intent: product return
+        item_number: 19
+        order_number: 62
+        raw_reply: 'intent: product return
+
+            order_number: 62
+
+            description: Adventure Dining Table, quantity 1, price $90
+
+            item_number: 19'
+-   accuracy_score: 0.75
+    customer: customer_8
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the Adventure Dining Table, and I have a
+                question about its setup. The instructions provided are not very clear,
+                and I'm having trouble assembling the table correctly. Can you provide
+                me with some guidance or more detailed instructions?
+            role: customer
+        customer_id: 8
+        description: Adventure Dining Table, quantity 2, price $180
+        intent: product question
+        item_number: 19
+        order_number: 64
+    predicted:
+        description: Adventure Dining Table, quantity 1, price $90
+        intent: product question
+        item_number: 19
+        order_number: 64
+        raw_reply: 'intent: product question
+
+            order_number: 64
+
+            description: Adventure Dining Table, quantity 1, price $90
+
+            item_number: 19'
+-   accuracy_score: 0.75
+    customer: customer_4
+    customer_interaction:
+        chat_history:
+        -   content: I recently purchased the CompactCook Camping Stove, and I'm quite
+                disappointed with its performance. The flame doesn't seem to stay
+                consistent, and it takes forever to boil water. This is not what I
+                expected from a camping stove. Can you help me with this issue?
+            role: customer
+        customer_id: 4
+        description: CompactCook Camping Stove, quantity 1, price $60
+        intent: product return
+        item_number: 20
+        order_number: 65
+    predicted:
+        description: CompactCook Camping Stove, quantity 1, price $60
+        intent: product question
+        item_number: 20
+        order_number: 65
+        raw_reply: 'intent: product question
+
+            order_number: 65
+
+            description: CompactCook Camping Stove, quantity 1, price $60
+
+            item_number: 20'
+-   accuracy_score: 1.0
+    customer: customer_10
+    customer_interaction:
+        chat_history:
+        -   content: I recently received the CompactCook Camping Stove, and I'm not
+                sure about its maintenance requirements. Are there any specific cleaning
+                or storage instructions I should follow to ensure the stove's longevity?
+            role: customer
+        customer_id: 10
+        description: CompactCook Camping Stove, quantity 1, price $60
+        intent: product question
+        item_number: 20
+        order_number: 67
+    predicted:
+        description: CompactCook Camping Stove, quantity 1, price $60
+        intent: product question
+        item_number: 20
+        order_number: 67
+        raw_reply: 'intent: product question
+
+            order_number: 67
+
+            description: CompactCook Camping Stove, quantity 1, price $60
+
+            item_number: 20'
