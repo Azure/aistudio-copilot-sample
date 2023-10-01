@@ -10,7 +10,7 @@ This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/
 
 To get started quickly, we recommend to use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-chat-demo?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
 
 Note: This will build a development environment using the Docker container definition in [.devcontainer/Dockerfile](.devcontainer/Dockerfile), and will start a VS Code instance running in that environment. 
 
