@@ -9,7 +9,7 @@ pydantic<2
 azureml-metrics[prompt-flow]==0.1.0.102333570
 --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
 azure-ai-generative==0.5.0
-azureml-rag[cognitive_search]==0.1.24.1
+azureml-rag[cognitive_search]==0.2.7
 
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
