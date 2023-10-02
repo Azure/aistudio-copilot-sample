@@ -170,3 +170,5 @@ cython_debug/
 
 # exclude encodings folder
 encodings/
+
+config.json

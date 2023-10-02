@@ -5,13 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: AISDK Copilot",
+            "name": "Python: Run Copilot",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/aisdk-copilot/copilot.py",
+            "program": "${workspaceFolder}/src/run.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/src/aisdk-copilot",
+            "cwd": "${workspaceFolder}/src",
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Python: Debug Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/test_copilot.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/src",
+            "justMyCode": true
+        },
     ]
 }

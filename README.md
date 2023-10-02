@@ -26,15 +26,49 @@ Login to azure and connect to an Azure AI project:
 
 This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
-## Step 3: Run the sample notebook
+Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view the generated indexes, evaluation runs, and endpoints.
 
-Open and run the sample notebook to create, evaluate, and deploy a chatbot built using Azure OpenAI, Azure Cognitive Search, and Langchain:
- - Open the notebook: [src/langchain/langchain_qna.ipynb](src/langchain/langchain_qna.ipynb)
- - Press `Ctrl-Enter` to run each cell
-    - When you run the first cell you may be prompted to select your kernel, choose `Python Environment` and select the `Python 3.10.x` environment.
- - Open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view the generated indexes, evaluation runs, and endpoints.
+## Step 3: Build an Azure Search index
+
+**SKIP THIS -- NOT YET WORKING E2E**
+
+Run the following CLI command to create an index that our code can use for data retrieval:
+```
+ai search index update --files "../data/3-product-info/*.md" --index-name "product-info"
+```
+
+## Step 4: Run the co-pilot with a sample question
+
+To run a single question & answer through the sample co-pilot:
+```bash
+python src/run.py --question "which tent is the most waterproof?"
+```
+
+Future: try out different co-pilot implementations
+
+## Step 5: Test the co-pilots using chatgpt to evaluate results
+
+To run evaluation on the copilot implementations, run pytest:
+```
+pytest
+```
+
+This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4.
+
+## Step 6: Deploy the sample code
+
+**SKIP THIS -- NOT IMPLEMENTED YET**
+```bash
+ai flow deploy --function aisdk_copilot.copilot.chat_completion --deployment-name productretail-copilot
+```
+
+Or, generate a docker file:
+```bash
+TODO: ai dockerfile generate
+```
 
 ## Additional Tips and Resources
+
 
 ### Follow the full tutorial
 

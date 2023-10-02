@@ -17,6 +17,7 @@ azureml-mlflow==1.53.0
 promptflow[azure]
 promptflow-tools
 keyring
+pytest
 
 # langchain dependencies, these should be optional in the future
 # langchain moved Embeddings from langchain.embeddings.base to langchain.schema.embeddings while azureml-rag is still referencing it. 
