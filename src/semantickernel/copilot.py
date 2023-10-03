@@ -1,5 +1,6 @@
 # enable type annotation syntax on Python versions earlier than 3.9
 from __future__ import annotations
+import datetime
 
 import os
 from typing import Any
@@ -8,7 +9,7 @@ import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 from semantic_kernel.planning import StepwisePlanner
 from semantic_kernel.planning.stepwise_planner.stepwise_planner_config import StepwisePlannerConfig
-from plugins.customer_support_plugin.customer_support import CustomerSupport
+from semantickernel.plugins.customer_support_plugin.customer_support import CustomerSupport
 
     
 async def chat_completion(messages: list[dict], stream: bool = False, 
@@ -29,7 +30,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     
     # Add the customer support plugin to the kernel
     kernel.import_skill(CustomerSupport(
-        number_of_docs = extra_args.get("num_retrieved_docs", 5),
+        number_of_docs = extra_args.get("num_retrieved_docs", 20),
         embedding_model_deployment = os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
         chat_model_deployment=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         temperature=extra_args.get("temperature", 0.7)
@@ -40,5 +41,18 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     plan = planner.create_plan(user_message)
     result = await kernel.run_async(plan)
 
-    return result.result
+    print(result.variables["steps_taken"])
+
+    return {
+        "choices": [{
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": result.result
+            },
+            "extra_args": {
+                "context": result.variables["skill_count"]
+            }
+        }]
+    }
 

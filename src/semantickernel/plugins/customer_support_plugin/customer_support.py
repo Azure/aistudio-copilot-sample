@@ -10,8 +10,7 @@ from azure.core.credentials import AzureKeyCredential
 import os
 
 class CustomerSupport:
-    def __init__(self, memory_store, number_of_docs, embedding_model_deployment, chat_model_deployment, temperature=0.5):
-        self.memory_store = memory_store
+    def __init__(self, number_of_docs, embedding_model_deployment, chat_model_deployment, temperature=0.5):
         self.number_of_docs = number_of_docs
         self.embedding_model_deployment = embedding_model_deployment
         self.chat_model_deployment = chat_model_deployment
@@ -61,11 +60,11 @@ class CustomerSupport:
         """
 
     @sk_function(
-        description="Use this function to get additional information about a product (or multiple products) if you have a question about them",
+        description="Use this function to get additional information about a product. You may also use this function to ask generic questions about multiple products at the same time (e.g., ""what product is the best?"")",
         name="AskAboutProducts",
         input_description="The question about the products; include as many details as possible in the question",
     )
-    async def AskAboutProducts(self, question: str, num_docs=5) -> str:
+    async def AskAboutProducts(self, question: str) -> str:
         #  retrieve documents relevant to the user's question from Cognitive Search
         search_client = SearchClient(
             endpoint=os.environ["AZURE_COGNITIVE_SEARCH_TARGET"],
@@ -73,7 +72,7 @@ class CustomerSupport:
             index_name=os.environ["AZURE_SEARCH_INDEX_NAME"])
 
         # generate a vector embedding of the user's question
-        embedding = await openai.Embedding.acreate(input=query,
+        embedding = await openai.Embedding.acreate(input=question,
             model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
             deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
         query_vector = embedding["data"][0]["embedding"]
@@ -81,7 +80,7 @@ class CustomerSupport:
         context = ""   
         async with search_client:           
             # use the vector embedding to do a vector search on the index
-            results = await search_client.search(question, top=num_docs,
+            results = await search_client.search(question, top=self.number_of_docs,
                     vector=query_vector, vector_fields="content_vector_open_ai")
 
             async for result in results:
@@ -118,6 +117,6 @@ class CustomerSupport:
         # Run the qna function with the right temperature and context.
         result = await (
             kernel.run_async(chat_plugin["qna"], input_vars=variables)
-        )    
+        )
                 
         return result.result
