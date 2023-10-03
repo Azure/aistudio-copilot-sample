@@ -31,7 +31,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     
     # Add the customer support plugin to the kernel
     kernel.import_skill(CustomerSupport(
-        number_of_docs = extra_args.get("num_retrieved_docs", 20),
+        number_of_docs = extra_args.get("num_retrieved_docs", 5),
         embedding_model_deployment = os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
         chat_model_deployment=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         temperature=extra_args.get("temperature", 0.7)
