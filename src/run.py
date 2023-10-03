@@ -19,24 +19,30 @@ def init_environment():
 
 # Run a single chat message through one of the co-pilot implementations
 if __name__ == "__main__":
+    # configure asyncio
+    import asyncio
+    import platform
+    if platform.system() == 'Windows':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    
+    # Parse command line arguments
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--question", help="The question to ask the co-pilot", type=str)
     args = parser.parse_args()
     
+    # set environment variables before importing the co-pilot code
+    from azure.ai.generative import AIClient
+    from azure.identity import DefaultAzureCredential
+    
+    client = AIClient.from_config(DefaultAzureCredential())
+    init_environment()
+    
     question = "which tent has the highest waterproof rating?"
     if args.question:
         question = args.question
-        
-    # set environment variables before importing the co-pilot code
-    init_environment()
-    
+           
     # Call the async chat function with a single question and print the response    
-    import asyncio
-    import platform
-    if platform.system() == 'Windows':
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-        
     from aisdk_copilot.copilot import chat_completion
 
     result = asyncio.run(

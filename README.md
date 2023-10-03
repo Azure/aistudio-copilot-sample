@@ -8,29 +8,37 @@ This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/
 
 ## Step 1: Set up your development environment
 
-To get started quickly, we recommend to use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
+To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
 
-Note: This will build a development environment using the Docker container definition in [.devcontainer/Dockerfile](.devcontainer/Dockerfile), and will start a VS Code instance running in that environment. 
+If you want to get started in your local environment, first install the packages:
+```
+git clone https://github.com/azure/aistudio-copilot-sample
+pip install -r requirements.txt
+```
 
-If you want to set up your local development environment, please refer to the instructions [here](https://aka.ms/aistudio/docs/sdk) on how to manually install the Azure AI CLI and SDK on your machine.
+Then install the Azure AI CLI, on Ubuntu:
+```
+curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
+```
 
-## Step 2: Connect to Azure Resources
+For Linux and MacOS, follow the instrucitons [here](https://aka.ms/aistudio/docs/sdk).
 
-Login to azure and connect to an Azure AI project:
+## Step 2: Create and connect to Azure Resources
 
- - In VS Code, open a new terminal by pressing ```Ctrl-Shift-` ```.
- - Login to azure by typing ```az login --use-device-code``` 
- - Run ```ai init``` and select **Azure AI Project + OpenAI + Cognitive Search** to create a new Azure AI resource and project or connect to an existing project.
+Run ai init to create and/or connect to existing Azure resources:
+```
+ai init
+```
 
-This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
+- This will first prompt to you to login to Azure
+- Then it will ask you to select or create resources, choose  **Azure AI Project + OpenAI + Cognitive Search** and follow the prompts
+- This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
-Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view the generated indexes, evaluation runs, and endpoints.
+Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
 
 ## Step 3: Build an Azure Search index
-
-**SKIP THIS -- NOT YET WORKING E2E**
 
 Run the following CLI command to create an index that our code can use for data retrieval:
 ```
@@ -48,7 +56,12 @@ Future: try out different co-pilot implementations
 
 ## Step 5: Test the co-pilots using chatgpt to evaluate results
 
-To run evaluation on the copilot implementations, run pytest:
+To run evaluation on a copilot implementations:
+```
+python src/evaluate.py
+```
+
+You can also run pytest to run tests that use evaluation results to pass/fail
 ```
 pytest
 ```
@@ -57,7 +70,6 @@ This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.j
 
 ## Step 6: Deploy the sample code
 
-**SKIP THIS -- NOT IMPLEMENTED YET**
 ```bash
 ai flow deploy --function aisdk_copilot.copilot.chat_completion --deployment-name productretail-copilot
 ```
