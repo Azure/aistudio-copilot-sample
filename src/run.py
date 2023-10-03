@@ -43,8 +43,8 @@ if __name__ == "__main__":
         question = args.question
            
     # Call the async chat function with a single question and print the response    
-    from aisdk_copilot.copilot import chat_completion
-    # from semantic_kernel.copilot import chat_completion
+    # from aisdk_copilot.copilot import chat_completion
+    from semantickernel.copilot import chat_completion
 
     result = asyncio.run(
         chat_completion([{"role": "user", "content": question}])
