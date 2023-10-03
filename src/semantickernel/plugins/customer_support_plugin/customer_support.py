@@ -21,6 +21,7 @@ class CustomerSupport:
         name="GetPastOrders",
     )
     def GetPastOrders(self) -> str:
+        # TODO: Replace with an call to a mock API
         return """
         order_number: 1 
         date: 2023-01-05 
@@ -86,7 +87,7 @@ class CustomerSupport:
             async for result in results:
                 context += f"\n>>> From: {result['sourcepage']}\n{result['content']}"  
 
-        # Initialize kernel
+        # Initialize a kernel so we can get the answer from the context
         kernel = sk.Kernel()
         kernel.add_chat_service(
             "chat_completion",
@@ -109,7 +110,7 @@ class CustomerSupport:
         variables["question"] = question
         variables["context"] = context
 
-        # Change temperature of qna semantic function
+        # Change temperature of qna semantic function for evaluations
         chat_plugin["qna"].set_ai_configuration(settings = CompleteRequestSettings(
             temperature=self.temperature
         ))

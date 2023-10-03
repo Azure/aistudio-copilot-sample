@@ -15,6 +15,7 @@ from semantickernel.plugins.customer_support_plugin.customer_support import Cust
 async def chat_completion(messages: list[dict], stream: bool = False, 
     session_state: Any = None, extra_args: dict[str, Any] = {}):
 
+    # Get the message from the user
     user_message = messages[-1]["content"]
 
     # Initialize the kernel
@@ -41,6 +42,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     plan = planner.create_plan(user_message)
     result = await kernel.run_async(plan)
 
+    # Print the steps taken by the stepwise planner for debugging purposes
     print(result.variables["steps_taken"])
 
     return {

@@ -1,2 +1,3 @@
 pytest
 openai
+semantic-kernel
