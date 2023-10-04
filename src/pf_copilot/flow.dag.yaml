@@ -1,0 +1,37 @@
+id: template_chat_flow
+name: Template Chat Flow
+inputs:
+  chat_history:
+    type: list
+    default:
+    - inputs:
+        question: "Which tent has the highest rainfly waterproof rating?"
+      outputs:
+        answer: "[Mocked]"
+        line_number: 0
+    is_chat_input: false
+    is_chat_history: true
+  question:
+    type: string
+    default: "Which tent has the highest rainfly waterproof rating?"
+    is_chat_input: true
+outputs:
+  answer:
+    type: string
+    reference: ${chat_completion_tool.output}
+    is_chat_output: true
+nodes:
+- name: chat_completion_tool
+  type: python
+  source:
+    type: code
+    path: chat_completion_tool.py
+  inputs:
+    acs_connection: Default_CognitiveSearch
+    aoai_connection: Default_AzureOpenAI
+    chat_history: ${inputs.chat_history}
+    question: ${inputs.question}
+  use_variants: false
+node_variants: {}
+environment:
+  python_requirements_txt: requirements.txt
