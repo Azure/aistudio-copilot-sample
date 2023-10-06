@@ -1,7 +1,4 @@
 from typing import Any, List, Dict, Union, Generator
-from azureml.rag.mlindex import MLIndex
-from azure.ai.generative import AIClient
-from azure.identity import DefaultAzureCredential
 
 def chat_completion(
     messages: List[dict],
@@ -9,21 +6,14 @@ def chat_completion(
     session_state: Any = None,
     extra_args: Dict[str, Any] = {}
 ) -> Union[Dict[str, Any], Generator[Dict[str, Any], None, None]]:
-    # connects to project defined in the config.json file at the root of the repo
-    # use "ai init" to update this to point at your project
-    client = AIClient.from_config(DefaultAzureCredential())
-
-    chat_model_deployment = "gpt-35-turbo-16k"
     question = messages[-1]["content"]
 
     from langchain import PromptTemplate
     from langchain.chains import RetrievalQA
     from langchain.chat_models import AzureChatOpenAI
-
-    llm = AzureChatOpenAI(
-        deployment_name=chat_model_deployment,
-        model_name="gpt-35-16k-turbo",
-    )
+    from langchain.embeddings.openai import OpenAIEmbeddings
+    from langchain.vectorstores.chroma import Chroma
+    from consts import chat_model_deployment, model_name, persist_directory
 
     template = """
     System:
@@ -46,15 +36,17 @@ def chat_completion(
         input_variables=["context", "question"]
     )
 
-    # convert MLIndex to a langchain retriever
-    index_langchain_retriever = MLIndex(
-        client.mlindexes.get(name="product-info-cog-search-index", label="latest").path,
-    ).as_langchain_retriever()
+    llm = AzureChatOpenAI(
+        deployment_name=chat_model_deployment,
+        model_name=model_name,
+    )
 
+    embeddings = OpenAIEmbeddings(chunk_size=16)
+    vectorstore = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
     qa = RetrievalQA.from_chain_type(
         llm=llm,
         chain_type="stuff",
-        retriever=index_langchain_retriever,
+        retriever=vectorstore.as_retriever(),
         return_source_documents=True,
         chain_type_kwargs={
             "prompt": prompt_template,

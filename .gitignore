@@ -171,7 +171,8 @@ cython_debug/
 # exclude encodings folder
 encodings/
 
-# PromptFlow temporary files
+# Project temporary files
 .promptflow
+.db
 
 config.json
