@@ -173,6 +173,6 @@ encodings/
 
 # Project temporary files
 .promptflow
-.db
+vectorstore
 
 config.json
