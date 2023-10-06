@@ -4,10 +4,12 @@ from chat import chat_completion
 from utils import create_cp_user_content, \
   set_aoai_environment, \
   set_acs_environment
+from consts import key_prompt_text
 
 @tool
 def chat_demo_tool(
   question: str,
+  prompt_text: str,
   chat_history: list,
   aoai_connection: AzureOpenAIConnection,
   acs_connection: CognitiveSearchConnection
@@ -19,6 +21,8 @@ def chat_demo_tool(
 
   # Add the current question
   cp_messages.append(create_cp_user_content(question))
-
-  result = chat_completion(cp_messages)
+  extra_args={
+    key_prompt_text: prompt_text
+  }
+  result = chat_completion(cp_messages, extra_args=extra_args)
   return result
