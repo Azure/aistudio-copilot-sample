@@ -1,2 +1,5 @@
 pytest
 openai
+--extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
+azure-ai-generative
+azure-identity
