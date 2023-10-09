@@ -68,5 +68,5 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
 
 if __name__ == "__main__":   
     from copilot_aisdk import chat
-    results = run_evaluation(chat.chat_completion, "/src/evaluation_dataset.jsonl")
+    results = run_evaluation(chat.chat_completion, "test_aisdk_copilot", "/src/evaluation_dataset.jsonl")
     print(results)
