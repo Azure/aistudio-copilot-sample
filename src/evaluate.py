@@ -31,7 +31,7 @@ def load_jsonl(path):
     with open(path, "r") as f:
         return [json.loads(line) for line in f.readlines()]
 
-def run_evaluation(chat_completion_fn, dataset_path):
+def run_evaluation(chat_completion_fn, name, dataset_path):
     # set environment variables to point at current Azure AI Project
     ai_client = AIClient.from_config(DefaultAzureCredential())      
     init_environment()
@@ -45,7 +45,7 @@ def run_evaluation(chat_completion_fn, dataset_path):
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
     
     result = evaluate(
-        evaluation_name="test_aisdk_copilot",
+        evaluation_name=name,
         asset=qna_fn,
         data=dataset,
         task_type="qa",

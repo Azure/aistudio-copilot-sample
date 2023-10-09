@@ -1,38 +1,56 @@
 import os
 
 from azure.ai.generative import AIClient
-from azure.ai.generative.entities import Model, Deployment
 from azure.identity import DefaultAzureCredential
 
-client = AIClient.from_config(DefaultAzureCredential())
-client.set_environment_variables()
-    
-flow = ChatCompletionFlow(
-    path="./ai_sdk_copilot",
-    conda_file="requirements.txt", # relative to model path if given
-    loader_module="copilot.chat_completion" 
-)
+from azure.ai.generative.entities.deployment import Deployment
+from azure.ai.generative.entities.models import LocalModel
 
-# Use secrets injection for keys so that we're not storing them in plain text anywhere
-deployment_environment_variables = {
-    "OPENAI_API_KEY": "azureml://connections/Default_AzureOpenAI/credentials/OPENAI_API_KEY",
-    "OPENAI_API_BASE": "azureml://connections/connections/Default_AzureOpenAI/target",
-    "OPENAI_API_VERSION": "azureml://connections/Default_AzureOpenAI/metadata/OPEN_AI_API_VERSION",
-    "AZURE_SEARCH_TARGET": os.environ["AZURE_SEARCH_TARGET"],
-    "AZURE_SEARCH_KEY": "azureml://connections/azure_cognitive_search_connection/credentials/COGNITIVE_SEARCH_KEY",
-    "AZURE_SEARCH_INDEX_NAME": os.environ["AZURE_SEARCH_INDEX_NAME"],
-    "AZURE_OPENAI_CHAT_DEPLOYMENT": os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
-    "AZURE_OPENAI_EVALUATION_DEPLOYMENT": os.environ["AZURE_OPENAI_EVALUATION_DEPLOYMENT"],
-    "AZURE_OPENAI_EMBEDDING_MODEL": os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
-    "AZURE_OPENAI_EMBEDDING_DEPLOYMENT": os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"]
-}
+from azure.identity import ManagedIdentityCredential
+from azure.ai.generative import AIClient
 
-deployment = Deployment(
-    name="my_custom_deployment",
-    flow=flow,
-    deployment_environment_variables,
-    enable_data_collector=True,
-    instance_type="Standard_DS3_v2",
-)
+from copilot_aisdk.chat import chat_completion
+import run
 
-client.deployments.create_or_update(deployment)
+class ChatCompletionLoader:
+    def __init__(self, path):
+        self.path = path
+        self._initialize_environment_variables()
+        self.chat_completion = chat_completion
+
+    def _initialize_environment_variables(self):
+        credential = ManagedIdentityCredential(client_id=os.getenv("UAI_CLIENT_ID"))
+        client = AIClient(
+            credential=credential,
+            subscription_id=os.getenv("AZURE_SUBSCRIPTION_ID"),
+            resource_group_name=os.getenv("AZURE_RESOURCE_GROUP_NAME"),
+            project_name=os.getenv("AZURE_PROJECT_NAME"),
+        )
+        client.set_environment_variables()
+
+    def predict(self, model_inputs):
+        results = []
+        for model_input in model_inputs:
+            output = self.chat_completion(model_input)
+            results.append(output)
+        return results
+
+
+def _load_pyfunc(path):
+    return ChatCompletionLoader(path)
+
+def deploy_flow(deployment_name):
+    client = AIClient.from_config(DefaultAzureCredential())
+    deployment = Deployment(
+        name=deployment_name,
+        model=LocalModel(
+            path="./src",
+            conda_file="conda.yaml",
+            loader_module="deploy",
+        ),
+    )    
+    client.deployments.create_or_update(deployment)
+
+if __name__ == "__main__":
+    client = AIClient.from_config(DefaultAzureCredential())
+    deploy_flow(f"{client.project_name}-copilot")

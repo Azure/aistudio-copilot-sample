@@ -11,6 +11,7 @@ def run_before_any_test():
   
     global evaluation_results
     evaluation_results = run_evaluation(chat.chat_completion, 
+                                        "test_aisdk_copilot",
                                         "/src/evaluation_dataset.jsonl")
 
 def get_metric_average(metric_name):    

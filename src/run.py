@@ -1,7 +1,7 @@
 # enable type annotation syntax on Python versions earlier than 3.9
 from __future__ import annotations
 
-def init_environment():
+def init_environment(self):
     import os
 
     # Set up environment variables by using values from the project
@@ -20,8 +20,9 @@ def init_environment():
     os.environ["AZURE_OPENAI_EMBEDDING_MODEL"] = "text-embedding-ada-002"
     os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"] = "text-ada-embedding-002-2"
 
-
-
+# for demo purposes, add method to AIClient
+from azure.ai.generative import AIClient
+AIClient.set_environment_variables = init_environment
 
     
 # Run a single chat message through one of the co-pilot implementations
@@ -54,7 +55,7 @@ if __name__ == "__main__":
         elif args.implementation == "aisdk":
             from copilot_aisdk.chat import chat_completion
     else:
-        from copilot_aisdk.copilot import chat_completion
+        from copilot_aisdk.chat import chat_completion
             
     
     # set environment variables before importing the co-pilot code
@@ -62,7 +63,7 @@ if __name__ == "__main__":
     from azure.identity import DefaultAzureCredential
     
     client = AIClient.from_config(DefaultAzureCredential())
-    init_environment()
+    client.set_environment_variables()
     
     question = "which tent has the highest waterproof rating?"
     if args.question:

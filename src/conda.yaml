@@ -1,0 +1,13 @@
+channels:
+  - "conda-forge"
+dependencies:
+  - "python=3.8"
+  - "pip<=23.0.1"
+  - pip:
+      - --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
+      - "azureml-rag[cognitive_search]"
+      - "langchain[azure]"
+      - "openai>=0.27.8"
+      - azure-ai-generative
+      - azure-identity
+      - https://docsupport.blob.core.windows.net/ml-sample-submissions/3005898/azure_ai_ml-1.10.0-py3-none-any.whl
