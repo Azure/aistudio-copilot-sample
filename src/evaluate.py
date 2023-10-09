@@ -34,7 +34,7 @@ def load_jsonl(path):
 def run_evaluation(chat_completion_fn, name, dataset_path):
     # set environment variables to point at current Azure AI Project
     ai_client = AIClient.from_config(DefaultAzureCredential())      
-    init_environment()
+    ai_client.set_environment_variables()
 
     # Evaluate the default vs the improved system prompt to see if the improved prompt
     # performs consistently better across a larger set of inputs
