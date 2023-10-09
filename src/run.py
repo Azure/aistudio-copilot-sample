@@ -34,6 +34,8 @@ if __name__ == "__main__":
     # configure asyncio
     import asyncio
     import platform
+
+    # workaround for a bug on windows
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     

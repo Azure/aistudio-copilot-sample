@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 from azure.ai.generative import AIClient
 from azure.identity import DefaultAzureCredential
@@ -31,10 +32,11 @@ class ChatCompletionLoader:
     def predict(self, model_inputs):
         results = []
         for model_input in model_inputs:
-            output = self.chat_completion(model_input)
-            results.append(output)
+            result = asyncio.run(
+                output = self.chat_completion(model_input)
+            )
+            results.append(result)
         return results
-
 
 def _load_pyfunc(path):
     return ChatCompletionLoader(path)
