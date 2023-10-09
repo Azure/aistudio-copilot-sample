@@ -7,10 +7,10 @@ evaluation_results : any
 
 @pytest.fixture(scope="session", autouse=True)
 def run_before_any_test():
-    from aisdk_copilot import copilot
+    from copilot_aisdk import chat
   
     global evaluation_results
-    evaluation_results = run_evaluation(copilot.chat_completion, 
+    evaluation_results = run_evaluation(chat.chat_completion, 
                                         "/src/evaluation_dataset.jsonl")
 
 def get_metric_average(metric_name):    
@@ -38,4 +38,5 @@ def test_gpt_coherence_atleast4():
     
 def test_gpt_fluency_atleast4():
     assert(get_metric_average("gpt_fluency") >= 4)
+    
     

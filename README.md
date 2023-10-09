@@ -23,7 +23,7 @@ Then install the Azure AI CLI, on Ubuntu:
 curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
 ```
 
-For Linux and MacOS, follow the instrucitons [here](https://aka.ms/aistudio/docs/sdk).
+For Linux and MacOS, follow the instructions [here](https://aka.ms/aistudio/docs/sdk).
 
 ## Step 2: Create and connect to Azure Resources
 

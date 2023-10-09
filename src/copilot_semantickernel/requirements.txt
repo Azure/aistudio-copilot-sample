@@ -1,0 +1,2 @@
+semantic-kernel
+openai
