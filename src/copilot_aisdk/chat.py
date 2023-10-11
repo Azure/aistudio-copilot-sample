@@ -16,8 +16,8 @@ system_message_template = templateEnv.get_template("system-message.jinja2")
 async def get_documents(query, num_docs=5):
     #  retrieve documents relevant to the user's question from Cognitive Search
     search_client = SearchClient(
-        endpoint=os.environ["AZURE_SEARCH_TARGET"],
-        credential=AzureKeyCredential(os.environ["AZURE_SEARCH_KEY"]),
+        endpoint=os.environ["AZURE_COGNITIVE_SEARCH_TARGET"],
+        credential=AzureKeyCredential(os.environ["AZURE_COGNITIVE_SEARCH_KEY"]),
         index_name=os.environ["AZURE_SEARCH_INDEX_NAME"])
 
     # generate a vector embedding of the user's question

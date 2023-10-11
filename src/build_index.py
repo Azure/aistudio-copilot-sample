@@ -14,9 +14,7 @@ from azure.ai.generative.functions.build_mlindex import build_mlindex
 def build_cogsearch_index(index_name, path_to_data):
     client = AIClient.from_config(DefaultAzureCredential())
     
-    # TODO: eliminate the need for this call
-    client.connections.get("Default_CognitiveSearch").set_current_environment()
-    
+    # Use the same index name when registering the index in AI Studio
     index = build_mlindex(
         output_index_name=index_name,
         vector_store="azure_cognitive_search",
@@ -29,7 +27,11 @@ def build_cogsearch_index(index_name, path_to_data):
     )
 
     # register the index so that it shows up in the project
-    client.mlindexes.create_or_update(index)
+    cloud_index = client.mlindexes.create_or_update(index)
+    
+    print(f"Created index '{cloud_index.name}'")
+    print(f"Local Path: {index.path}")
+    print(f"Cloud Path: {cloud_index.path}")
     
 if __name__ == "__main__":
     build_cogsearch_index("contoso_product_index", "data/3-product_info")
