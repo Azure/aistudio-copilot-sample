@@ -6,7 +6,7 @@ from azure.ai.generative import AIClient
 from azureml.rag.mlindex import MLIndex
     
 async def chat_completion(messages: list[dict], stream: bool = False, 
-    session_state: Any = None, extra_args: dict[str, Any] = {}):  
+    session_state: Any = None, context: dict[str, Any] = {}):  
 
     question = messages[-1]["content"]
     llm = AzureChatOpenAI(

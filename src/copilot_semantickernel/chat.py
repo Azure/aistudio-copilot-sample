@@ -11,8 +11,9 @@ from semantic_kernel.planning import StepwisePlanner
 from semantic_kernel.planning.stepwise_planner.stepwise_planner_config import StepwisePlannerConfig
 from copilot_semantickernel.plugins.customer_support_plugin.customer_support import CustomerSupport
 
+
 async def chat_completion(messages: list[dict], stream: bool = False, 
-    session_state: Any = None, extra_args: dict[str, Any] = {}):
+    session_state: Any = None, context: dict[str, Any] = {}):
 
     # Get the message from the user
     user_message = messages[-1]["content"]

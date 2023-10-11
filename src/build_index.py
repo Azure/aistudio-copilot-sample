@@ -1,5 +1,9 @@
 import os
 
+# set environment variables before the openai SDK gets imported
+from dotenv import load_dotenv
+load_dotenv()
+
 from azure.ai.generative import AIClient
 from azure.identity import DefaultAzureCredential
 
@@ -9,6 +13,10 @@ from azure.ai.generative.functions.build_mlindex import build_mlindex
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
     client = AIClient.from_config(DefaultAzureCredential())
+    
+    # TODO: eliminate the need for this call
+    client.connections.get("Default_CognitiveSearch").set_current_environment()
+    
     index = build_mlindex(
         output_index_name=index_name,
         vector_store="azure_cognitive_search",
@@ -24,8 +32,6 @@ def build_cogsearch_index(index_name, path_to_data):
     client.mlindexes.create_or_update(index)
     
 if __name__ == "__main__":
-    from run import init_environment
-    init_environment(None)
     build_cogsearch_index("contoso_product_index", "data/3-product_info")
 
 

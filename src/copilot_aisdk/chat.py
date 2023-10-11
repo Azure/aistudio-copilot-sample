@@ -13,11 +13,11 @@ templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve()
 templateEnv = jinja2.Environment(loader=templateLoader)
 system_message_template = templateEnv.get_template("system-message.jinja2")
 
-async def get_context(query, num_docs=5):
+async def get_documents(query, num_docs=5):
     #  retrieve documents relevant to the user's question from Cognitive Search
     search_client = SearchClient(
-        endpoint=os.environ["AZURE_COGNITIVE_SEARCH_TARGET"],
-        credential=AzureKeyCredential(os.environ["AZURE_COGNITIVE_SEARCH_KEY"]),
+        endpoint=os.environ["AZURE_SEARCH_TARGET"],
+        credential=AzureKeyCredential(os.environ["AZURE_SEARCH_KEY"]),
         index_name=os.environ["AZURE_SEARCH_INDEX_NAME"])
 
     # generate a vector embedding of the user's question
@@ -38,11 +38,15 @@ async def get_context(query, num_docs=5):
     return context
     
 async def chat_completion(messages: list[dict], stream: bool = False, 
-    session_state: Any = None, extra_args: dict[str, Any] = {}):
+    session_state: Any = None, context: dict[str, Any] = {}):
     
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
-    context = await get_context(user_message, extra_args.get("num_retrieved_docs", 5))    
+    documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))    
+    
+    # make a copy of the context and modify it with the retrieved documents
+    context = dict(context)
+    context['documents'] = documents
     
     # add retrieved documents as context to the system prompt 
     system_message = system_message_template.render(context=context)
@@ -51,11 +55,11 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     # call Azure OpenAI with the system prompt and user's question
     response = openai.ChatCompletion.create(
         engine=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
-        messages=messages, temperature=extra_args.get("temperature", 0.7),
+        messages=messages, temperature=context.get("temperature", 0.7),
         stream=stream,
         max_tokens=800)
     
     # add context in the returned response
-    response.choices[0]['extra_args'] = {'context': context}
+    response.choices[0]['context'] = context
     return response
 

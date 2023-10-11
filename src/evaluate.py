@@ -2,11 +2,13 @@ import os
 import json
 from pprint import pprint
 
+# set environment variables before the openai SDK gets imported
+from dotenv import load_dotenv
+load_dotenv()
+
 from azure.identity import DefaultAzureCredential
 from azure.ai.generative import AIClient
 from azure.ai.generative.evaluate import evaluate
-
-from run import init_environment
 
 # TEMP: wrapper around chat completion function until chat_completion protocol is supported
 def copilot_qna(question, chat_completion_fn):
@@ -23,7 +25,7 @@ def copilot_qna(question, chat_completion_fn):
     return {
         "question": question,
         "answer": response["message"]["content"],
-        "context": response["extra_args"]["context"]
+        "context": response["context"]
     }
  
  # Define helper methods
@@ -32,10 +34,6 @@ def load_jsonl(path):
         return [json.loads(line) for line in f.readlines()]
 
 def run_evaluation(chat_completion_fn, name, dataset_path):
-    # set environment variables to point at current Azure AI Project
-    ai_client = AIClient.from_config(DefaultAzureCredential())      
-    ai_client.set_environment_variables()
-
     # Evaluate the default vs the improved system prompt to see if the improved prompt
     # performs consistently better across a larger set of inputs
     path = os.path.join(os.getcwd() + dataset_path)
@@ -44,6 +42,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     # temp: generate a single-turn qna wrapper over the chat completion function
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
     
+    client = AIClient.from_config(DefaultAzureCredential())
     result = evaluate(
         evaluation_name=name,
         asset=qna_fn,
@@ -62,11 +61,11 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             "questions": "question",
             "contexts": "context",
         },
-        tracking_uri=ai_client.tracking_uri,
+        tracking_uri=client.tracking_uri,
     )
     return result
 
-if __name__ == "__main__":   
+if __name__ == "__main__": 
     from copilot_aisdk import chat
     results = run_evaluation(chat.chat_completion, "test_aisdk_copilot", "/src/evaluation_dataset.jsonl")
     print(results)

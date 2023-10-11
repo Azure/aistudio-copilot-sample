@@ -4,7 +4,7 @@ from __future__ import annotations
 from promptflow import PFClient
     
 async def chat_completion(messages: list[dict], stream: bool = False, 
-    session_state: Any = None, extra_args: dict[str, Any] = {}):
+    session_state: Any = None, context: dict[str, Any] = {}):
 
     pf_client = PFClient()  
     inputs = {"chat_history": messages[:-1], "question": messages[-1], "customerId": 2}  

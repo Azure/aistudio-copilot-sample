@@ -1,20 +1,5 @@
 {
     "subscription_id": "your_subscription_id",
     "resource_group": "your_resource_group",
-    "project_name": "your_project_name",
-    "environment": {
-        "OPENAI_API_TYPE": "azure",
-        "OPENAI_API_KEY": "$secretRef:azureml://connections/Default_AzureOpenAI/credentials/OPENAI_API_KEY",
-        "OPENAI_API_BASE": "$secretRef:azureml://connections/connections/Default_AzureOpenAI/target",
-        "OPENAI_API_VERSION": "$secretRef:azureml://connections/Default_AzureOpenAI/metadata/OPEN_AI_API_VERSION",
-        "AZURE_SEARCH_TARGET": "$secretRef:azureml://connections/Default_CognitiveSearch/target",
-        "AZURE_SEARCH_KEY": "azureml://connections/Default_CognitiveSearch/credentials/COGNITIVE_SEARCH_KEY",
-        "AZURE_SEARCH_INDEX_NAME": "product-info-index-test1",
-        "AZURE_OPENAI_CHAT_MODEL": "gpt-35-turbo-16k",
-        "AZURE_OPENAI_CHAT_DEPLOYMENT": "gpt-35-turbo-16k-0613",
-        "AZURE_OPENAI_EVALUATION_MODEL": "gpt-35-turbo-16k",
-        "AZURE_OPENAI_EVALUATION_DEPLOYMENT": "gpt-35-turbo-16k-0613",
-        "AZURE_OPENAI_EMBEDDING_MODEL": "text-embedding-ada-002",
-        "AZURE_OPENAI_EMBEDDING_DEPLOYMENT": "text-ada-embedding-002-2"
-    }
+    "project_name": "your_project_name"
 }

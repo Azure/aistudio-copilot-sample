@@ -1,6 +1,10 @@
 import os
 import asyncio
 
+# set environment variables before the openai SDK gets imported
+from dotenv import load_dotenv
+load_dotenv()
+
 from azure.ai.generative import AIClient
 from azure.identity import DefaultAzureCredential
 
@@ -11,7 +15,6 @@ from azure.identity import ManagedIdentityCredential
 from azure.ai.generative import AIClient
 
 from copilot_aisdk.chat import chat_completion
-import run
 
 class ChatCompletionLoader:
     def __init__(self, path):
@@ -50,7 +53,7 @@ def deploy_flow(deployment_name):
             conda_file="conda.yaml",
             loader_module="deploy",
         ),
-    )    
+    )
     client.deployments.create_or_update(deployment)
 
 if __name__ == "__main__":
