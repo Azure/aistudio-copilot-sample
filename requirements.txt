@@ -16,6 +16,7 @@ azureml-mlflow==1.53.0
 promptflow[azure]==0.1.0b7.post1
 promptflow-tools==0.1.0b8
 keyring
+pytest
 
 # langchain dependencies, it's used in chat demo notebook
 langchain==0.0.312
