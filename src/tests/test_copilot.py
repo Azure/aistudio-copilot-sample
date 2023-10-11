@@ -1,6 +1,6 @@
 import pytest
 
-from evaluate import run_evaluation
+from run import run_evaluation
 
 # Test results are stored here
 evaluation_results : any
@@ -12,7 +12,7 @@ def run_before_any_test():
     global evaluation_results
     evaluation_results = run_evaluation(chat.chat_completion, 
                                         "test_aisdk_copilot",
-                                        "/src/evaluation_dataset.jsonl")
+                                        "src/tests/evaluation_dataset.jsonl")
 
 def get_metric_average(metric_name):    
     # metrics format is e.g.: ['3', '5', '5', '5', '5', '4', '3', '5', '5', '5', '5', '5', '1']
