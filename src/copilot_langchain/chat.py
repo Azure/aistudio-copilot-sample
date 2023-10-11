@@ -1,3 +1,5 @@
+import os
+
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
@@ -10,8 +12,8 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     question = messages[-1]["content"]
     llm = AzureChatOpenAI(
-        deployment_name=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
-        model_name="gpt-35-16k-turbo",
+        deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
+        model_name=os.environ["AZURE_OPENAI_CHAT_MODEL"],
         temperature=extra_args.get('temperature', 0.7)
     )
 

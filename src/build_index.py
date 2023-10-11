@@ -12,6 +12,10 @@ from azure.ai.generative.functions.build_mlindex import build_mlindex
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
+    # Set up environment variables for cog search SDK
+    os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
+    os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
+    
     client = AIClient.from_config(DefaultAzureCredential())
     
     # Use the same index name when registering the index in AI Studio

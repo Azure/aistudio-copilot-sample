@@ -71,9 +71,9 @@ class CustomerSupport:
     async def AskAboutProducts(self, question: str) -> str:
         #  retrieve documents relevant to the user's question from Cognitive Search
         search_client = SearchClient(
-            endpoint=os.environ["AZURE_COGNITIVE_SEARCH_TARGET"],
-            credential=AzureKeyCredential(os.environ["AZURE_COGNITIVE_SEARCH_KEY"]),
-            index_name=os.environ["AZURE_SEARCH_INDEX_NAME"])
+            endpoint=os.environ["AZURE_AI_SEARCH_ENDPOINT"],
+            credential=AzureKeyCredential(os.environ["AZURE_AI_SEARCH_KEY"]),
+            index_name=os.environ["AZURE_AI_SEARCH_INDEX_NAME"])
 
         # generate a vector embedding of the user's question
         embedding = await openai.Embedding.acreate(input=question,
