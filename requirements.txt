@@ -14,7 +14,7 @@ azureml-rag[document_parsing,cognitive_search]==0.2.9
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
 promptflow[azure]==0.1.0b7.post1
-promptflow-tools==0.1.0b6
+promptflow-tools==0.1.0b8
 keyring
 pytest
 
