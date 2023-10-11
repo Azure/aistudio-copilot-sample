@@ -29,6 +29,6 @@ WORKDIR /home/vscode
 USER vscode
 
 # Install Azure AI CLI
-RUN wget https://csspeechstorage.blob.core.windows.net/drop/private/ai/Azure.AI.CLI.1.0.0-alpha1010.1.nupkg && \
-   dotnet tool install --global --add-source . Azure.AI.CLI --version 1.0.0-alpha1010.1 && \
-   rm Azure.AI.CLI.1.0.0-alpha1010.1.nupkg
+RUN wget https://csspeechstorage.blob.core.windows.net/drop/private/ai/Azure.AI.CLI.1.0.0-alpha1010.2.nupkg && \
+   dotnet tool install --global --add-source . Azure.AI.CLI --version 1.0.0-alpha1010.2 && \
+   rm Azure.AI.CLI.1.0.0-alpha1010.2.nupkg
