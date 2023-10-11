@@ -5,11 +5,10 @@ python-dotenv
 # generative ai SDK dependencies
 openai
 pydantic<2
---extra-index-url=https://azuremlsdktestpypi.azureedge.net/Create-Dev-Index/102333570
-azureml-metrics[prompt-flow]==0.1.0.102333570
+azureml-metrics[prompt-flow] @https://studioaiwheels.blob.core.windows.net/wheels/azureml_metrics-0.1.0.102333570-py3-none-any.whl
 --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
-azure-ai-generative==0.5.0
-azureml-rag[cognitive_search]==0.1.24.1
+azure-ai-generative[index]==0.6.5
+azureml-rag[document_parsing,cognitive_search]==0.2.9
 
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
@@ -19,8 +18,6 @@ promptflow-tools
 keyring
 pytest
 
-# langchain dependencies, these should be optional in the future
-# langchain moved Embeddings from langchain.embeddings.base to langchain.schema.embeddings while azureml-rag is still referencing it. 
-# once azureml-rag fixes, we should remove the langchain reference from this file
-langchain<0.0.293
+# langchain dependencies, it's used in chat demo notebook
+langchain==0.0.312
 semantic-kernel
