@@ -39,7 +39,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # Add hints to the customer ask
     # TODO: Make the ID configurable
-    ask = user_message + "\nThe customer ID is 1."
+    ask = user_message + "\nThe customer ID is 1; only use this if you need information about the current customer."
 
     # Create and run plan based on the customer ask
     planner = StepwisePlanner(kernel, config=StepwisePlannerConfig(max_iterations=5))
