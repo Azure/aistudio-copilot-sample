@@ -6,8 +6,7 @@ python-dotenv
 openai
 pydantic<2
 azureml-metrics[prompt-flow] @https://studioaiwheels.blob.core.windows.net/wheels/azureml_metrics-0.1.0.102333570-py3-none-any.whl
---extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
-azure-ai-generative[index]==0.6.5
+azure-ai-generative @https://azuremlsdktestpypi.blob.core.windows.net/repo/test-azure-ai-generative/azure_ai_generative-0.6.5-py3-none-any.whl
 azureml-rag[document_parsing,cognitive_search]==0.2.9
 
 # promptflow dependencies, these should be optional in the future
