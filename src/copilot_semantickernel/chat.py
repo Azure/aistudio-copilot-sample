@@ -37,13 +37,14 @@ async def chat_completion(messages: list[dict], stream: bool = False,
         temperature=context.get("temperature", 0.7)
     ), skill_name="CustomerSupport")
 
+    # Add hints to the customer ask
+    # TODO: Make the ID configurable
+    ask = user_message + "\nThe customer ID is 1; only use this if you need information about the current customer."
+
     # Create and run plan based on the customer ask
     planner = StepwisePlanner(kernel, config=StepwisePlannerConfig(max_iterations=5))
-    plan = planner.create_plan(user_message)
+    plan = planner.create_plan(ask)
     result = await kernel.run_async(plan)
-
-    # Print the steps taken by the stepwise planner for debugging purposes
-    print(result.variables["steps_taken"])
 
     return {
         "choices": [{
@@ -53,7 +54,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
                 "content": result.result
             },
             "extra_args": {
-                "context": result.variables["skill_count"]
+                "context": result.variables["steps_taken"]
             }
         }]
     }

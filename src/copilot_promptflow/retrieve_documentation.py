@@ -16,7 +16,7 @@ def retrieve_documentation(question: str, index_name: str, embedding: List[float
       question, 
       top=2, 
       vector=embedding,
-      vector_fields="content_vector_open_ai")
+      vector_fields="Embedding")
 
   docs = [{"id": doc["id"],  "title": doc["title"], "content": doc["content"], "url": doc["sourcepage"]}
           for doc in results]
