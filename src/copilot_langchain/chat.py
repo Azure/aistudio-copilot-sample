@@ -1,5 +1,6 @@
 import os
 
+from typing import Any
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
@@ -14,7 +15,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     llm = AzureChatOpenAI(
         deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
         model_name=os.environ["AZURE_OPENAI_CHAT_MODEL"],
-        temperature=extra_args.get('temperature', 0.7)
+        temperature=context.get('temperature', 0.7)
     )
 
     template = """
@@ -40,6 +41,14 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # connects to project defined in the config.json file at the root of the repo
     client = AIClient.from_config(DefaultAzureCredential())
+
+    # Log into the Azure CLI (run az login --use-device code) before running this step!
+    default_aoai_connection = client.get_default_aoai_connection()
+    default_aoai_connection.set_current_environment()
+
+    # change this if you use different connection name
+    default_acs_connection = client.connections.get("Default_CognitiveSearch")
+    default_acs_connection.set_current_environment()
 
     # convert MLIndex to a langchain retriever
     index_langchain_retriever = MLIndex(
