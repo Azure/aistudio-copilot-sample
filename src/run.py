@@ -110,7 +110,7 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
         model=Model(
             path=".",
             conda_file=f"{deployment_folder}/conda.yaml",
-            scoring_script="score.py",
+            chat_module=chat_module,
         ),
         instance_type="Standard_DS2_V2",
         environment_variables={
@@ -128,7 +128,6 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
             'AZURE_OPENAI_EVALUATION_DEPLOYMENT': os.getenv('AZURE_OPENAI_EVALUATION_DEPLOYMENT'),
             'AZURE_OPENAI_EMBEDDING_MODEL': os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
             'AZURE_OPENAI_EMBEDDING_DEPLOYMENT': os.getenv('AZURE_OPENAI_EMBEDDING_DEPLOYMENT'),
-            "AZURE_AI_CHAT_MODULE": chat_module,
         },
     )
     client.deployments.create_or_update(deployment)
