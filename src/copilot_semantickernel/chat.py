@@ -53,8 +53,8 @@ async def chat_completion(messages: list[dict], stream: bool = False,
                 "role": "assistant",
                 "content": result.result
             },
-            "extra_args": {
-                "context": result.variables["steps_taken"]
+            "context": {
+                "steps_taken": result.variables["steps_taken"]
             }
         }]
     }
