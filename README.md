@@ -10,11 +10,12 @@ This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/
 
 To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample/tree/oct-refresh?quickstart=1)
 
 If you want to get started in your local environment, first install the packages:
 ```
 git clone https://github.com/azure/aistudio-copilot-sample
+cd aistudio-copilot-sample
 pip install -r requirements.txt
 ```
 
@@ -52,13 +53,19 @@ To run a single question & answer through the sample co-pilot:
 python src/run.py --question "which tent is the most waterproof?"
 ```
 
-Future: try out different co-pilot implementations
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, langchain` or `aisdk`. To try running with semantic kernel:
+
+```bash
+python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
+```
+
+The `--implementaiton` flag can be used in combination with the evaluate command below as well.
 
 ## Step 5: Test the co-pilots using chatgpt to evaluate results
 
 To run evaluation on a copilot implementations:
 ```
-python src/evaluate.py
+python src/run.py --evaluate
 ```
 
 You can also run pytest to run tests that use evaluation results to pass/fail

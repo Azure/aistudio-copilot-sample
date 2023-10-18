@@ -3,9 +3,10 @@ import json
 import os
 from pathlib import Path
 import sys
-from azureml.contrib.services.aml_request import AMLRequest, rawhttp 
+from azureml.contrib.services.aml_request import AMLRequest, rawhttp
 from azureml.contrib.services.aml_response import AMLResponse
 import json
+import importlib
 
 
 def response_to_dict(response):
@@ -32,10 +33,10 @@ def run(raw_data: AMLRequest):
     """
     raw_data = json.loads(raw_data.data)
     stream = raw_data["stream"]
-    from chat import chat_completion
+    chat_completion = importlib.import_module(os.getenv("AZURE_AI_CHAT_MODULE")).chat_completion
     response = asyncio.run(chat_completion(**raw_data))
     if stream:
         aml_response = AMLResponse(response_to_dict(response), 200)
         aml_response.headers["Content-Type"] = "text/event-stream"
         return aml_response
-    return response
+    return json.dumps(response)

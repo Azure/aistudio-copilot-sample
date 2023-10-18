@@ -1,0 +1,14 @@
+channels:
+  - "conda-forge"
+dependencies:
+  - "python=3.10"
+  - "pip<=23.0.1"
+  - pip:
+      - openai[embeddings]
+      - # --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
+      - # azure-ai-generative
+      - azure-identity
+      - azure-search-documents==11.4.0b6
+      - jinja2
+      - azureml-inference-server-http
+      - azureml-contrib-services
