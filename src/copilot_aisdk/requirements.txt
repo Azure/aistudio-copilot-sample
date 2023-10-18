@@ -1,6 +1,4 @@
 openai
-# --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
-# azure-ai-generative
 azure-identity
 azure-search-documents==11.4.0b6
 jinja2
