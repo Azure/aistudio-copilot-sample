@@ -12,6 +12,8 @@ import json
 import pathlib
 
 from azure.ai.generative import AIClient
+from azure.ai.generative.entities.models import Model
+from azure.ai.generative.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 
 # build the index using the product catalog docs from data/3-product-info
@@ -22,9 +24,9 @@ def build_cogsearch_index(index_name, path_to_data):
     # Set up environment variables for cog search SDK
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
     os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
-    
+
     client = AIClient.from_config(DefaultAzureCredential())
-    
+
     # Use the same index name when registering the index in AI Studio
     index = build_mlindex(
         output_index_name=index_name,
@@ -39,18 +41,18 @@ def build_cogsearch_index(index_name, path_to_data):
 
     # register the index so that it shows up in the project
     cloud_index = client.mlindexes.create_or_update(index)
-    
+
     print(f"Created index '{cloud_index.name}'")
     print(f"Local Path: {index.path}")
     print(f"Cloud Path: {cloud_index.path}")
-    
+
 # TEMP: wrapper around chat completion function until chat_completion protocol is supported
 def copilot_qna(question, chat_completion_fn):
-    # Call the async chat function with a single question and print the response    
+    # Call the async chat function with a single question and print the response
 
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-        
+
     result = asyncio.run(
         chat_completion_fn([{"role": "user", "content": question}])
     )
@@ -60,7 +62,7 @@ def copilot_qna(question, chat_completion_fn):
         "answer": response["message"]["content"],
         "context": response["context"]
     }
- 
+
  # Define helper methods
 def load_jsonl(path):
     with open(path, "r") as f:
@@ -73,10 +75,10 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     # performs consistently better across a larger set of inputs
     path = pathlib.Path.cwd() / dataset_path
     dataset = load_jsonl(path)
-    
+
     # temp: generate a single-turn qna wrapper over the chat completion function
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
-    
+
     client = AIClient.from_config(DefaultAzureCredential())
     result = evaluate(
         evaluation_name=name,
@@ -101,15 +103,32 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     )
     return result
 
-def deploy_flow(deployment_name):
+def deploy_flow(deployment_name, deployment_folder, chat_module):
     client = AIClient.from_config(DefaultAzureCredential())
     deployment = Deployment(
         name=deployment_name,
-        model=LocalModel(
-            path="./src",
-            conda_file="conda.yaml",
-            loader_module="load",
+        model=Model(
+            path=".",
+            conda_file=f"{deployment_folder}/conda.yaml",
+            chat_module=chat_module,
         ),
+        instance_type="Standard_DS2_V2",
+        environment_variables={
+            'AZURE_SUBSCRIPTION_ID': os.getenv('AZURE_SUBSCRIPTION_ID'),
+            'OPENAI_API_TYPE': os.getenv('OPENAI_API_TYPE'),
+            'OPENAI_API_BASE': os.getenv('OPENAI_API_BASE'),
+            'OPENAI_API_KEY': os.getenv('OPENAI_API_KEY'),
+            'OPENAI_API_VERSION': os.getenv('OPENAI_API_VERSION'),
+            'AZURE_AI_SEARCH_ENDPOINT': os.getenv('AZURE_AI_SEARCH_ENDPOINT'),
+            'AZURE_AI_SEARCH_KEY': os.getenv('AZURE_AI_SEARCH_KEY'),
+            'AZURE_AI_SEARCH_INDEX_NAME': os.getenv('AZURE_AI_SEARCH_INDEX_NAME'),
+            'AZURE_OPENAI_CHAT_MODEL': os.getenv('AZURE_OPENAI_CHAT_MODEL'),
+            'AZURE_OPENAI_CHAT_DEPLOYMENT': os.getenv('AZURE_OPENAI_CHAT_DEPLOYMENT'),
+            'AZURE_OPENAI_EVALUATION_MODEL': os.getenv('AZURE_OPENAI_EVALUATION_MODEL'),
+            'AZURE_OPENAI_EVALUATION_DEPLOYMENT': os.getenv('AZURE_OPENAI_EVALUATION_DEPLOYMENT'),
+            'AZURE_OPENAI_EMBEDDING_MODEL': os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
+            'AZURE_OPENAI_EMBEDDING_DEPLOYMENT': os.getenv('AZURE_OPENAI_EMBEDDING_DEPLOYMENT'),
+        },
     )
     client.deployments.create_or_update(deployment)
 
@@ -122,7 +141,7 @@ if __name__ == "__main__":
     # workaround for a bug on windows
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
+
     # Parse command line arguments
     import argparse
     parser = argparse.ArgumentParser()
@@ -134,16 +153,24 @@ if __name__ == "__main__":
     parser.add_argument("--deployment-name", help="deployment name to use when deploying the flow", type=str)
     parser.add_argument("--build-index", help="Build an index with the default docs", action='store_true')
     args = parser.parse_args()
-    
+
     if args.implementation:
         if args.implementation == "promptflow":
             from copilot_promptflow.chat import chat_completion
+            deployment_folder = "copilot_promptflow"
+            chat_module = "copilot_promptflow.chat"
         elif args.implementation == "semantickernel":
             from copilot_semantickernel.chat import chat_completion
+            deployment_folder = "copilot_semantickernel"
+            chat_module = "copilot_semantickernel.chat"
         elif args.implementation == "langchain":
             from copilot_langchain.chat import chat_completion
+            deployment_folder = "copilot_langchain"
+            chat_module = "copilot_langchain.chat"
         elif args.implementation == "aisdk":
             from copilot_aisdk.chat import chat_completion
+            deployment_folder = "copilot_aisdk"
+            chat_module = "copilot_aisdk.chat"
 
     if args.build_index:
         build_cogsearch_index("contoso_product_index", "data/3-product_info")
@@ -151,18 +178,16 @@ if __name__ == "__main__":
         results = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot", dataset_path=args.dataset_path)
         print(results)
     elif args.deploy:
-        # TODO - how to handle changing the implementation?
         client = AIClient.from_config(DefaultAzureCredential())
         deployment_name = args.deployment_name if args.deployment_name else f"{client.project_name}-copilot"
-        deploy_flow(deployment_name)
+        deploy_flow(deployment_name, deployment_folder, chat_module)
     else:
         question = "which tent is the most waterproof?"
         if args.question:
             question = args.question
-            
+
         # Call the async chat function with a single question and print the response
         result = asyncio.run(
             chat_completion([{"role": "user", "content": question}])
         )
         print(result)
-    
