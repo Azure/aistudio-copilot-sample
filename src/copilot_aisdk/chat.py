@@ -60,6 +60,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
         max_tokens=800)
     
     # add context in the returned response
-    response.choices[0]['context'] = context
+    if not stream:
+        response.choices[0]['context'] = context['documents']
     return response
 
