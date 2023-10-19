@@ -28,14 +28,16 @@ async def chat_completion(messages: list[dict], stream: bool = False,
             os.getenv("OPENAI_API_KEY"),
         )
     )
-    
-    # Add the customer support plugin to the kernel
-    kernel.import_skill(CustomerSupport(
-        number_of_docs = context.get("num_retrieved_docs", 5),
+
+    customer_support_plugin = CustomerSupport(
+        number_of_docs = context.get("num_retrieved_docs", 3),
         embedding_model_deployment = os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
         chat_model_deployment=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         temperature=context.get("temperature", 0.7)
-    ), skill_name="CustomerSupport")
+    )
+    
+    # Add the customer support plugin to the kernel
+    kernel.import_skill(customer_support_plugin, skill_name="CustomerSupport")
 
     # Add hints to the customer ask
     # TODO: Make the ID configurable
@@ -53,7 +55,10 @@ async def chat_completion(messages: list[dict], stream: bool = False,
                 "role": "assistant",
                 "content": result.result
             },
-            "context": str(result.variables["steps_taken"])
+            "extra_args": {
+                "context": customer_support_plugin.context,
+                "steps_taken":str(result.variables["steps_taken"])
+            }
         }]
     }
 
