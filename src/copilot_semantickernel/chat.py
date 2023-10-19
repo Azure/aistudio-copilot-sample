@@ -48,6 +48,11 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     plan = planner.create_plan(ask)
     result = await kernel.run_async(plan)
 
+    # limit size of returned context
+    context = customer_support_plugin.context
+    if len(context) > 40000:
+        context = context[:40000]
+
     return {
         "choices": [{
             "index": 0,
@@ -55,10 +60,8 @@ async def chat_completion(messages: list[dict], stream: bool = False,
                 "role": "assistant",
                 "content": result.result
             },
-            "extra_args": {
-                "context": customer_support_plugin.context,
-                "steps_taken":str(result.variables["steps_taken"])
-            }
+            "context": context,
+            "steps_taken": str(result.variables["steps_taken"])
         }]
     }
 

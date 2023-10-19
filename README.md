@@ -53,13 +53,13 @@ To run a single question & answer through the sample co-pilot:
 python src/run.py --question "which tent is the most waterproof?"
 ```
 
-You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, langchain` or `aisdk`. To try running with semantic kernel:
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
 
 ```bash
 python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
 ```
 
-The `--implementaiton` flag can be used in combination with the evaluate command below as well.
+The `--implementation` flag can be used in combination with the evaluate command below as well.
 
 ## Step 5: Test the co-pilots using chatgpt to evaluate results
 
