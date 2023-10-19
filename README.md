@@ -44,6 +44,12 @@ Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to 
 Run the following CLI command to create an index that our code can use for data retrieval:
 ```
 ai search index update --files "../data/3-product-info/*.md" --index-name "product-info"
+ai config --set search.index.name product-info
+```
+
+Now, generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
+```
+ai dev new .env
 ```
 
 ## Step 4: Run the co-pilot with a sample question
