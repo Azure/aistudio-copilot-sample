@@ -14,13 +14,6 @@ RUN apt update && apt install -y fuse
 COPY requirements.txt .
 RUN pip install -r requirements.txt 
 
-RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-   dpkg -i packages-microsoft-prod.deb && \
-   apt update && apt install -y dotnet-sdk-7.0 nuget  # Change the version as needed
-
-# Install azure CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
 # Adding this install under root's path for the custom AI Studio container solution
 ENV PATH="/home/vscode/.dotnet/tools:${PATH}"
 
@@ -28,7 +21,5 @@ ENV PATH="/home/vscode/.dotnet/tools:${PATH}"
 WORKDIR /home/vscode
 USER vscode
 
-# Install Azure AI CLI
-RUN wget https://csspeechstorage.blob.core.windows.net/drop/private/ai/Azure.AI.CLI.1.0.0-alpha1010.2.nupkg && \
-   dotnet tool install --global --add-source . Azure.AI.CLI --version 1.0.0-alpha1010.2 && \
-   rm Azure.AI.CLI.1.0.0-alpha1010.2.nupkg
+# Install Azure AI CLI (which installs `az` CLI and `ai` CLI + dependencies)
+RUN curl -sL https://csspeechstorage.blob.core.windows.net/drop/private/ai/InstallAzureAICLIDeb-1.0.0-alpha1018.1.sh | bash
