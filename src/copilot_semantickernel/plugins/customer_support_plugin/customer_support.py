@@ -18,6 +18,7 @@ class CustomerSupport:
         self.embedding_model_deployment = embedding_model_deployment
         self.chat_model_deployment = chat_model_deployment
         self.temperature = temperature
+        self.context = ""
 
     @sk_function(
         description="See what was previously purchased by a customer. If you need more detail after using this function about a product, use the CustomerSupport.AskAboutProducts function.",
@@ -25,6 +26,8 @@ class CustomerSupport:
         input_description="The ID of the customer to retreive order information about"
     )
     def GetPastOrders(self, input: str) -> str:
+        orders = str(get_customer_info(int(input))["orders"])
+        self.context += "## GetPastOrders data\n" + str(orders) + "\n\n"
         return str(get_customer_info(int(input))["orders"])
 
     @sk_function(
@@ -53,6 +56,8 @@ class CustomerSupport:
 
             async for result in results:
                 chunks += f"\n>>> From: {result['Id']}\n{result['Text']}"  
+
+        self.context += "## AskAboutProducts data\n" + str(chunks) + "\n\n"
 
         # Initialize a kernel so we can get the answer from the context
         kernel = sk.Kernel()
