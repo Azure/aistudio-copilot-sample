@@ -7,7 +7,19 @@ from langchain.chat_models import AzureChatOpenAI
 from azure.identity import DefaultAzureCredential
 from azure.ai.generative import AIClient
 from azureml.rag.mlindex import MLIndex
-    
+
+def setup_credentials():
+    # Azure OpenAI credentials
+    import openai
+    openai.api_type = os.environ["OPENAI_API_TYPE"]
+    openai.api_key = os.environ["OPENAI_API_KEY"]
+    openai.api_version = os.environ["OPENAI_API_VERSION"]
+    openai.api_base = os.environ["OPENAI_API_BASE"]
+
+    # Azure Cognitive Search credentials
+    os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
+    os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
+
 async def chat_completion(messages: list[dict], stream: bool = False, 
     session_state: Any = None, context: dict[str, Any] = {}):  
 
@@ -41,14 +53,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # connects to project defined in the config.json file at the root of the repo
     client = AIClient.from_config(DefaultAzureCredential())
-
-    # Log into the Azure CLI (run az login --use-device code) before running this step!
-    default_aoai_connection = client.get_default_aoai_connection()
-    default_aoai_connection.set_current_environment()
-
-    # change this if you use different connection name
-    default_acs_connection = client.connections.get("Default_CognitiveSearch")
-    default_acs_connection.set_current_environment()
+    setup_credentials()
 
     # convert MLIndex to a langchain retriever
     index_langchain_retriever = MLIndex(
