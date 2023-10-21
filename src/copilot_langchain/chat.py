@@ -7,6 +7,7 @@ from langchain.chat_models import AzureChatOpenAI
 from azure.identity import DefaultAzureCredential
 from azure.ai.generative import AIClient
 from azureml.rag.mlindex import MLIndex
+from consts import search_index_folder
 
 def setup_credentials():
     # Azure OpenAI credentials
@@ -56,9 +57,8 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     setup_credentials()
 
     # convert MLIndex to a langchain retriever
-    index_langchain_retriever = MLIndex(
-        client.mlindexes.get(name="product-info-cog-search-index", label="latest").path,
-    ).as_langchain_retriever()
+    mlindex = MLIndex(search_index_folder)
+    index_langchain_retriever = mlindex.as_langchain_retriever()
 
     qa = RetrievalQA.from_chain_type(
         llm=llm,
