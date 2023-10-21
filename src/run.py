@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
+import sys
 import asyncio
 import platform
 import json
@@ -15,6 +16,7 @@ from azure.ai.generative import AIClient
 from azure.ai.generative.entities.models import Model
 from azure.ai.generative.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
+from consts import search_index_name, search_index_folder
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
@@ -173,7 +175,7 @@ if __name__ == "__main__":
             chat_module = "copilot_aisdk.chat"
 
     if args.build_index:
-        build_cogsearch_index("contoso_product_index", "data/3-product_info")
+        build_cogsearch_index(search_index_name, "data/3-product_info")
     elif args.evaluate:
         results = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot", dataset_path=args.dataset_path)
         print(results)
@@ -185,6 +187,15 @@ if __name__ == "__main__":
         question = "which tent is the most waterproof?"
         if args.question:
             question = args.question
+
+        # Prepare for the search index
+        if not os.path.exists(search_index_folder):
+            client = AIClient.from_config(DefaultAzureCredential())
+            try:
+                client.mlindexes.download(name=search_index_name, download_path=search_index_folder, label="latest")
+            except:
+                print("Please build the search index with 'python src/run.py --build-index'")
+                sys.exit(1)
 
         # Call the async chat function with a single question and print the response
         result = asyncio.run(
