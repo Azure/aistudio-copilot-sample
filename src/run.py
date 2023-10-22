@@ -197,8 +197,16 @@ if __name__ == "__main__":
                 print("Please build the search index with 'python src/run.py --build-index'")
                 sys.exit(1)
 
+        # Prepare for chat history
+        from chat_history import read_chat_history, update_chat_history
+        chat_history = read_chat_history()
+        chat_history.append({"role": "user", "content": question})
+
         # Call the async chat function with a single question and print the response
-        result = asyncio.run(
-            chat_completion([{"role": "user", "content": question}])
+        answer = asyncio.run(
+            chat_completion(chat_history)
         )
-        print(result)
+        update_chat_history(question=question, answer=answer)
+        print(answer)
+
+
