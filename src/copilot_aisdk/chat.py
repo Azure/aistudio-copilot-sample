@@ -30,10 +30,10 @@ async def get_documents(query, num_docs=5):
     async with search_client:
         # use the vector embedding to do a vector search on the index
         results = await search_client.search(query, top=num_docs,
-                vector=query_vector, vector_fields="Embedding")
+                vector=query_vector, vector_fields="content_vector_open_ai")
 
         async for result in results:
-            context += f"\n>>> From: {result['Id']}\n{result['Text']}"
+            context += f"\n>>> From: {result['id']}\n{result['content']}"
 
     return context
 
