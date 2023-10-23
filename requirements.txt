@@ -5,8 +5,7 @@ ipykernel
 openai
 pydantic<2
 --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
-azure-ai-generative[evaluate]==0.8.3
-azureml-rag[cognitive_search]==0.1.24.1
+azure-ai-generative[evaluate,index]==0.8.3
 
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
