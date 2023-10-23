@@ -6,8 +6,7 @@ python-dotenv
 openai
 pydantic<2
 --extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
---extra-index-url https://azuremlsdktestpypi.azureedge.net/Create-Dev-Index/108146802
-azure-ai-generative[evaluate]==0.8.2
+azure-ai-generative[evaluate]==0.8.3
 azureml-rag[cognitive_search]==0.1.24.1
 
 # promptflow dependencies, these should be optional in the future
