@@ -26,40 +26,41 @@ async def get_documents(query, num_docs=5):
         deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
     query_vector = embedding["data"][0]["embedding"]
 
-    context = ""   
-    async with search_client:           
+    context = ""
+    async with search_client:
         # use the vector embedding to do a vector search on the index
         results = await search_client.search(query, top=num_docs,
                 vector=query_vector, vector_fields="Embedding")
 
         async for result in results:
-            context += f"\n>>> From: {result['Id']}\n{result['Text']}"      
-            
+            context += f"\n>>> From: {result['Id']}\n{result['Text']}"
+
     return context
-    
-async def chat_completion(messages: list[dict], stream: bool = False, 
+
+async def chat_completion(messages: list[dict], stream: bool = False,
     session_state: Any = None, context: dict[str, Any] = {}):
-    
+
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
-    documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))    
-    
+    documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))
+
     # make a copy of the context and modify it with the retrieved documents
     context = dict(context)
     context['documents'] = documents
-    
-    # add retrieved documents as context to the system prompt 
+
+    # add retrieved documents as context to the system prompt
     system_message = system_message_template.render(context=context)
     messages.insert(0, {"role":"system", "content": system_message})
-    
+
     # call Azure OpenAI with the system prompt and user's question
     response = openai.ChatCompletion.create(
         engine=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         messages=messages, temperature=context.get("temperature", 0.7),
         stream=stream,
         max_tokens=800)
-    
+
     # add context in the returned response
-    response.choices[0]['context'] = context
+    if not stream:
+        response.choices[0]['context'] = context['documents']
     return response
 

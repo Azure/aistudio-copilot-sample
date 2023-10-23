@@ -24,7 +24,7 @@ Then install the Azure AI CLI, on Ubuntu:
 curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
 ```
 
-For Linux and MacOS, follow the instructions [here](https://aka.ms/aistudio/docs/sdk).
+To install the CLI on Windows and MacOS, follow the instructions [here](https://github.com/Azure/azureai-insiders/blob/main/previews/aistudio/how-to/use_azureai_sdk.md#install-the-cli).
 
 ## Step 2: Create and connect to Azure Resources
 
@@ -34,7 +34,7 @@ ai init
 ```
 
 - This will first prompt to you to login to Azure
-- Then it will ask you to select or create resources, choose  **Azure AI Project + OpenAI + Cognitive Search** and follow the prompts
+- Then it will ask you to select or create resources, choose  **AI Project resource** and follow the prompts to create an Azure OpenAI resource, model deployments, and Azure AI  search resource
 - This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
 Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
@@ -44,6 +44,12 @@ Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to 
 Run the following CLI command to create an index that our code can use for data retrieval:
 ```
 ai search index update --files "../data/3-product-info/*.md" --index-name "product-info"
+ai config --set search.index.name product-info
+```
+
+Now, generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
+```
+ai dev new .env
 ```
 
 ## Step 4: Run the co-pilot with a sample question
@@ -53,13 +59,13 @@ To run a single question & answer through the sample co-pilot:
 python src/run.py --question "which tent is the most waterproof?"
 ```
 
-You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, langchain` or `aisdk`. To try running with semantic kernel:
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
 
 ```bash
 python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
 ```
 
-The `--implementaiton` flag can be used in combination with the evaluate command below as well.
+The `--implementation` flag can be used in combination with the evaluate command below as well.
 
 ## Step 5: Test the co-pilots using chatgpt to evaluate results
 
@@ -77,13 +83,16 @@ This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.j
 
 ## Step 6: Deploy the sample code
 
+** NOT YET WORKING **
+
+To deploy one of the implementations to an online endpoint, use:
 ```bash
-ai flow deploy --function aisdk_copilot.copilot.chat_completion --deployment-name productretail-copilot
+python src/run.py --deploy
 ```
 
-Or, generate a docker file:
+To test out the online enpoint, run:
 ```bash
-TODO: ai dockerfile generate
+python src/run.py --invoke 
 ```
 
 ## Additional Tips and Resources
