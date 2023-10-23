@@ -5,9 +5,11 @@ import os
 import openai
 import jinja2
 import pathlib
+from typing import Any
 
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents.aio import SearchClient
+from azure.search.documents.models import RawVectorQuery
 
 templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve())
 templateEnv = jinja2.Environment(loader=templateLoader)
@@ -27,10 +29,14 @@ async def get_documents(query, num_docs=5):
     query_vector = embedding["data"][0]["embedding"]
 
     context = ""
+    vector_query = RawVectorQuery(vector=query_vector, k=3, fields="Embedding")
     async with search_client:
         # use the vector embedding to do a vector search on the index
-        results = await search_client.search(query, top=num_docs,
-                vector=query_vector, vector_fields="Embedding")
+        results = await search_client.search(
+            search_text="",
+            top=num_docs,
+            vector_queries=[vector_query],
+        )
 
         async for result in results:
             context += f"\n>>> From: {result['Id']}\n{result['Text']}"
