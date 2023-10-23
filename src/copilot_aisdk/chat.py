@@ -8,6 +8,7 @@ import pathlib
 
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents.aio import SearchClient
+from azure.search.documents.models import RawVectorQuery
 
 templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve())
 templateEnv = jinja2.Environment(loader=templateLoader)
@@ -24,13 +25,16 @@ async def get_documents(query, num_docs=5):
     embedding = await openai.Embedding.acreate(input=query,
         model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
         deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
-    query_vector = embedding["data"][0]["embedding"]
+    embedding_to_query = embedding["data"][0]["embedding"]
 
     context = ""
     async with search_client:
         # use the vector embedding to do a vector search on the index
-        results = await search_client.search(query, top=num_docs,
-                vector=query_vector, vector_fields="Embedding")
+        vector_query = RawVectorQuery(vector=embedding_to_query, k=num_docs, fields="Embedding")
+        results = await search_client.search(
+            search_text="",
+            vector_queries=[vector_query],
+            select=["Id", "Text"])
 
         async for result in results:
             context += f"\n>>> From: {result['Id']}\n{result['Text']}"
@@ -42,7 +46,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
-    documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))
+    documents = await get_documents(user_message, context.get("num_retrieved_docs", 2))
 
     # make a copy of the context and modify it with the retrieved documents
     context = dict(context)
