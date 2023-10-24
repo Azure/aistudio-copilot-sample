@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 # set environment variables before importing any other code (in particular the openai module)
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 import os
 import sys
@@ -116,13 +116,12 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
         ),
         instance_type="Standard_DS2_V2",
         environment_variables={
-            'AZURE_SUBSCRIPTION_ID': os.getenv('AZURE_SUBSCRIPTION_ID'),
-            'OPENAI_API_TYPE': os.getenv('OPENAI_API_TYPE'),
-            'OPENAI_API_BASE': os.getenv('OPENAI_API_BASE'),
-            'OPENAI_API_KEY': os.getenv('OPENAI_API_KEY'),
-            'OPENAI_API_VERSION': os.getenv('OPENAI_API_VERSION'),
-            'AZURE_AI_SEARCH_ENDPOINT': os.getenv('AZURE_AI_SEARCH_ENDPOINT'),
-            'AZURE_AI_SEARCH_KEY': os.getenv('AZURE_AI_SEARCH_KEY'),
+            'OPENAI_API_TYPE': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiType}}" ,
+            'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
+            'OPENAI_API_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
+            'OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
+            'AZURE_AI_SEARCH_ENDPOINT': "${{azureml://connections/Default_CognitiveSearch/target}}",
+            'AZURE_AI_SEARCH_KEY': "${{azureml://connections/Default_CognitiveSearch/credentials/key}}",
             'AZURE_AI_SEARCH_INDEX_NAME': os.getenv('AZURE_AI_SEARCH_INDEX_NAME'),
             'AZURE_OPENAI_CHAT_MODEL': os.getenv('AZURE_OPENAI_CHAT_MODEL'),
             'AZURE_OPENAI_CHAT_DEPLOYMENT': os.getenv('AZURE_OPENAI_CHAT_DEPLOYMENT'),
@@ -170,7 +169,7 @@ if __name__ == "__main__":
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
         elif args.implementation == "aisdk":
-            from copilot_aisdk.chat import chat_completion
+            # from copilot_aisdk.chat import chat_completion
             deployment_folder = "copilot_aisdk"
             chat_module = "copilot_aisdk.chat"
 
