@@ -5,10 +5,10 @@ python-dotenv
 # generative ai SDK dependencies
 openai
 pydantic<2
-azureml-metrics[generative-ai]
-azure-ai-generative @https://azuremlsdktestpypi.blob.core.windows.net/repo/test-azure-ai-generative/azure_ai_generative-0.7.0-py3-none-any.whl
-azureml-rag[document_parsing,cognitive_search]==0.2.10
-azureml-telemetry
+--extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
+--extra-index-url https://azuremlsdktestpypi.azureedge.net/Create-Dev-Index/108146802
+azure-ai-generative[evaluate]==0.8.2
+azureml-rag[cognitive_search]==0.1.24.1
 
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
