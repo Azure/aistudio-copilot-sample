@@ -21,7 +21,7 @@ from consts import search_index_name, search_index_folder
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
     from azure.ai.generative.operations._index_data_source import LocalSource, ACSOutputConfig
-    from azure.ai.generative.functions.build_mlindex import build_mlindex
+    from azure.ai.generative.index import build_mlindex
 
     # Set up environment variables for cog search SDK
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
