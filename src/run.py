@@ -169,7 +169,7 @@ if __name__ == "__main__":
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
         elif args.implementation == "aisdk":
-            # from copilot_aisdk.chat import chat_completion
+            from copilot_aisdk.chat import chat_completion
             deployment_folder = "copilot_aisdk"
             chat_module = "copilot_aisdk.chat"
 
