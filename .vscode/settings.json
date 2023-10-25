@@ -1,0 +1,14 @@
+{
+    "python.testing.pytestArgs": [
+        "src"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.terminal.activateEnvironment": true,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.ai": true,
+        "**/.promptflow": true,
+        "**/.pytest_cache": true,
+    }
+}
