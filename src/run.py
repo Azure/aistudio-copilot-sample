@@ -81,25 +81,25 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     # temp: generate a single-turn qna wrapper over the chat completion function
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
 
+
     client = AIClient.from_config(DefaultAzureCredential())
     result = evaluate(
         evaluation_name=name,
-        asset=qna_fn,
+        target=qna_fn,
         data=dataset,
         task_type="qa",
-        truth_data="truth",
-        metrics_config={
-            "openai_params": {
-                "api_version": "2023-05-15",
-                "api_base": os.getenv("OPENAI_API_BASE"),
-                "api_type": "azure",
-                "api_key": os.getenv("OPENAI_API_KEY"),
-                "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
-            },
+        data_mapping={
             "questions": "question",
             "contexts": "context",
             "y_pred": "answer",
-            "y_test": "answer"
+            "y_test": "truth"
+        },
+        model_config={
+            "api_version": "2023-05-15",
+            "api_base": os.getenv("OPENAI_API_BASE"),
+            "api_type": "azure",
+            "api_key": os.getenv("OPENAI_API_KEY"),
+            "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
         },
         tracking_uri=client.tracking_uri,
     )
