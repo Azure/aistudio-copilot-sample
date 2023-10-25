@@ -18,6 +18,11 @@ keyring
 pytest
 
 # langchain dependencies, these should be optional in the future
-# langchain moved Embeddings from langchain.embeddings.base to langchain.schema.embeddings while azureml-rag is still referencing it. 
+# langchain moved Embeddings from langchain.embeddings.base to langchain.schema.embeddings while azureml-rag is still referencing it.
 # once azureml-rag fixes, we should remove the langchain reference from this file
 langchain<0.0.293
+semantic-kernel
+
+# inference server dependencies
+azureml-inference-server-http
+# azureml-contrib-servies
