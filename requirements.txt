@@ -5,9 +5,8 @@ ipykernel
 openai
 pydantic<2
 azure-search-documents==11.4.0b11
---extra-index-url https://azuremlsdktestpypi.azureedge.net/test-azure-ai-generative
 --extra-index-url https://azuremlsdktestpypi.azureedge.net/Create-Dev-Index/108397413/
-azure-ai-generative[evaluate]==0.8.3
+azure-ai-generative[evaluate] @https://azuremlsdktestpypi.blob.core.windows.net/repo/test-azure-ai-generative/azure_ai_generative-0.8.3-py3-none-any.whl
 
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
