@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 # set environment variables before importing any other code (in particular the openai module)
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 import os
 import sys
