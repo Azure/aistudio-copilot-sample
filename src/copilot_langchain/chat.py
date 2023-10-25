@@ -1,11 +1,10 @@
 import os
 
-from typing import Any
+from typing import Any, List
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
-from azure.identity import DefaultAzureCredential
-from azure.ai.generative import AIClient
+from langchain.memory import ConversationBufferMemory
 from azureml.rag.mlindex import MLIndex
 from consts import search_index_folder
 
@@ -21,10 +20,28 @@ def setup_credentials():
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
     os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
 
+def convert_chat_history_cp_to_lc(cp_messages: List[dict], lc_memory: ConversationBufferMemory):
+    lc_memory.clear()
+    for cp_message in cp_messages:
+        if cp_message["role"] == "user":
+            lc_memory.chat_memory.add_user_message(cp_message["content"])
+        elif cp_message["role"] == "assistant":
+            lc_memory.chat_memory.add_ai_message(cp_message["content"])
+
 async def chat_completion(messages: list[dict], stream: bool = False, 
     session_state: Any = None, context: dict[str, Any] = {}):  
+    setup_credentials()
 
+    # extra question from chat history messages
     question = messages[-1]["content"]
+    # convert chat history messages into memory
+    memory = ConversationBufferMemory(
+        memory_key="chat_history",
+        input_key="question",
+        return_messages=True,
+    )
+    convert_chat_history_cp_to_lc(messages[:-1], memory)
+
     llm = AzureChatOpenAI(
         deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
         model_name=os.environ["AZURE_OPENAI_CHAT_MODEL"],
@@ -35,9 +52,12 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     System:
     You are an AI assistant helping users with queries related to outdoor outdooor/camping gear and clothing.
     Use the following pieces of context to answer the questions about outdoor/camping gear and clothing as completely, correctly, and concisely as possible.
-    If the question is not related to outdoor/camping gear and clothing, just say Sorry, I only can answer question related to outdoor/camping gear and clothing. So how can I help? Don't try to make up an answer.
-    If the question is related to outdoor/camping gear and clothing but vague ask for clarifying questions.
-    Do not add documentation reference in the response.
+
+    ---
+
+    {chat_history}
+
+    ---
 
     {context}
 
@@ -47,14 +67,15 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     Answer:"
     """
+
     prompt_template = PromptTemplate(
         template=template,
-        input_variables=["context", "question"]
+        input_variables=[
+            "context",
+            "chat_history",
+            "question"
+        ],
     )
-
-    # connects to project defined in the config.json file at the root of the repo
-    client = AIClient.from_config(DefaultAzureCredential())
-    setup_credentials()
 
     # convert MLIndex to a langchain retriever
     mlindex = MLIndex(search_index_folder)
@@ -69,6 +90,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
             "prompt": prompt_template,
         }
     )
+    qa.combine_documents_chain.memory = memory
 
-    response = qa(question)
+    response = qa({ "question": question, "query": question })
     return response["result"]

@@ -6,6 +6,7 @@ import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import AzureTextEmbedding, AzureChatCompletion
 from semantic_kernel.connectors.ai.complete_request_settings import CompleteRequestSettings
 from azure.search.documents.aio import SearchClient
+from azure.search.documents.models import RawVectorQuery
 from azure.core.credentials import AzureKeyCredential
 
 from api import get_customer_info
@@ -49,13 +50,16 @@ class CustomerSupport:
         query_vector = embedding["data"][0]["embedding"]
 
         chunks = ""   
-        async with search_client:           
+        async with search_client:
             # use the vector embedding to do a vector search on the index
-            results = await search_client.search(question, top=self.number_of_docs,
-                    vector=query_vector, vector_fields="Embedding")
+            vector_query = RawVectorQuery(vector=embedding_to_query, k=self.number_of_docs, fields="Embedding")
+            results = await search_client.search(
+                search_text="",
+                vector_queries=[vector_query],
+                select=["Id", "Text"])
 
-            async for result in results:
-                chunks += f"\n>>> From: {result['Id']}\n{result['Text']}"  
+        async for result in results:
+            chunks += f"\n>>> From: {result['Id']}\n{result['Text']}"
 
         self.context += "## AskAboutProducts data\n" + str(chunks) + "\n\n"
 
