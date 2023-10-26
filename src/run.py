@@ -12,7 +12,7 @@ import platform
 import json
 import pathlib
 
-from azure.ai.resources import AIClient
+from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
@@ -27,7 +27,7 @@ def build_cogsearch_index(index_name, path_to_data):
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
     os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
 
-    # client = AIClient.from_config(DefaultAzureCredential())
+    client = AIClient.from_config(DefaultAzureCredential())
 
     # Use the same index name when registering the index in AI Studio
     index = build_index(
@@ -42,7 +42,7 @@ def build_cogsearch_index(index_name, path_to_data):
     )
 
     # register the index so that it shows up in the project
-    cloud_index = client.mlindexes.create_or_update(index)
+    cloud_index = client.indexes.create_or_update(index)
 
     print(f"Created index '{cloud_index.name}'")
     print(f"Local Path: {index.path}")
