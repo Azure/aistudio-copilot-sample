@@ -12,25 +12,25 @@ import platform
 import json
 import pathlib
 
-from azure.ai.generative import AIClient
-from azure.ai.generative.entities.models import Model
-from azure.ai.generative.entities.deployment import Deployment
+from azure.ai.resources import AIClient
+from azure.ai.resources.entities.models import Model
+from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 from consts import search_index_name, search_index_folder
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
-    from azure.ai.generative.operations._index_data_source import LocalSource, ACSOutputConfig
-    from azure.ai.generative.index import build_mlindex
+    from azure.ai.resources.operations._index_data_source import LocalSource, ACSOutputConfig
+    from azure.ai.generative.index import build_index
 
     # Set up environment variables for cog search SDK
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
     os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
 
-    client = AIClient.from_config(DefaultAzureCredential())
+    # client = AIClient.from_config(DefaultAzureCredential())
 
     # Use the same index name when registering the index in AI Studio
-    index = build_mlindex(
+    index = build_index(
         output_index_name=index_name,
         vector_store="azure_cognitive_search",
         embeddings_model = f"azure_open_ai://deployment/{os.environ['AZURE_OPENAI_EMBEDDING_DEPLOYMENT']}/model/{os.environ['AZURE_OPENAI_EMBEDDING_MODEL']}",
@@ -169,12 +169,12 @@ if __name__ == "__main__":
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
         elif args.implementation == "aisdk":
-            from copilot_aisdk.chat import chat_completion
+            # from copilot_aisdk.chat import chat_completion
             deployment_folder = "copilot_aisdk"
             chat_module = "copilot_aisdk.chat"
 
     if args.build_index:
-        build_cogsearch_index(search_index_name, "data/3-product_info")
+        build_cogsearch_index(search_index_name, "../data/3-product-info")
     elif args.evaluate:
         results = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot", dataset_path=args.dataset_path)
         print(results)
