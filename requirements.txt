@@ -13,8 +13,8 @@ azure-ai-ml @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc42
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
-promptflow[azure]
-promptflow-tools
+promptflow[azure]==0.1.0b8
+promptflow-tools==0.1.0b10
 keyring
 pytest
 
