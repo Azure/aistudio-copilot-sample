@@ -37,7 +37,7 @@ async def get_documents(query, num_docs=5):
             select=["Id", "Text"])
 
         async for result in results:
-            context += f"\n>>> From: {result['Id']}\n{result['Text']}"
+            context += f"\n>>> From: {result['id']}\n{result['content']}"
 
     return context
 

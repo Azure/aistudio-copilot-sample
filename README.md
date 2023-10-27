@@ -43,8 +43,7 @@ Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to 
 
 Run the following CLI command to create an index that our code can use for data retrieval:
 ```
-ai search index update --files "../data/3-product-info/*.md" --index-name "product-info"
-ai config --set search.index.name product-info
+ai search index update --files "../data/3-product-info/*.md" --mlindex-name "contoso_product_index"
 ```
 
 Now, generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
@@ -66,6 +65,30 @@ python src/run.py --implementation semantickernel --question "what is the waterp
 ```
 
 The `--implementation` flag can be used in combination with the evaluate command below as well.
+
+You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
+
+```bash
+cd src
+
+# chat interactively
+ai chat --interactive # uses default "chat with your data" copilot
+ai chat --interactive --function copilot_aisdk/chat:chat_completion
+ai chat --interactive --function copilot_langchain/chat:chat_completion
+ai chat --interactive --function copilot_semantickernel/chat:chat_completion
+
+# ask a single question
+ai chat --question "which tent is the most waterproof?" # uses default "chat with your data" copilot
+ai chat --function copilot_aisdk/chat:chat_completion --question "which tent is the most waterproof?" 
+ai chat --function copilot_langchain/chat:chat_completion --question "which tent is the most waterproof?" 
+ai chat --function copilot_semantickernel/chat:chat_completion --question "what is the waterproof rating of the tent I just ordered?"
+
+# chat interactively, with an initial seed question:
+ai chat --interactive --question "which tent is the most waterproof?"  # uses default "chat with your data" copilot
+ai chat --interactive --function copilot_aisdk/chat:chat_completion --question "which tent is the most waterproof?" 
+ai chat --interactive --function copilot_langchain/chat:chat_completion --question "which tent is the most waterproof?" 
+ai chat --interactive --function copilot_semantickernel/chat:chat_completion --question "what is the waterproof rating of the tent I just ordered?"
+```
 
 ## Step 5: Test the co-pilots using chatgpt to evaluate results
 
