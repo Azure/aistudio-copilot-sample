@@ -1,19 +1,18 @@
 # other app dependencies
 ipykernel
-python-dotenv
 
 # generative ai SDK dependencies
 openai
 pydantic<2
-azureml-metrics[prompt-flow,evaluate] @https://azuremlsdktestpypi.blob.core.windows.net/repo/sdk-release/master/588E708E0DF342C4A80BD954289657CF/azureml_metrics-0.1.0.105204596-py3-none-any.whl
-azure-ai-generative @https://azuremlsdktestpypi.blob.core.windows.net/repo/test-azure-ai-generative/azure_ai_generative-0.7.0-py3-none-any.whl
-azureml-rag[cognitive_search]==0.1.24.1
-azureml-telemetry
+azure-search-documents==11.4.0b11
+azureml-metrics[generative-ai] @https://azuremlsdktestpypi.blob.core.windows.net/repo/Create-Dev-Index/108397413/azureml_metrics-0.1.0.108397413-py3-none-any.whl
+azure-ai-generative[evaluate,index] @https://azuremlsdktestpypi.blob.core.windows.net/repo/test-azure-ai-generative/azure_ai_generative-0.8.3-py3-none-any.whl
 
 # promptflow dependencies, these should be optional in the future
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
 promptflow[azure]
+# python-dotenv # promptflow[azure] depends on this package
 promptflow-tools
 keyring
 pytest
