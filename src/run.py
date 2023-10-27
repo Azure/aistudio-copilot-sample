@@ -12,9 +12,9 @@ import platform
 import json
 import pathlib
 
-from azure.ai.generative import AIClient
-from azure.ai.generative.entities.models import Model
-from azure.ai.generative.entities.deployment import Deployment
+from azure.ai.resources.client import AIClient
+from azure.ai.resources.entities.models import Model
+from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 from consts import search_index_name, search_index_folder
 
