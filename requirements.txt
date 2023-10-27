@@ -5,9 +5,8 @@ ipykernel
 openai
 pydantic<2
 azure-search-documents==11.4.0b11
-azureml-metrics[generative-ai] @https://azuremlsdktestpypi.blob.core.windows.net/repo/Create-Dev-Index/108397413/azureml_metrics-0.1.0.108397413-py3-none-any.whl
-azure-ai-generative[evaluate,index,document_parsing] @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-generative/1a20231026010/azure_ai_generative-1.0.0a20231026010-py3-none-any.whl
 azure-ai-resources @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-resources/1a20231026010/azure_ai_resources-1.0.0a20231026010-py3-none-any.whl
+azure-ai-generative[evaluate,index,document_parsing] @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-generative/1a20231026010/azure_ai_generative-1.0.0a20231026010-py3-none-any.whl
 azure-ai-ml @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-ml/1.12a20231026005/azure_ai_ml-1.12.0a20231026005-py3-none-any.whl
 
 # promptflow dependencies, these should be optional in the future
@@ -15,14 +14,13 @@ azure-ai-ml @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc42
 azureml-mlflow==1.53.0
 promptflow[azure]==0.1.0b8
 promptflow-tools==0.1.0b10
-# python-dotenv # promptflow[azure] depends on this package
 keyring
 pytest
 
 # langchain dependencies, these should be optional in the future
 # langchain moved Embeddings from langchain.embeddings.base to langchain.schema.embeddings while azureml-rag is still referencing it.
 # once azureml-rag fixes, we should remove the langchain reference from this file
-langchain<0.0.293
+langchain==0.0.324
 semantic-kernel
 
 # inference server dependencies
