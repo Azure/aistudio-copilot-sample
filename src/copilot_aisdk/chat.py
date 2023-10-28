@@ -5,7 +5,6 @@ import os
 import openai
 import jinja2
 import pathlib
-from typing import Any
 
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents.aio import SearchClient
