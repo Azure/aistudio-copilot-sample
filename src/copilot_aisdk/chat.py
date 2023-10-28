@@ -31,14 +31,14 @@ async def get_documents(query, num_docs=5):
     context = ""
     async with search_client:
         # use the vector embedding to do a vector search on the index
-        vector_query = RawVectorQuery(vector=embedding_to_query, k=num_docs, fields="Embedding")
+        vector_query = RawVectorQuery(vector=embedding_to_query, k=num_docs, fields="content_vector_open_ai")
         results = await search_client.search(
             search_text="",
             vector_queries=[vector_query],
-            select=["Id", "Text"])
+            select=["id", "content"])
 
         async for result in results:
-            context += f"\n>>> From: {result['Id']}\n{result['Text']}"
+            context += f"\n>>> From: {result['id']}\n{result['content']}"
 
     return context
 

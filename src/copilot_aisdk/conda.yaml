@@ -6,7 +6,7 @@ dependencies:
   - pip:
       - openai[embeddings]
       - azure-identity
-      - azure-search-documents==11.4.0b6
+      - azure-search-documents==11.4.0b11
       - jinja2
       - azureml-inference-server-http
       - azureml-contrib-services

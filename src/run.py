@@ -20,8 +20,8 @@ from consts import search_index_name, search_index_folder
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
-    from azure.ai.generative.operations._index_data_source import LocalSource, ACSOutputConfig
-    from azure.ai.generative.functions.build_mlindex import build_mlindex
+    from azure.ai.resources.operations._index_data_source import LocalSource, ACSOutputConfig
+    from azure.ai.generative.index import build_index
 
     # Set up environment variables for cog search SDK
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
@@ -30,7 +30,7 @@ def build_cogsearch_index(index_name, path_to_data):
     client = AIClient.from_config(DefaultAzureCredential())
 
     # Use the same index name when registering the index in AI Studio
-    index = build_mlindex(
+    index = build_index(
         output_index_name=index_name,
         vector_store="azure_cognitive_search",
         embeddings_model = f"azure_open_ai://deployment/{os.environ['AZURE_OPENAI_EMBEDDING_DEPLOYMENT']}/model/{os.environ['AZURE_OPENAI_EMBEDDING_MODEL']}",
@@ -42,7 +42,7 @@ def build_cogsearch_index(index_name, path_to_data):
     )
 
     # register the index so that it shows up in the project
-    cloud_index = client.mlindexes.create_or_update(index)
+    cloud_index = client.indexes.create_or_update(index)
 
     print(f"Created index '{cloud_index.name}'")
     print(f"Local Path: {index.path}")
@@ -103,7 +103,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
         },
         tracking_uri=client.tracking_uri,
     )
-    return result
+    return result.metrics_summary
 
 def deploy_flow(deployment_name, deployment_folder, chat_module):
     client = AIClient.from_config(DefaultAzureCredential())
@@ -116,13 +116,12 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
         ),
         instance_type="Standard_DS2_V2",
         environment_variables={
-            'AZURE_SUBSCRIPTION_ID': os.getenv('AZURE_SUBSCRIPTION_ID'),
-            'OPENAI_API_TYPE': os.getenv('OPENAI_API_TYPE'),
-            'OPENAI_API_BASE': os.getenv('OPENAI_API_BASE'),
-            'OPENAI_API_KEY': os.getenv('OPENAI_API_KEY'),
-            'OPENAI_API_VERSION': os.getenv('OPENAI_API_VERSION'),
-            'AZURE_AI_SEARCH_ENDPOINT': os.getenv('AZURE_AI_SEARCH_ENDPOINT'),
-            'AZURE_AI_SEARCH_KEY': os.getenv('AZURE_AI_SEARCH_KEY'),
+            'OPENAI_API_TYPE': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiType}}" ,
+            'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
+            'OPENAI_API_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
+            'OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
+            'AZURE_AI_SEARCH_ENDPOINT': "${{azureml://connections/Default_CognitiveSearch/target}}",
+            'AZURE_AI_SEARCH_KEY': "${{azureml://connections/Default_CognitiveSearch/credentials/key}}",
             'AZURE_AI_SEARCH_INDEX_NAME': os.getenv('AZURE_AI_SEARCH_INDEX_NAME'),
             'AZURE_OPENAI_CHAT_MODEL': os.getenv('AZURE_OPENAI_CHAT_MODEL'),
             'AZURE_OPENAI_CHAT_DEPLOYMENT': os.getenv('AZURE_OPENAI_CHAT_DEPLOYMENT'),
@@ -175,7 +174,7 @@ if __name__ == "__main__":
             chat_module = "copilot_aisdk.chat"
 
     if args.build_index:
-        build_cogsearch_index(search_index_name, "data/3-product_info")
+        build_cogsearch_index(os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), "./data/3-product-info")
     elif args.evaluate:
         results = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot", dataset_path=args.dataset_path)
         print(results)

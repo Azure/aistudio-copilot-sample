@@ -5,7 +5,7 @@ from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from azureml.rag.mlindex import MLIndex
+from azure.ai.generative.index import get_langchain_retriever_from_index
 from consts import search_index_folder
 
 def setup_credentials():
@@ -28,8 +28,8 @@ def convert_chat_history_cp_to_lc(cp_messages: List[dict], lc_memory: Conversati
         elif cp_message["role"] == "assistant":
             lc_memory.chat_memory.add_ai_message(cp_message["content"])
 
-async def chat_completion(messages: list[dict], stream: bool = False, 
-    session_state: Any = None, context: dict[str, Any] = {}):  
+async def chat_completion(messages: list[dict], stream: bool = False,
+    session_state: Any = None, context: dict[str, Any] = {}):
     setup_credentials()
 
     # extra question from chat history messages
@@ -78,8 +78,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     )
 
     # convert MLIndex to a langchain retriever
-    mlindex = MLIndex(search_index_folder)
-    index_langchain_retriever = mlindex.as_langchain_retriever()
+    index_langchain_retriever = get_langchain_retriever_from_index(search_index_folder)
 
     qa = RetrievalQA.from_chain_type(
         llm=llm,

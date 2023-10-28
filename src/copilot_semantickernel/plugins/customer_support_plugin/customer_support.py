@@ -49,10 +49,10 @@ class CustomerSupport:
             deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
         query_vector = embedding["data"][0]["embedding"]
 
-        chunks = ""   
+        chunks = ""
         async with search_client:
             # use the vector embedding to do a vector search on the index
-            vector_query = RawVectorQuery(vector=embedding_to_query, k=self.number_of_docs, fields="Embedding")
+            vector_query = RawVectorQuery(vector=query_vector, k=self.number_of_docs, fields="content_vector_open_ai")
             results = await search_client.search(
                 search_text="",
                 vector_queries=[vector_query],
@@ -73,7 +73,7 @@ class CustomerSupport:
                 os.getenv("OPENAI_API_KEY"),
             )
         )
-    
+
         # Import the chat plugin from the plugins directory.
         plugins_directory = os.path.dirname(os.path.realpath(__file__)) + "/../../plugins"
 
