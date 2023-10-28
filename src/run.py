@@ -103,7 +103,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
         },
         tracking_uri=client.tracking_uri,
     )
-    return result
+    return result.metrics_summary
 
 def deploy_flow(deployment_name, deployment_folder, chat_module):
     client = AIClient.from_config(DefaultAzureCredential())
@@ -169,12 +169,12 @@ if __name__ == "__main__":
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
         elif args.implementation == "aisdk":
-            # from copilot_aisdk.chat import chat_completion
+            from copilot_aisdk.chat import chat_completion
             deployment_folder = "copilot_aisdk"
             chat_module = "copilot_aisdk.chat"
 
     if args.build_index:
-        build_cogsearch_index(search_index_name, "../data/3-product-info")
+        build_cogsearch_index(os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), "./data/3-product-info")
     elif args.evaluate:
         results = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot", dataset_path=args.dataset_path)
         print(results)
