@@ -16,7 +16,6 @@ from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
-from consts import search_index_name, search_index_folder
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
@@ -188,10 +187,11 @@ if __name__ == "__main__":
             question = args.question
 
         # Prepare for the search index
+        search_index_folder = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") + "-mlindex"
         if not os.path.exists(search_index_folder):
             client = AIClient.from_config(DefaultAzureCredential())
             try:
-                client.mlindexes.download(name=search_index_name, download_path=search_index_folder, label="latest")
+                client.mlindexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), download_path=search_index_folder, label="latest")
             except:
                 print("Please build the search index with 'python src/run.py --build-index'")
                 sys.exit(1)

@@ -6,7 +6,6 @@ from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from azure.ai.generative.index import get_langchain_retriever_from_index
-from consts import search_index_folder
 
 def setup_credentials():
     # Azure OpenAI credentials
@@ -78,6 +77,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     )
 
     # convert MLIndex to a langchain retriever
+    search_index_folder = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") + "-mlindex"
     index_langchain_retriever = get_langchain_retriever_from_index(search_index_folder)
 
     qa = RetrievalQA.from_chain_type(
