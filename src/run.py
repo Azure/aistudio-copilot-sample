@@ -154,6 +154,7 @@ if __name__ == "__main__":
     parser.add_argument("--build-index", help="Build an index with the default docs", action='store_true')
     args = parser.parse_args()
 
+    check_local_index = False
     if args.implementation:
         if args.implementation == "promptflow":
             from copilot_promptflow.chat import chat_completion
@@ -167,6 +168,7 @@ if __name__ == "__main__":
             from copilot_langchain.chat import chat_completion
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
+            check_local_index = True
         elif args.implementation == "aisdk":
             from copilot_aisdk.chat import chat_completion
             deployment_folder = "copilot_aisdk"
@@ -188,7 +190,7 @@ if __name__ == "__main__":
 
         # Prepare for the search index
         search_index_folder = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") + "-mlindex"
-        if not os.path.exists(search_index_folder):
+        if check_local_index and not os.path.exists(search_index_folder):
             client = AIClient.from_config(DefaultAzureCredential())
             try:
                 client.mlindexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), download_path=search_index_folder, label="latest")
