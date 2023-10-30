@@ -188,7 +188,7 @@ if __name__ == "__main__":
             question = args.question
 
         # Prepare for the search index
-        if not os.path.exists(search_index_folder):
+        if args.implementation == "langchain" and not os.path.exists(search_index_folder):
             client = AIClient.from_config(DefaultAzureCredential())
             try:
                 client.mlindexes.download(name=search_index_name, download_path=search_index_folder, label="latest")
