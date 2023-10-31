@@ -29,8 +29,8 @@ nodes:
     tool: promptflow.tools.embedding.embedding
   inputs:
     connection: Default_AzureOpenAI
+    deployment_name: text-embedding-ada-002-2
     input: ${inputs.question}
-    deployment_name: text-ada-embedding-002-2
 - name: retrieve_documentation
   type: python
   source:
@@ -39,7 +39,7 @@ nodes:
   inputs:
     search: Default_CognitiveSearch
     question: ${inputs.question}
-    index_name: product-info-index-test1
+    index_name: product-info
     embedding: ${question_embedding.output}
 - name: llm_response
   type: llm
@@ -47,7 +47,7 @@ nodes:
     type: code
     path: llm_response.jinja2
   inputs:
-    deployment_name: gpt-35-turbo-16k-0613
+    deployment_name: gpt-35-turbo-0301
     prompt_text: ${customer_prompt.output}
     question: ${inputs.question}
     model: gpt-3.5-turbo-0301

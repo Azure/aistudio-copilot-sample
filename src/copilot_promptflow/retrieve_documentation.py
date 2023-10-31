@@ -15,9 +15,9 @@ def retrieve_documentation(question: str, index_name: str, embedding: List[float
     vector_query = RawVectorQuery(vector=embedding, k=2, fields="content_vector_open_ai")
     results = search_client.search(search_text="",
             vector_queries=[vector_query],
-            select=["Id", "Text"])
+            select=["id", "content"])
 
-    docs = [{"id": doc["Id"],  "text": doc["Text"]}
+    docs = [{"id": doc["id"],  "text": doc["content"]}
           for doc in results]
 
     return docs
