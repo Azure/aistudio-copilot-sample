@@ -107,7 +107,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             "api_key": os.getenv("OPENAI_API_KEY"),
             "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
         },
-        metrics_list=["ada_similarity", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
+        metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
         tracking_uri=client.tracking_uri,
     )
 
