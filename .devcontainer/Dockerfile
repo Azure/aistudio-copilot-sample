@@ -22,5 +22,5 @@ WORKDIR /home/vscode
 USER vscode
 
 # Install Azure AI CLI (which installs `az` CLI and `ai` CLI + dependencies)
-RUN curl -sL https://csspeechstorage.blob.core.windows.net/drop/private/ai/InstallAzureAICLIDeb-0.0.0-dev2023.40659454.sh | bash
+RUN curl -sL https://csspeechstorage.blob.core.windows.net/drop/private/ai/InstallAzureAICLIDeb-1.0.0-alpha1031.2.sh | bash
 
