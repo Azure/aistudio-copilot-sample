@@ -15,6 +15,7 @@ templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve()
 templateEnv = jinja2.Environment(loader=templateLoader)
 system_message_template = templateEnv.get_template("system-message.jinja2")
 
+
 async def get_documents(query, num_docs=5):
     #  retrieve documents relevant to the user's question from Cognitive Search
     search_client = SearchClient(
@@ -24,8 +25,8 @@ async def get_documents(query, num_docs=5):
 
     # generate a vector embedding of the user's question
     embedding = await openai.Embedding.acreate(input=query,
-        model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
-        deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
+                                               model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
+                                               deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
     embedding_to_query = embedding["data"][0]["embedding"]
 
     context = ""
@@ -42,9 +43,9 @@ async def get_documents(query, num_docs=5):
 
     return context
 
-async def chat_completion(messages: list[dict], stream: bool = False,
-    session_state: Any = None, context: dict[str, Any] = {}):
 
+async def chat_completion(messages: list[dict], stream: bool = False,
+                          session_state: Any = None, context: dict[str, Any] = {}):
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
     documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))
@@ -55,7 +56,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # add retrieved documents as context to the system prompt
     system_message = system_message_template.render(context=context)
-    messages.insert(0, {"role":"system", "content": system_message})
+    messages.insert(0, {"role": "system", "content": system_message})
 
     # call Azure OpenAI with the system prompt and user's question
     response = openai.ChatCompletion.create(
@@ -68,4 +69,3 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     if not stream:
         response.choices[0]['context'] = context['documents']
     return response
-

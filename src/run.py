@@ -107,6 +107,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             "api_key": os.getenv("OPENAI_API_KEY"),
             "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
         },
+        metrics_list=["ada_similarity", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
         tracking_uri=client.tracking_uri,
     )
 
@@ -115,7 +116,8 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
         with tempfile.TemporaryDirectory() as tmpdir:
             result.download_evaluation_artifacts(tmpdir)
             import pandas as pd
-            pd.set_option('display.max_colwidth', 30)
+            pd.set_option('display.max_colwidth', 15)
+            pd.set_option('display.max_columns', None)
             tabular_result = pd.read_json(os.path.join(tmpdir, "eval_results.jsonl"), lines=True)
         return tabular_result
 
