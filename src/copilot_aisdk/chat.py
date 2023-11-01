@@ -11,6 +11,8 @@ from azure.core.credentials import AzureKeyCredential
 from azure.search.documents.aio import SearchClient
 from azure.search.documents.models import RawVectorQuery
 
+from ..utils import add_context_to_streamed_response
+
 templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve())
 templateEnv = jinja2.Environment(loader=templateLoader)
 system_message_template = templateEnv.get_template("system-message.jinja2")
@@ -67,5 +69,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # add context in the returned response
     if not stream:
-        response.choices[0]['context'] = context['documents']
+        response.choices[0]['context'] = context
+    else:
+        response = add_context_to_streamed_response(response, context)
     return response
