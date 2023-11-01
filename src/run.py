@@ -64,10 +64,38 @@ def copilot_qna(question, chat_completion_fn):
         chat_completion_fn([{"role": "user", "content": question}])
     )
     response = result['choices'][0]
+
+    context = ""
+    for resutl in response["context"]
+        context += f"\n>>> From: {result['id']}\n{result['content']}"
     return {
         "question": question,
         "answer": response["message"]["content"],
+        "context": context
+    }
+
+# TEMP Wraper to convert chat_completion reponse to supported chat protocol
+def copilot_single_turn_chat(question, chat_completion_fn, num_retrieved_docs=5, temperature=0.7, **kwargs):
+    if platform.system() == 'Windows':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    user_message = {"role": "user", "content": question}
+
+    result = asyncio.run(
+        chat_completion_fn([{"role": "user", "content": question}], context={"num_retrieved_docs": num_retrieved_docs, "temperature": temperature})
+    )
+    response = result['choices'][0]
+
+    system_message = {
+        "role": response["message"]["role"],
+        "content": response["message"]["content"],
         "context": response["context"]
+    }
+
+    messages = [user_message, system_message]
+
+    return {
+        "messages": messages
     }
 
 
@@ -108,6 +136,49 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
         },
         metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
+        tracking_uri=client.tracking_uri,
+    )
+
+    def read_eval_artifacts(result):
+        tabular_result = None
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result.download_evaluation_artifacts(tmpdir)
+            import pandas as pd
+            pd.set_option('display.max_colwidth', 15)
+            pd.set_option('display.max_columns', None)
+            tabular_result = pd.read_json(os.path.join(tmpdir, "eval_results.jsonl"), lines=True)
+        return tabular_result
+
+    return result.metrics_summary, read_eval_artifacts(result)
+
+
+def run_chat_evaluation(chat_completion_fn, name, dataset_path):
+    from azure.ai.generative.evaluate import evaluate
+
+    # Evaluate the default vs the improved system prompt to see if the improved prompt
+    # performs consistently better across a larger set of inputs
+    path = pathlib.Path.cwd() / dataset_path
+    dataset = load_jsonl(path)
+
+    # temp: generate a single-turn qna wrapper over the chat completion function
+    chat_fn = lambda question, **kwargs: copilot_single_turn_chat(question, chat_completion_fn, **kwargs)
+
+    client = AIClient.from_config(DefaultAzureCredential())
+    result = evaluate(
+        evaluation_name=name,
+        target=chat_fn,
+        data=dataset,
+        task_type="chat",
+        data_mapping={
+            "y_pred": "messages",
+        },
+        model_config={
+            "api_version": "2023-05-15",
+            "api_base": os.getenv("OPENAI_API_BASE"),
+            "api_type": "azure",
+            "api_key": os.getenv("OPENAI_API_KEY"),
+            "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
+        },
         tracking_uri=client.tracking_uri,
     )
 
@@ -204,8 +275,12 @@ if __name__ == "__main__":
     if args.build_index:
         build_cogsearch_index(os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), "./data/3-product-info")
     elif args.evaluate:
-        metrics_summary, tabular_result = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
+        if args.implementation == "aisdk":
+            metrics_summary, tabular_result = run_chat_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
                                  dataset_path=args.dataset_path)
+        else:
+            metrics_summary, tabular_result = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
+                                    dataset_path=args.dataset_path)
         pprint("-----Summarized Metrics-----")
         pprint(metrics_summary)
         pprint("-----Tabular Result-----")

@@ -38,17 +38,22 @@ async def get_documents(query, num_docs=5):
             vector_queries=[vector_query],
             select=["id", "content"])
 
+        citations = []
         async for result in results:
             context += f"\n>>> From: {result['id']}\n{result['content']}"
+            citations.append({
+                "id": result["id"],
+                "content" : result["content"]
+            })
 
-    return context
+    return citations
 
 
 async def chat_completion(messages: list[dict], stream: bool = False,
                           session_state: Any = None, context: dict[str, Any] = {}):
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
-    documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))
+    documents = await get_documents(user_message, context.pop("num_retrieved_docs", 5))
 
     # make a copy of the context and modify it with the retrieved documents
     context = dict(context)
@@ -61,11 +66,13 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     # call Azure OpenAI with the system prompt and user's question
     response = openai.ChatCompletion.create(
         engine=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
-        messages=messages, temperature=context.get("temperature", 0.7),
+        messages=messages, temperature=context.pop("temperature", 0.7),
         stream=stream,
         max_tokens=800)
 
     # add context in the returned response
     if not stream:
-        response.choices[0]['context'] = context['documents']
+        if response.choices[0].get("context") is None:
+            response.choices[0]['context'] = {}
+        response.choices[0]['context']["citations"] = context['documents']
     return response
