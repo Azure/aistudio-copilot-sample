@@ -72,6 +72,13 @@ python src/run.py --question "which tent is the most waterproof?" --implementati
 
 The `--implementation` flag can be used in combination with the evaluate command below as well.
 
+You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
+
+```bash
+ai chat --interactive # uses default "chat with your data" copilot
+ai chat --interactive --function src/copilot_aisdk/chat:chat_completion
+```
+
 ## Step 5: Test the co-pilots using chatgpt to evaluate results
 
 To run evaluation on a copilot implementations:
@@ -85,6 +92,13 @@ pytest
 ```
 
 This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4.
+
+You can also use the `ai` CLI to do bulk runs and evaluations:
+
+```bash
+ai chat evaluate --input-data src/test/evaluation_dataset.jsonl # uses default "chat with your data" copilot
+ai chat evaluate --input-data src/test/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
+```
 
 ## Step 6: Deploy the sample code
 
