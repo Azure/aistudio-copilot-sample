@@ -43,7 +43,7 @@ Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to 
 
 Run the following CLI command to create an index that our code can use for data retrieval:
 ```
-ai search index update --files "../data/3-product-info/*.md" --index-name "product-info"
+ai search index update --files "./data/3-product-info/*.md" --index-name "product-info"
 ai config --set search.index.name product-info
 ```
 
@@ -63,6 +63,12 @@ You can try out different sample implementations by specifying the `--implementa
 
 ```bash
 python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
+```
+
+To try out the promptflow implementation, double check deployment names (both embedding and chat) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
+
+```bash
+python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
 ```
 
 The `--implementation` flag can be used in combination with the evaluate command below as well.

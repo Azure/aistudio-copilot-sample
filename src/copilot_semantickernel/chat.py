@@ -61,7 +61,6 @@ async def chat_completion(messages: list[dict], stream: bool = False,
                 "content": result.result
             },
             "context": context,
-            "steps_taken": str(result.variables["steps_taken"])
         }]
     }
 
