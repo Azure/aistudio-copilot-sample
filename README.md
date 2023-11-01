@@ -64,7 +64,7 @@ You can try out different sample implementations by specifying the `--implementa
 python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
 ```
 
-To try out the promptflow implementation, double check deployment names (both embedding and chat) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
+To try out the promptflow implementation, check deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
 
 ```bash
 python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
