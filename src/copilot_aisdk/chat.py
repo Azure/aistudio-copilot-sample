@@ -5,13 +5,12 @@ import os
 import openai
 import jinja2
 import pathlib
-from typing import Any
 
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents.aio import SearchClient
 from azure.search.documents.models import RawVectorQuery
 
-from ..utils import add_context_to_streamed_response
+from utils import add_context_to_streamed_response
 
 templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve())
 templateEnv = jinja2.Environment(loader=templateLoader)
@@ -47,7 +46,7 @@ async def get_documents(query, num_docs=5):
 
 
 async def chat_completion(messages: list[dict], stream: bool = False,
-                          session_state: Any = None, context: dict[str, Any] = {}):
+                          session_state: any = None, context: dict[str, any] = {}):
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
     documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))
