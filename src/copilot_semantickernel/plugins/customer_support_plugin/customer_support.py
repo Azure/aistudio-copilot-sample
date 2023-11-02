@@ -2,6 +2,7 @@ from semantic_kernel.skill_definition import (
     sk_function,
 )
 import openai
+import json
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import AzureTextEmbedding, AzureChatCompletion
 from semantic_kernel.connectors.ai.complete_request_settings import CompleteRequestSettings
@@ -29,7 +30,7 @@ class CustomerSupport:
     def GetPastOrders(self, input: str) -> str:
         orders = str(get_customer_info(int(input))["orders"])
         self.context += "## GetPastOrders data\n" + str(orders) + "\n\n"
-        return str(get_customer_info(int(input))["orders"])
+        return json.dumps(get_customer_info(int(input))["orders"])
 
     @sk_function(
         description="Use this function to get additional information about a product. You may also use this function to ask generic questions about multiple products at the same time (e.g., ""what product is the best?"")",
@@ -56,10 +57,10 @@ class CustomerSupport:
             results = await search_client.search(
                 search_text="",
                 vector_queries=[vector_query],
-                select=["Id", "Text"])
-
-        async for result in results:
-            chunks += f"\n>>> From: {result['Id']}\n{result['Text']}"
+                select=["id", "content"])
+            
+            async for result in results:
+                chunks += f"\n>>> From: {result['id']}\n{result['content']}"
 
         self.context += "## AskAboutProducts data\n" + str(chunks) + "\n\n"
 
