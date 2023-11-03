@@ -1,0 +1,43 @@
+id: template_standard_flow
+name: Template Standard Flow
+inputs:
+  topic:
+    type: string
+    default: atom
+    is_chat_input: false
+outputs:
+  joke:
+    type: string
+    reference: ${echo.output}
+nodes:
+- name: echo
+  type: python
+  source:
+    type: code
+    path: echo.py
+  inputs:
+    input: ${joke.output}
+  use_variants: false
+- name: joke
+  type: llm
+  source:
+    type: code
+    path: joke.jinja2
+  inputs:
+    deployment_name: gpt-35-turbo-16k
+    temperature: 1
+    top_p: 1
+    stop: ""
+    max_tokens: 256
+    presence_penalty: 0
+    frequency_penalty: 0
+    logit_bias: ""
+    topic: ${inputs.topic}
+  provider: AzureOpenAI
+  connection: Default_AzureOpenAI
+  api: chat
+  module: promptflow.tools.aoai
+  use_variants: false
+node_variants: {}
+environment:
+  python_requirements_txt: requirements.txt

@@ -1,0 +1,5 @@
+{
+  "inputs": {
+      "input_string": ["Paris is the [MASK] of France.", "Today is a [MASK] day!"]
+  }
+}
