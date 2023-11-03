@@ -10,7 +10,7 @@ from azure.core.credentials import AzureKeyCredential
 from azure.search.documents.aio import SearchClient
 from azure.search.documents.models import RawVectorQuery
 
-from utils import add_context_to_streamed_response
+from streaming_utils import add_context_to_streamed_response
 
 templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve())
 templateEnv = jinja2.Environment(loader=templateLoader)
