@@ -125,6 +125,8 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
 
 
 def deploy_flow(deployment_name, deployment_folder, chat_module):
+    if not deployment_name:
+        deployment_name = f"{client.project_name}-copilot"
     client = AIClient.from_config(DefaultAzureCredential())
     deployment = Deployment(
         name=deployment_name,
@@ -248,7 +250,7 @@ if __name__ == "__main__":
         pprint("-----Tabular Result-----")
         pprint(tabular_result)
     elif args.deploy:
-        deployment_name = args.deployment_name if args.deployment_name else f"{client.project_name}-copilot"
+        deployment_name = args.deployment_name if args.deployment_name else None
         deploy_flow(deployment_name, deployment_folder, chat_module)
     elif args.invoke_deployment:
         if not args.deployment_name:
