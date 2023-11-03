@@ -129,11 +129,10 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
     deployment = Deployment(
         name=deployment_name,
         model=Model(
-            path=".",
+            path="./src",
             conda_file=f"{deployment_folder}/conda.yaml",
             chat_module=chat_module,
         ),
-        instance_type="Standard_DS2_V2",
         environment_variables={
             'OPENAI_API_TYPE': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiType}}",
             'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
@@ -151,6 +150,42 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
         },
     )
     client.deployments.create_or_update(deployment)
+
+
+def invoke_deployment(deployment_name: str, stream: bool = False):
+    client = AIClient.from_config(DefaultAzureCredential())
+    import requests
+
+    if stream:
+        accept_header = "application/jsonl"
+    else:
+        accept_header = "application/json"
+
+    scoring_url = client.deployments.get(deployment_name).scoring_uri
+    primary_key = client.deployments.get_keys(deployment_name).primary_key
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {primary_key}",
+        "Accept": accept_header,
+        "azureml-model-deployment": deployment_name,
+    }
+
+    response = requests.post(
+        scoring_url,
+        headers=headers,
+        json={
+            "messages": [{"role": "user", "content": "What tent has the highest rainfly rating?"}],
+            "stream": stream,
+        },
+        stream=stream
+    )
+    if stream:
+        for item in response.iter_lines(chunk_size=None):
+            print(item)
+    else:
+        print(response.json())
+
 
 
 # Run a single chat message through one of the co-pilot implementations
@@ -173,8 +208,10 @@ if __name__ == "__main__":
     parser.add_argument("--evaluate", help="Evaluate copilot", action='store_true')
     parser.add_argument("--dataset-path", help="Test dataset to use with evaluation",
                         default="src/tests/evaluation_dataset.jsonl", action='store_true')
-    parser.add_argument("--deployment-name", help="deployment name to use when deploying the flow", type=str)
+    parser.add_argument("--deployment-name", help="deployment name to use when deploying or invoking the flow", type=str)
     parser.add_argument("--build-index", help="Build an index with the default docs", action='store_true')
+    parser.add_argument("--stream", help="Whether response from a particular implementation should be streamed or not", action="store_true")
+    parser.add_argument("--invoke-deployment", help="Invoke a deployment and print out response", action="store_true")
     args = parser.parse_args()
 
     check_local_index = False
@@ -211,9 +248,13 @@ if __name__ == "__main__":
         pprint("-----Tabular Result-----")
         pprint(tabular_result)
     elif args.deploy:
-        client = AIClient.from_config(DefaultAzureCredential())
         deployment_name = args.deployment_name if args.deployment_name else f"{client.project_name}-copilot"
         deploy_flow(deployment_name, deployment_folder, chat_module)
+    elif args.invoke_deployment:
+        if not args.deployment_name:
+            print("Please provide a deployment name to invoke")
+            sys.exit(1)
+        invoke_deployment(args.deployment_name, stream=args.stream)
     else:
         question = "which tent is the most waterproof?"
         if args.question:
@@ -231,7 +272,15 @@ if __name__ == "__main__":
                 sys.exit(1)
 
         # Call the async chat function with a single question and print the response
-        result = asyncio.run(
-            chat_completion([{"role": "user", "content": question}])
-        )
-        print(result)
+        if args.stream:
+            result = asyncio.run(
+                chat_completion([{"role": "user", "content": question}], stream=True)
+            )
+            for r in result:
+                print(r)
+                print("\n")
+        else:
+            result = asyncio.run(
+                chat_completion([{"role": "user", "content": question}], stream=False)
+            )
+            print(result)
