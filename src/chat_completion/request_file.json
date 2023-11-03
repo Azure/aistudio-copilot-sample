@@ -1,0 +1,4 @@
+{
+    "messages": [{"role": "user", "content": "What tent has the highest rainfly rating?"}],
+    "stream": true
+}
