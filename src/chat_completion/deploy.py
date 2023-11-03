@@ -21,6 +21,14 @@ def deploy(deployment_name: str):
             path="./code/",
             chat_module="chat",
         ),
+        environment_variables={
+            'OPENAI_API_TYPE': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiType}}",
+            'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
+            'OPENAI_API_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
+            'OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
+            'AZURE_AI_SEARCH_ENDPOINT': "${{azureml://connections/AzureAISerach/target}}",
+            'AZURE_AI_SEARCH_KEY': "${{azureml://connections/AzureAISerach/credentials/key}}",
+        }
     )
 
     deployment = client.deployments.create_or_update(deployment)
