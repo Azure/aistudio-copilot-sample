@@ -41,3 +41,18 @@ python ./scripts/create_project.py --project-name <name of your project>
 ```
 
 If you run into permission issues, ping in the chat and you will be given access to the test subscription.
+
+Once you have your project created, please populate the project name in the `config.json` at the root of the repo.
+
+## Test Samples
+
+The repo is structured is structured as follows:
+
+1. `src/chat_completion` contains a sample for deploying a chat completion function
+2. `src/foundation_model` contains samples for deploying a foundation model. Within this folder, there is a separate folder for `HuggingFace`, `LLaMA`,
+and `azureml` curated. Feel free to try other models in the model catalog, which can be found [here](https://int.ai.azure.com/explore/models).
+4. `src/promptflow` contains a sample for deploying a promptflow. This promptflow uses the `Default_AzureOpenAI` connection. Feel free to stress
+test this sample by bringing your own promptflow and/or base image.
+
+Each sample has a `deploy.py` script as well as an `invoke.py` and sample json payload. Given that deployment takes about 10 minutes to complete, we
+recommend running various `deploy.py` scripts in parallel (i.e. run samples in different shells) instead of running them one at a time.
