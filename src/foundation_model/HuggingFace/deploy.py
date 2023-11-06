@@ -4,7 +4,7 @@
 
 from argparse import ArgumentParser
 
-from azure.ai.resources import AIClient
+from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential as Credential
 
