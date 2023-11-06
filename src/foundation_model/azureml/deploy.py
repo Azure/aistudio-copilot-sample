@@ -11,7 +11,7 @@ from azure.identity import DefaultAzureCredential as Credential
 def deploy(deployment_name: str):
     credential = Credential()
 
-    model_id = "azureml://registries/azureml/distilbert-base-cased/versions/10"
+    model_id = "azureml://registries/azureml/models/distilbert-base-cased/versions/10"
 
     client = AIClient.from_config(credential)
 
