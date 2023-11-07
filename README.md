@@ -55,6 +55,9 @@ and `azureml` curated. Feel free to try other models in the model catalog, which
 4. `src/promptflow` contains a sample for deploying a promptflow. This promptflow uses the `Default_AzureOpenAI` connection. Feel free to stress
 test this sample by bringing your own promptflow and/or base image.
 
+Each sub-folder contains a `deploy.py` that will deploy the model or application code, as well as an `invoke.py` that can be used to invoke the deployment. You should
+**first** use the `deploy.py` script to create the deployment. Then you can use the `invoke.py` script to test the deployment.
+
 We recommend running the samples in the following order:
 1. First, try out the foundation model examples. You may or may not have enough quota for LLaMA. If it fails for that reason, please ping in the chat, but do not file a bug.
 1. After you've tested out various models from the model catalog with these examples, then try deploying promptflow. For this one, you can bring your own promptflow, but please
