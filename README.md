@@ -3,29 +3,45 @@
 Welcome to the Deployment Bug Bash scheduled for 11/07/2023. Before you can start bashing, please make sure you follow these instructions to make sure you have the correct
 local environment and AI Project.
 
+## Clone the repo
+
+Clone the repo by running the following command:
+
+```shell
+git clone https://github.com/Azure/aistudio-copilot-sample
+git checkout deployment-bug-bash-11-07
+cd aistudio-copilot-sample
+```
+
 ## Setting Up Local Environment
 
-In a new shell, run the following to create a virtual environment:
+You will create a environment, activate it, install required packages.
 
-```shell
-python -m venv deployment-bug-bash-env
-```
+### Using virtual environment
 
-To activate the environment on Windows, run:
+If you are using Windows, run:
 
 ```cmd
+python -m venv deployment-bug-bash-env
 ./deployment-bug-bash-env/scripts/Activate
+pip install -r requirements.txt
 ```
 
-On Linux, run:
+To do this on Linux, run:
 
 ```bash
+python -m venv deployment-bug-bash-env
 source ./deployment-bug-bash-env/scripts/Activate
+pip install -r requirements.txt
 ```
 
-After the environment is active, run:
+### Using conda
+
+Alternatively, you can use conda too:
 
 ```shell
+conda create -n deployment-bug-bash-env python=3.10
+conda activate deployment-bug-bash-env
 pip install -r requirements.txt
 ```
 
