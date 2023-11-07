@@ -53,7 +53,7 @@ class CustomerSupport:
         chunks = ""
         async with search_client:
             # use the vector embedding to do a vector search on the index
-            vector_query = RawVectorQuery(vector=query_vector, k=self.number_of_docs, fields="content_vector_open_ai")
+            vector_query = RawVectorQuery(vector=query_vector, k=self.number_of_docs, fields="contentVector")
             results = await search_client.search(
                 search_text="",
                 vector_queries=[vector_query],
