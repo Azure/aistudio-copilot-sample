@@ -6,8 +6,8 @@ import requests
 import json
 from argparse import ArgumentParser
 
-from azure.ai.resources import AIClient
-from azure.identity import DefaultAzureCredential as Credential
+from azure.ai.resources.client import AIClient
+from azure.identity import InteractiveBrowserCredential as Credential
 
 def invoke(deployment_name: str):
     credential = Credential()

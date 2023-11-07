@@ -105,3 +105,6 @@ Please make sure to test the following in addition to running the above scripts:
 1. Listing deployments (run `client.deployments.list()`)
 1. Deleting a deployment (run `client.deployments.delete(<deployment_name>)`)
 1. Getting the keys of the deployment (run `client.deployments.get_keys(<deployment_name>)`)
+
+
+If you run into quota issues, try passing  `instance_type="Standard_E4s_v3"` to the deployment object.
