@@ -12,7 +12,7 @@ def retrieve_documentation(question: str, index_name: str, embedding: List[float
                                 index_name=index_name,
                                 credential=AzureKeyCredential(search.api_key))
 
-    vector_query = RawVectorQuery(vector=embedding, k=2, fields="content_vector_open_ai")
+    vector_query = RawVectorQuery(vector=embedding, k=2, fields="contentVector")
     results = search_client.search(search_text="",
             vector_queries=[vector_query],
             select=["id", "content"])
