@@ -4,7 +4,7 @@ dependencies:
   - "python=3.10"
   - "pip<=23.0.1"
   - pip:
-      - openai[embeddings]
+      - openai[embeddings]<1
       - azure-identity
       - azure-search-documents==11.4.0b11
       - jinja2
