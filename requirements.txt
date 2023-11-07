@@ -2,5 +2,5 @@
 --extra-index-url https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/
 azure-ai-generative==1.0.0a20231106013
 azure-ai-resources==1.0.0a20231106013
-azure-ai-ml @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-ml/1.12a20231026005/azure_ai_ml-1.12.0a20231026005-py3-none-any.whl
+azure-ai-ml==1.12a20231106004
 azure-identity
