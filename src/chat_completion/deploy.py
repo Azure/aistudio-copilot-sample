@@ -20,13 +20,16 @@ def deploy(deployment_name: str):
         model=Model(
             path="./code/",
             chat_module="chat",
+            conda_file="./conda.yaml",
         ),
         environment_variables={
             'OPENAI_API_TYPE': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiType}}",
             'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
             'OPENAI_API_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
             'OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
-        }
+            "AZURE_OPENAI_CHAT_DEPLOYMENT": "gpt-35-turbo"
+        },
+        instance_type="Standard_E4s_v3",
     )
 
     deployment = client.deployments.create_or_update(deployment)
