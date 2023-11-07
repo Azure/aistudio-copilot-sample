@@ -26,8 +26,6 @@ def deploy(deployment_name: str):
             'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
             'OPENAI_API_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
             'OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
-            'AZURE_AI_SEARCH_ENDPOINT': "${{azureml://connections/AzureAISerach/target}}",
-            'AZURE_AI_SEARCH_KEY': "${{azureml://connections/AzureAISerach/credentials/key}}",
         }
     )
 

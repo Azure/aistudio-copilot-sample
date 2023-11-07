@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.deployment import Deployment
-from azure.identity import DefaultAzureCredential as Credential
+from azure.identity import InteractiveBrowserCredential as Credential
 
 def deploy(deployment_name: str):
     credential = Credential()

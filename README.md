@@ -33,16 +33,13 @@ Your local environment is now fully ready to use the deployment code!
 
 ## Creating an AI Project
 
-An AI Resource has **already** been provisioned for your use, and connections to AOAI and AISearch have also been created. The AISearch resource already contains a vector index that
-will be consumed by some of the deployment examples. Create a project that's connected to this resource by running:
+An AI Resource has **already** been provisioned for your use. Create a project that's connected to this resource by running:
 
 ```
 python ./scripts/create_project.py --project-name <name of your project>
 ```
 
 If you run into permission issues, ping in the chat and you will be given access to the test subscription.
-
-Once you have your project created, please populate the project name in the `config.json` at the root of the repo.
 
 ## Test Samples
 
@@ -54,5 +51,17 @@ and `azureml` curated. Feel free to try other models in the model catalog, which
 4. `src/promptflow` contains a sample for deploying a promptflow. This promptflow uses the `Default_AzureOpenAI` connection. Feel free to stress
 test this sample by bringing your own promptflow and/or base image.
 
-Each sample has a `deploy.py` script as well as an `invoke.py` and sample json payload. Given that deployment takes about 10 minutes to complete, we
-recommend running various `deploy.py` scripts in parallel (i.e. run samples in different shells) instead of running them one at a time.
+We recommend running the samples in the following order:
+1. First, try out the foundation model examples. You may or may not have enough quota for LLaMA. If it fails for that reason, please ping in the chat, but do not file a bug.
+1. After you've tested out various models from the model catalog with these examples, then try deploying promptflow. For this one, you can bring your own promptflow, but please
+keep in mind that connection references/deployment names must be updated to match that in the AI resource.
+1. If you have time, you can try deploying the chat completion function. This is an **advanced scenario**, so please make sure the example deploys correctly and you can invoke the endpoint. You do not have to do anything else.
+
+Please make sure to test the following in addition to running the above scripts:
+
+1. Updating a deployment (`tags`, `properties`, `model`, etc)
+1. Getting a deployment (run `client.deployments.get(<deployment_name>)`)
+1. Listing deployments (run `client.deployments.list()`)
+1. Deleting a deployment (run `client.deployments.delete(<deployment_name>)`)
+1. Getting the keys of the deployment (run `client.deployments.get_keys(<deployment_name>)`)
+
