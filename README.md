@@ -10,7 +10,7 @@ Clone the repo by running the following command:
 ```shell
 git clone https://github.com/Azure/aistudio-copilot-sample
 git checkout deployment-bug-bash-11-07
-cd deployment-bug-bash-11-07
+cd aistudio-copilot-sample
 ```
 
 ## Setting Up Local Environment
