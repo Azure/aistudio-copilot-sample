@@ -121,6 +121,8 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             tabular_result = pd.read_json(os.path.join(tmpdir, "eval_results.jsonl"), lines=True)
         return tabular_result
 
+    pprint("------Studio Url-------")
+    pprint(result.studio_url)
     return result.metrics_summary, read_eval_artifacts(result)
 
 
