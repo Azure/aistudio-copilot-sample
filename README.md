@@ -41,6 +41,10 @@ python ./scripts/create_project.py --project-name <name of your project>
 
 If you run into permission issues, ping in the chat and you will be given access to the test subscription.
 
+## Bug Template
+
+The bug template can be found [here](https://aka.ms/aistudio/createbug).
+
 ## Test Samples
 
 The repo is structured is structured as follows:
