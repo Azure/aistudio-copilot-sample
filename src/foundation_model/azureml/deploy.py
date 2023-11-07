@@ -22,8 +22,6 @@ def deploy(deployment_name: str):
 
     deployment = client.deployments.create_or_update(deployment)
 
-    print(client.deployments.invoke(deployment_name, "./request_file_azureml_curated.json"))
-
 
 if __name__ == "__main__":
     parser = ArgumentParser()
