@@ -45,6 +45,15 @@ If you run into permission issues, ping in the chat and you will be given access
 
 The bug template can be found [here](https://aka.ms/aistudio/createbug).
 
+## Code/API References
+
+Reference docs are still in progress. For now, please see these files for a full list of parameters the deployment object/operations accept:
+
+1. `client.deployments.*`: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-resources/azure/ai/resources/operations/_deployment_operations.py
+1. `class Deployment`: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-resources/azure/ai/resources/entities/deployment.py
+1. `class DeploymentKeys`: https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-resources/azure/ai/resources/entities/deployment_keys.py
+1. Model classes (`Model` and `PromptflowModel`): https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-resources/azure/ai/resources/entities/models.py 
+
 ## Test Samples
 
 The repo is structured is structured as follows:
@@ -61,7 +70,8 @@ Each sub-folder contains a `deploy.py` that will deploy the model or application
 We recommend running the samples in the following order:
 1. First, try out the foundation model examples. You may or may not have enough quota for LLaMA. If it fails for that reason, please ping in the chat, but do not file a bug.
 1. After you've tested out various models from the model catalog with these examples, then try deploying promptflow. For this one, you can bring your own promptflow, but please
-keep in mind that connection references/deployment names must be updated to match that in the AI resource.
+keep in mind that connection references/deployment names must be updated to match that in the AI resource. You may also have to create connections in your project to make your
+own promptflow work. Note that the path the promptflow must be a local path.
 1. If you have time, you can try deploying the chat completion function. This is an **advanced scenario**, so please make sure the example deploys correctly and you can invoke the endpoint. You do not have to do anything else.
 
 Please make sure to test the following in addition to running the above scripts:
