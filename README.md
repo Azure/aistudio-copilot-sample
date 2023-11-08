@@ -102,8 +102,6 @@ ai chat evaluate --input-data src/test/evaluation_dataset.jsonl --function src/c
 
 ## Step 6: Deploy the sample code
 
-** NOT YET WORKING **
-
 To deploy one of the implementations to an online endpoint, use:
 ```bash
 python src/run.py --deploy
