@@ -10,7 +10,7 @@ This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/
 
 To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample/tree/oct-refresh?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
 
 If you want to get started in your local environment, first install the packages:
 ```
