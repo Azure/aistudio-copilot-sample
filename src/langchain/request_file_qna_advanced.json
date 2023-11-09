@@ -1,9 +1,0 @@
-{
-    "input_data": [
-        {
-            "question": "Which tent has the highest rainfly waterproof rating?",
-            "temperature": 0.5,
-            "number_of_docs": 0.3
-        }
-    ]
-}

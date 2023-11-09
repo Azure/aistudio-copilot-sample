@@ -1,0 +1,12 @@
+channels:
+  - "conda-forge"
+dependencies:
+  - "python=3.10"
+  - "pip<=23.0.1"
+  - pip:
+      - openai[embeddings]<1
+      - azure-identity
+      - azure-search-documents==11.4.0b11
+      - jinja2
+      - azureml-inference-server-http
+      - azureml-contrib-services

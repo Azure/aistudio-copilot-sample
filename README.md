@@ -8,33 +8,112 @@ This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/
 
 ## Step 1: Set up your development environment
 
-To get started quickly, we recommend to use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
+To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample/tree/oct-refresh?quickstart=1)
 
-Note: This will build a development environment using the Docker container definition in [.devcontainer/Dockerfile](.devcontainer/Dockerfile), and will start a VS Code instance running in that environment. 
+If you want to get started in your local environment, first install the packages:
+```
+git clone https://github.com/azure/aistudio-copilot-sample
+cd aistudio-copilot-sample
+pip install -r requirements.txt
+```
 
-If you want to set up your local development environment, please refer to the instructions [here](https://aka.ms/aistudio/docs/sdk) on how to manually install the Azure AI CLI and SDK on your machine.
+Then install the Azure AI CLI, on Ubuntu:
+```
+curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
+```
 
-## Step 2: Connect to Azure Resources
+To install the CLI on Windows and MacOS, follow the instructions [here](https://github.com/Azure/azureai-insiders/blob/main/previews/aistudio/how-to/use_azureai_sdk.md#install-the-cli).
 
-Login to azure and connect to an Azure AI project:
+## Step 2: Create and connect to Azure Resources
 
- - In VS Code, open a new terminal by pressing ```Ctrl-Shift-` ```.
- - Login to azure by typing ```az login --use-device-code``` 
- - Run ```ai init``` and select **Azure AI Project + OpenAI + Cognitive Search** to create a new Azure AI resource and project or connect to an existing project.
+Run ai init to create and/or connect to existing Azure resources:
+```
+ai init
+```
 
-This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
+- This will first prompt to you to login to Azure
+- Then it will ask you to select or create resources, choose  **AI Project resource** and follow the prompts to create an Azure OpenAI resource, model deployments, and Azure AI  search resource
+- This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
-## Step 3: Run the sample notebook
+Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
 
-Open and run the sample notebook to create, evaluate, and deploy a chatbot built using Azure OpenAI, Azure Cognitive Search, and Langchain:
- - Open the notebook: [src/langchain/langchain_qna.ipynb](src/langchain/langchain_qna.ipynb)
- - Press `Ctrl-Enter` to run each cell
-    - When you run the first cell you may be prompted to select your kernel, choose `Python Environment` and select the `Python 3.10.x` environment.
- - Open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view the generated indexes, evaluation runs, and endpoints.
+## Step 3: Build an Azure Search index
+
+Run the following CLI command to create an index that our code can use for data retrieval:
+```
+ai search index update --files "./data/3-product-info/*.md" --index-name "product-info"
+```
+
+Now, generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
+```
+ai dev new .env
+```
+
+## Step 4: Run the co-pilot with a sample question
+
+To run a single question & answer through the sample co-pilot:
+```bash
+python src/run.py --question "which tent is the most waterproof?"
+```
+
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
+
+```bash
+python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
+```
+
+To try out the promptflow implementation, check deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
+
+```bash
+python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
+```
+
+The `--implementation` flag can be used in combination with the evaluate command below as well.
+
+You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
+
+```bash
+ai chat --interactive # uses default "chat with your data" copilot
+ai chat --interactive --function src/copilot_aisdk/chat:chat_completion
+```
+
+## Step 5: Test the co-pilots using chatgpt to evaluate results
+
+To run evaluation on a copilot implementations:
+```
+python src/run.py --evaluate
+```
+
+You can also run pytest to run tests that use evaluation results to pass/fail
+```
+pytest
+```
+
+This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4.
+
+You can also use the `ai` CLI to do bulk runs and evaluations:
+
+```bash
+ai chat evaluate --input-data src/test/evaluation_dataset.jsonl # uses default "chat with your data" copilot
+ai chat evaluate --input-data src/test/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
+```
+
+## Step 6: Deploy the sample code
+
+To deploy one of the implementations to an online endpoint, use:
+```bash
+python src/run.py --deploy
+```
+
+To test out the online enpoint, run:
+```bash
+python src/run.py --invoke 
+```
 
 ## Additional Tips and Resources
+
 
 ### Follow the full tutorial
 

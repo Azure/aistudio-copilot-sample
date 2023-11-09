@@ -1,0 +1,13 @@
+channels:
+  - "conda-forge"
+dependencies:
+  - "python=3.10"
+  - "pip<=23.0.1"
+  - pip:
+      - promptflow[azure] @https://azuremlsdktestpypi.blob.core.windows.net/repo/promptflow/promptflow-0.0.109137057-py3-none-any.whl
+      - promptflow-tools
+      - keyrings.alt
+      - azure-cosmos
+      - azure-search-documents==11.4.0b11
+      - azureml-inference-server-http
+      - azureml-contrib-services

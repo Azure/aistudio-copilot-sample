@@ -173,3 +173,7 @@ encodings/
 
 # PromptFlow temporary files
 .promptflow
+
+config.json
+
+.ai
