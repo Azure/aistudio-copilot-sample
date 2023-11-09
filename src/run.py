@@ -262,7 +262,7 @@ if __name__ == "__main__":
         if check_local_index and not os.path.exists(search_index_folder):
             client = AIClient.from_config(DefaultAzureCredential())
             try:
-                client.mlindexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
+                client.indexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
                                           download_path=search_index_folder, label="latest")
             except:
                 print("Please build the search index with 'python src/run.py --build-index'")
