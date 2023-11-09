@@ -37,7 +37,7 @@ nodes:
     type: code
     path: retrieve_documentation.py
   inputs:
-    search: Default_CognitiveSearch
+    search: AzureAISearch
     question: ${inputs.question}
     index_name: product-info
     embedding: ${question_embedding.output}
@@ -47,10 +47,10 @@ nodes:
     type: code
     path: llm_response.jinja2
   inputs:
-    deployment_name: gpt-35-turbo-0301
+    deployment_name: gpt-35-turbo-16k-0613
     prompt_text: ${customer_prompt.output}
     question: ${inputs.question}
-    model: gpt-3.5-turbo-0301
+    model: gpt-3.5-turbo-0613
   provider: AzureOpenAI
   connection: Default_AzureOpenAI
   api: chat

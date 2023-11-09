@@ -5,7 +5,7 @@ import os
 
 from promptflow import PFClient
 
-from utils import contruct_streamed_pf_response
+from streaming_utils import contruct_streamed_pf_response
 
 
 def _get_connection_provider_id():
