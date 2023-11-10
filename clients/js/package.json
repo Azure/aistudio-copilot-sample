@@ -1,0 +1,16 @@
+{
+  "name": "mir",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node main.js"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/ai-chat-protocol": "file:../../../azure-sdk-for-js/sdk/machinelearning/ai-chat-protocol/azure-ai-chat-protocol-1.0.0-beta.1.tgz"
+  }
+}
