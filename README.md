@@ -51,6 +51,38 @@ The bug template can be found [here](https://aka.ms/aistudio/createbug).
 
 ## Step 6: Deploy the sample code
 
+### LLaMA
+
+To deploy LLaMA, run:
+
+```python
+cd src/LLaMA
+python ./deploy.py
+```
+
+To invoke LLaMA, run:
+
+```python
+cd src/LLaMA
+python ./invoke.py
+```
+
+### Promptflow
+
+To deploy promptflow, run:
+
+```python
+cd src/promptflow
+python ./deploy.py
+```
+
+To invoke LLaMA, run:
+
+```python
+cd src/promptflow
+python ./invoke.py
+```
+
 To deploy one of the implementations to an online endpoint, use:
 ```bash
 python src/run.py --deploy
