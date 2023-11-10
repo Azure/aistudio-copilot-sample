@@ -7,14 +7,13 @@ evaluation_results : any
 
 @pytest.fixture(scope="session", autouse=True)
 def run_before_any_test():
-    from copilot_semantickernel import chat
+    from copilot_promptflow import chat
   
-    global metrics_summary   
-    metrics_summary, tabular_result = run_evaluation(chat.chat_completion, 
-                                        "test_semantickernel_copilot",
+    global metrics_summary
+    metrics_summary, tabular_result =  run_evaluation(chat.chat_completion, 
+                                        "test_promptflow_copilot",
                                         "src/tests/evaluation_dataset.jsonl")
-
-
+        
 def test_gpt_groundedness_atleast4():
     assert(metrics_summary['mean_gpt_groundedness'] >= 4)
 
@@ -23,6 +22,5 @@ def test_gpt_relevance_atleast4():
         
 def test_gpt_coherence_atleast4():
     assert(metrics_summary['mean_gpt_coherence'] >= 4)
-    
     
     
