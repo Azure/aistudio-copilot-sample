@@ -26,79 +26,28 @@ curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
 
 To install the CLI on Windows and MacOS, follow the instructions [here](https://github.com/Azure/azureai-insiders/blob/main/previews/aistudio/how-to/use_azureai_sdk.md#install-the-cli).
 
-## Step 2: Create and connect to Azure Resources
+## Creating an AI Project
 
-Run ai init to create and/or connect to existing Azure resources:
+An AI Resource has **already** been provisioned for your use. Create a project that's connected to this resource by following below steps:
+
+1. Visit this [link to the AI Resource](https://int.ai.azure.com/manage/overview?wsid=/subscriptions/b17253fa-f327-42d6-9686-f3e553e24763/resourceGroups/rg-deploymentbugbash/providers/Microsoft.MachineLearningServices/workspaces/deployment_bug_bash&tid=72f988bf-86f1-41af-91ab-2d7cd011db47).
+1. Click `View all` on the Project panel.
+1. Click `+New Project`, enter your project name, then click `Create a project`. For your project, you can use the provided subscription and resource group but it may not have enough CPU quota that you need. In such case, use other subscription and resource group of your choice.
+1. You will see the Project detail page. Click `Settings` on bottom left, then click `View in the Azure Portal` on Resource Configuration panel on top right.
+1. Click `Download config.json`, then put the downloaded file into your root directory of your cloned repo.
+
+<!--
 ```
-ai init
-```
-
-- This will first prompt to you to login to Azure
-- Then it will ask you to select or create resources, choose  **AI Project resource** and follow the prompts to create an Azure OpenAI resource, model deployments, and Azure AI  search resource
-- This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
-
-Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
-
-## Step 3: Build an Azure Search index
-
-Run the following CLI command to create an index that our code can use for data retrieval:
-```
-ai search index update --files "./data/3-product-info/*.md" --index-name "product-info"
+python ./scripts/create_project.py --project-name <name of your project>
 ```
 
-Now, generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
-```
-ai dev new .env
-```
+If you run into permission issues, ping in the chat and you will be given access to the test subscription.
+-->
 
-## Step 4: Run the co-pilot with a sample question
+## Bug Template
 
-To run a single question & answer through the sample co-pilot:
-```bash
-python src/run.py --question "which tent is the most waterproof?"
-```
+The bug template can be found [here](https://aka.ms/aistudio/createbug).
 
-You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
-
-```bash
-python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
-```
-
-To try out the promptflow implementation, check deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
-
-```bash
-python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
-```
-
-The `--implementation` flag can be used in combination with the evaluate command below as well.
-
-You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
-
-```bash
-ai chat --interactive # uses default "chat with your data" copilot
-ai chat --interactive --function src/copilot_aisdk/chat:chat_completion
-```
-
-## Step 5: Test the co-pilots using chatgpt to evaluate results
-
-To run evaluation on a copilot implementations:
-```
-python src/run.py --evaluate
-```
-
-You can also run pytest to run tests that use evaluation results to pass/fail
-```
-pytest
-```
-
-This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4.
-
-You can also use the `ai` CLI to do bulk runs and evaluations:
-
-```bash
-ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl # uses default "chat with your data" copilot
-ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
-```
 
 ## Step 6: Deploy the sample code
 
