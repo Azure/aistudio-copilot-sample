@@ -15,6 +15,7 @@ import asyncio
 import platform
 import json
 import pathlib
+import pandas as pd
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
@@ -87,6 +88,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
 
     # temp: generate a single-turn qna wrapper over the chat completion function
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
+    output_path = "./evaluation_output"
 
     client = AIClient.from_config(DefaultAzureCredential())
     result = evaluate(
@@ -109,19 +111,12 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
         },
         metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
         tracking_uri=client.tracking_uri,
+        output_path=output_path,
     )
+    
+    tabular_result = pd.read_json(os.path.join(output_path, "eval_results.jsonl"), lines=True)
 
-    def read_eval_artifacts(result):
-        tabular_result = None
-        with tempfile.TemporaryDirectory() as tmpdir:
-            result.download_evaluation_artifacts(tmpdir)
-            import pandas as pd
-            pd.set_option('display.max_colwidth', 15)
-            pd.set_option('display.max_columns', None)
-            tabular_result = pd.read_json(os.path.join(tmpdir, "eval_results.jsonl"), lines=True)
-        return tabular_result
-
-    return result.metrics_summary, read_eval_artifacts(result)
+    return result, tabular_result
 
 
 def deploy_flow(deployment_name, deployment_folder, chat_module):
@@ -245,12 +240,13 @@ if __name__ == "__main__":
     if args.build_index:
         build_cogsearch_index(os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), "./data/3-product-info")
     elif args.evaluate:
-        metrics_summary, tabular_result = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
+        result, tabular_result = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
                                  dataset_path=args.dataset_path)
         pprint("-----Summarized Metrics-----")
-        pprint(metrics_summary)
+        pprint(result.metrics_summary)
         pprint("-----Tabular Result-----")
         pprint(tabular_result)
+        pprint(f"View evaluation results in AI Studio: {result.studio_url}")
     elif args.deploy:
         deployment_name = args.deployment_name if args.deployment_name else None
         deploy_flow(deployment_name, deployment_folder, chat_module)
@@ -266,7 +262,7 @@ if __name__ == "__main__":
         if check_local_index and not os.path.exists(search_index_folder):
             client = AIClient.from_config(DefaultAzureCredential())
             try:
-                client.mlindexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
+                client.indexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
                                           download_path=search_index_folder, label="latest")
             except:
                 print("Please build the search index with 'python src/run.py --build-index'")

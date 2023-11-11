@@ -10,7 +10,7 @@ This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/
 
 To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample/tree/oct-refresh?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
 
 If you want to get started in your local environment, first install the packages:
 ```
@@ -96,8 +96,8 @@ This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.j
 You can also use the `ai` CLI to do bulk runs and evaluations:
 
 ```bash
-ai chat evaluate --input-data src/test/evaluation_dataset.jsonl # uses default "chat with your data" copilot
-ai chat evaluate --input-data src/test/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
+ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl # uses default "chat with your data" copilot
+ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
 ```
 
 ## Step 6: Deploy the sample code

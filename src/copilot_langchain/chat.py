@@ -92,4 +92,13 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     qa.combine_documents_chain.memory = memory
 
     response = qa({ "question": question, "query": question })
-    return response["result"]
+    return {
+        "choices": [{
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": response["result"]
+            },
+            "context": question,
+        }]
+    }
