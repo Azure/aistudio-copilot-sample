@@ -13,6 +13,7 @@ import os
 import sys
 sys.path.insert(0, '../')
 import asyncio
+from typing import Callable, Dict, List
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities import AzureOpenAIModelConfiguration
@@ -63,22 +64,25 @@ def get_persona(file):
     return json.loads(content)
 
 
-async def sim_callback(question, conversation_history, meta_data):
-    # you may also await async call
-    context_key = conv_template.context_key[0]
-    messages = []
-    for i in range(len(conversation_history)):
-        turn = conversation_history[i]
-        message = turn.to_openai_chat_format()
-        messages.append(message)
+def create_callback_fn(callback_citation_key: str = "callback_citations", chat_completion_fn: Callable[[str, List[Dict], dict], str] = None):
+    async def sim_callback(question, conversation_history, meta_data):
+        # you may also await async call
+        context_key = conv_template.context_key[0]
+        messages = []
+        for i in range(len(conversation_history)):
+            turn = conversation_history[i]
+            message = turn.to_openai_chat_format()
+            messages.append(message)
 
-    response = await chat_completion(messages = messages)
-    context_dict = {"turn_" + str(i + 1): response.choices[0]['context']}
-    if "context" in meta_data[context_key].keys():
-        meta_data[context_key]["context"].update(context_dict)
-    else:
-        meta_data[context_key]["context"] = context_dict
-    return response.choices[0]["message"]['content']
+        response = await chat_completion_fn(messages = messages)
+        context_dict = {"turn_" + str(i + 1): response.choices[0]['context']}
+        meta_data[context_key]["callback_citation_key"] = callback_citation_key
+        if "context" in meta_data[context_key].keys():
+            meta_data[context_key][callback_citation_key].update(context_dict)
+        else:
+            meta_data[context_key][callback_citation_key] = context_dict
+        return response.choices[0]["message"]['content']
+    return sim_callback
 
 if __name__ == '__main__':
     args = parse_args()
@@ -114,6 +118,8 @@ if __name__ == '__main__':
 
     # initialize the conversation template parameters
     conv_parameters = get_persona(persona_file)
+
+    sim_callback = create_callback_fn("callback_citations", chat_completion)
 
     simulator = Simulator(simulate_callback=sim_callback, systemConnection=system_bot_model)
     conv_callback = asyncio.run(simulator.simulate_async(
