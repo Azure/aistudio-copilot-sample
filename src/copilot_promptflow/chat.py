@@ -16,7 +16,7 @@ def _get_connection_provider_id():
 
 
 async def chat_completion(messages: list[dict], stream: bool = False,
-    session_state: Any = None, context: dict[str, Any] = {}):
+    session_state: any = None, context: dict[str, any] = {}):
 
     pf_client = PFClient(
         config={
