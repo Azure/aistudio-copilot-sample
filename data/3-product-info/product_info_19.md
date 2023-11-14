@@ -1,4 +1,4 @@
-# Information about product item_number: 19
+# Information about Adventure Dining Table (item_number: 19)
 Adventure Dining Table, price $90,
 
 ## Brand

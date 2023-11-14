@@ -1,4 +1,4 @@
-# Information about product item_number: 9
+# Information about SummitClimber Backpack (item_number: 9)
 SummitClimber Backpack, price $120,
 
 ## Brand

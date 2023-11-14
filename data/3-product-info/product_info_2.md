@@ -1,4 +1,4 @@
-# Information about product item_number: 2
+# Information about Adventurer Pro Backpack (item_number: 2)
 Adventurer Pro Backpack, price $90,
 
 ## Brand

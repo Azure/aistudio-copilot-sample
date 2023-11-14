@@ -1,4 +1,4 @@
-# Information about product item_number: 6
+# Information about EcoFire Camping Stove (item_number: 6)
 EcoFire Camping Stove, price $80,
 
 ## Brand

@@ -1,4 +1,4 @@
-# Information about product item_number: 7
+# Information about CozyNights Sleeping Bag (item_number: 7)
 CozyNights Sleeping Bag, price $100,
 
 ## Brand

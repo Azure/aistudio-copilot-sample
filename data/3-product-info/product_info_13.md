@@ -1,4 +1,4 @@
-# Information about product item_number: 13
+# Information about PowerBurner Camping Stove (item_number: 13)
 PowerBurner Camping Stove, price $100,
 
 ## Brand

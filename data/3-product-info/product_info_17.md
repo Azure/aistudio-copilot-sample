@@ -1,4 +1,4 @@
-# Information about product item_number: 17
+# Information about RainGuard Hiking Jacket (item_number: 17)
 RainGuard Hiking Jacket, price $110,
 
 ## Brand

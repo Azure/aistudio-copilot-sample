@@ -1,4 +1,4 @@
-# Information about product item_number: 11
+# Information about TrailWalker Hiking Shoes (item_number: 11)
 TrailWalker Hiking Shoes, price $110
 
 ## Brand

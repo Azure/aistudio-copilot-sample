@@ -1,4 +1,4 @@
-# Information about product item_number: 12
+# Information about TrekMaster Camping Chair (item_number: 12)
 TrekMaster Camping Chair, price $50
 
 ## Brand

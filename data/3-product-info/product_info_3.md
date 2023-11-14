@@ -1,4 +1,4 @@
-# Information about product item_number: 3
+# Information about Summit Breeze Jacket (item_number: 3)
 Summit Breeze Jacket, price $120,
 
 ## Brand

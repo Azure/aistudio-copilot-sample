@@ -1,4 +1,4 @@
-# Information about product item_number: 4
+# Information about TrekReady Hiking Boots (item_number: 4)
 TrekReady Hiking Boots, price $140,
 
 ## Brand

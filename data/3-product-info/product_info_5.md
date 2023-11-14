@@ -1,4 +1,4 @@
-# Information about product item_number: 5
+# Information about BaseCamp Folding Table (item_number: 5)
 BaseCamp Folding Table, price $60,
 
 ## Brand
