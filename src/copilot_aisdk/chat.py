@@ -37,10 +37,12 @@ async def get_documents(query, num_docs=5):
         results = await search_client.search(
             search_text="",
             vector_queries=[vector_query],
-            select=["id", "content"])
+            select=["id", "title", "content"])
 
         async for result in results:
-            context += f"\n>>> From: {result['id']}\n{result['content']}"
+            context += f"\n>>> From: {result['title']}\n{result['content']}"
+
+    print(context);
 
     return context
 
@@ -49,7 +51,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
                           session_state: any = None, context: dict[str, any] = {}):
     # get search documents for the last user message in the conversation
     user_message = messages[-1]["content"]
-    documents = await get_documents(user_message, context.get("num_retrieved_docs", 5))
+    documents = await get_documents(user_message, context.get("num_retrieved_docs", 10))
 
     # make a copy of the context and modify it with the retrieved documents
     context = dict(context)

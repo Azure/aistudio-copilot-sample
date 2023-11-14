@@ -29,7 +29,7 @@ class CustomerSupport:
     )
     def GetPastOrders(self, input: str) -> str:
         orders = str(get_customer_info(int(input))["orders"])
-        self.context += "## GetPastOrders data\n" + str(orders) + "\n\n"
+        self.context += "## GetPastOrders data. The list is ordered from oldest to newest orders.\n" + str(orders) + "\n\n"
         return json.dumps(get_customer_info(int(input))["orders"])
 
     @sk_function(
@@ -38,6 +38,7 @@ class CustomerSupport:
         input_description="The question about the products; include as many details as possible in the question",
     )
     async def AskAboutProducts(self, question: str) -> str:
+
         #  retrieve documents relevant to the user's question from Cognitive Search
         search_client = SearchClient(
             endpoint=os.environ["AZURE_AI_SEARCH_ENDPOINT"],
@@ -57,10 +58,10 @@ class CustomerSupport:
             results = await search_client.search(
                 search_text="",
                 vector_queries=[vector_query],
-                select=["id", "content"])
+                select=["id", "title", "content"])
             
             async for result in results:
-                chunks += f"\n>>> From: {result['id']}\n{result['content']}"
+                chunks += f"\n>>> From: {result['title']}\n{result['content']}"
 
         self.context += "## AskAboutProducts data\n" + str(chunks) + "\n\n"
 

@@ -61,7 +61,7 @@ python src/run.py --question "which tent is the most waterproof?"
 You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
 
 ```bash
-python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I just ordered?"
+python src/run.py --implementation semantickernel --question "what is the waterproof rating of the tent I ordered in January?"
 ```
 
 To try out the promptflow implementation, check deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
