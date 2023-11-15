@@ -6,3 +6,6 @@ dependencies:
   - pip:
     - semantic-kernel
     - openai
+    - azureml-inference-server-http
+    - azureml-contrib-services
+    - azure-search-documents==11.4.0b11
