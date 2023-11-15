@@ -1,7 +1,6 @@
 # generative ai SDK dependencies
 openai
 pydantic<2
-RUN pip install azure-search-documents==11.4.0b11
 RUN pip install azure-ai-generative[evaluate,index,document_parsing]
 
 # promptflow dependencies, these should be optional in the future

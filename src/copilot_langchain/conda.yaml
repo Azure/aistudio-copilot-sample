@@ -8,5 +8,4 @@ dependencies:
     # generative ai SDK dependencies
     - openai
     - pydantic<2
-    - azure-search-documents==11.4.0b11
     - azure-ai-generative[evaluate,index,document_parsing]
