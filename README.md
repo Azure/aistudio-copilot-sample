@@ -1,30 +1,55 @@
 ## ❗Important
 
-**Features contained in this repository are in private preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/).**
+**Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/).**
 
 # Getting Started
 
-This repository is part of the [Azure AI Studio preview](https://aka.ms/azureai/docs).
+This repository contains a copilot getting sample that can be used with the the [Azure AI Studio preview](https://aka.ms/azureai/docs). 
+
+The sample walks through creating a copilot enterprise chat API that uses custom Python code to ground the copilot responses in your company data and APIs. The sample is meant to provide a starting point that you can further customize to add additional intelligence or capabilities. Following the below steps in the README, you will be able to: set up your development environment, create your Azure AI resources and project, build an index containing product information, run your co-pilot, evaluate it, and deploy & invoke an API.
+
+NOTE: We do not guarantee the quality of responses produced by this sample copilot or its suitability for use in your scenario, and responses will vary as development of this sample is ongoing. You must perform your own validation the outputs of the copilot and its suitability for use within your company.
 
 ## Step 1: Set up your development environment
 
+#### Use a pre-built development environment
 To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
 
-If you want to get started in your local environment, first install the packages:
+Once you've opened in Codespaces you can proceed to the next step.
+
+#### Alternatively, set up your local development environment
+
+First, clone the code sample locally:
 ```
 git clone https://github.com/azure/aistudio-copilot-sample
 cd aistudio-copilot-sample
+```
+
+Create a new Python virtual environment where we can safely install the SDK packages:
+ * On MacOS and Linux run:
+   ```
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+* On Windows run:
+   ```
+   py -3 -m venv .venv
+   .venv\scripts\activate
+   ```
+
+Now that your environment is activated, install the SDK packages
+```
 pip install -r requirements.txt
 ```
 
-Then install the Azure AI CLI, on Ubuntu:
+Finally, install the Azure AI CLI. On Ubuntu you can use this all-in-one installer command:
 ```
 curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
 ```
 
-To install the CLI on Windows and MacOS, follow the instructions [here](https://github.com/Azure/azureai-insiders/blob/main/previews/aistudio/how-to/use_azureai_sdk.md#install-the-cli).
+To install the CLI on Windows and MacOS, follow the instructions [here](https://aka.ms/aistudio/docs/cli).
 
 ## Step 2: Create and connect to Azure Resources
 
@@ -34,7 +59,7 @@ ai init
 ```
 
 - This will first prompt to you to login to Azure
-- Then it will ask you to select or create resources, choose  **AI Project resource** and follow the prompts to create an Azure OpenAI resource, model deployments, and Azure AI  search resource
+- Then it will ask you to select or create resources, choose  **New Azure AI Project** and follow the prompts to create an Azure AI resource, project, model deployments, and Azure AI search resource
 - This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
 Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
@@ -45,8 +70,9 @@ Run the following CLI command to create an index that our code can use for data 
 ```
 ai search index update --files "./data/3-product-info/*.md" --index-name "product-info"
 ```
+Note: if you've previously done this step and already have an index created, you can instead run `ai config --set search.index.name <existing-index-name>`.
 
-Now, generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
+Now that we've created an index, we can generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
 ```
 ai dev new .env
 ```
@@ -83,15 +109,10 @@ ai chat --interactive --function src/copilot_aisdk/chat:chat_completion
 
 To run evaluation on a copilot implementations:
 ```
-python src/run.py --evaluate
+python src/run.py --evaluate --implementation aisdk
 ```
 
-You can also run pytest to run tests that use evaluation results to pass/fail
-```
-pytest
-```
-
-This will run the tests in `src/test_copilot.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4.
+You can change `aisdk` to any of the other implementation names to run an evaluation on them.
 
 You can also use the `ai` CLI to do bulk runs and evaluations:
 
@@ -99,6 +120,13 @@ You can also use the `ai` CLI to do bulk runs and evaluations:
 ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl # uses default "chat with your data" copilot
 ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
 ```
+
+You can also run all of the evaluations using pytest, and where tests will fail if the metrics are less than 4:
+```
+pytest
+```
+
+This will run the tests named `src/test_copilot_<implementation>.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4. Not all tests are currently passing (this is expected as we work to improve the sample copilot implementations).
 
 ## Step 6: Deploy the sample code
 
@@ -113,11 +141,6 @@ python src/run.py --invoke
 ```
 
 ## Additional Tips and Resources
-
-
-### Follow the full tutorial
-
-For a more detailed tutorial using this notebook, you can follow the [Build a co-pilot using the Azure AI SDK](https://github.com/Azure/azureai-insiders/blob/aistudio-preview/previews/aistudio/tutorials/copilot_with_sdk.md) tutorial.
 
 ### Customize the development container
 
