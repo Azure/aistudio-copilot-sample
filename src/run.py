@@ -16,12 +16,14 @@ import platform
 import json
 import pathlib
 import pandas as pd
+import shutil
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 
+source_path = "./src"
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
@@ -118,15 +120,31 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
 
     return result, tabular_result
 
+def prepare_search_index(client: AIClient, deployment_folder: str):
+    search_index_name = os.getenv("AZURE_AI_SEARCH_INDEX_NAME")
+    search_index_folder = (search_index_name if search_index_name else "") + "-mlindex"
+    search_index_path = os.path.join(source_path, deployment_folder, search_index_folder)
+    if not os.path.exists(search_index_path):
+        try:
+            client.indexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
+                                        download_path=search_index_path, label="latest")
+        except:
+            print("Please build the search index with 'python src/run.py --build-index'")
+            sys.exit(1)
 
-def deploy_flow(deployment_name, deployment_folder, chat_module):
+def deploy_flow(deployment_name, deployment_folder, chat_module, use_local_index):
     client = AIClient.from_config(DefaultAzureCredential())
+
+    # Copy search index into deployment folder
+    if use_local_index:
+        prepare_search_index(client, deployment_folder)
+
     if not deployment_name:
         deployment_name = f"{client.project_name}-copilot"
     deployment = Deployment(
         name=deployment_name,
         model=Model(
-            path="./src",
+            path=source_path,
             conda_file=f"{deployment_folder}/conda.yaml",
             chat_module=chat_module,
         ),
@@ -213,7 +231,7 @@ if __name__ == "__main__":
     parser.add_argument("--invoke-deployment", help="Invoke a deployment and print out response", action="store_true")
     args = parser.parse_args()
 
-    check_local_index = False
+    use_local_index = False
     if args.implementation:
         if args.implementation == "promptflow":
             from copilot_promptflow.chat import chat_completion
@@ -230,7 +248,7 @@ if __name__ == "__main__":
 
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
-            check_local_index = True
+            use_local_index = True
         elif args.implementation == "aisdk":
             from copilot_aisdk.chat import chat_completion
 
@@ -249,7 +267,7 @@ if __name__ == "__main__":
         pprint(f"View evaluation results in AI Studio: {result.studio_url}")
     elif args.deploy:
         deployment_name = args.deployment_name if args.deployment_name else None
-        deploy_flow(deployment_name, deployment_folder, chat_module)
+        deploy_flow(deployment_name, deployment_folder, chat_module, use_local_index)
     elif args.invoke_deployment:
         invoke_deployment(args.deployment_name, stream=args.stream)
     else:
@@ -257,16 +275,9 @@ if __name__ == "__main__":
         if args.question:
             question = args.question
 
-        # Prepare for the search index
-        search_index_folder = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") + "-mlindex"
-        if check_local_index and not os.path.exists(search_index_folder):
+        if use_local_index:
             client = AIClient.from_config(DefaultAzureCredential())
-            try:
-                client.indexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
-                                          download_path=search_index_folder, label="latest")
-            except:
-                print("Please build the search index with 'python src/run.py --build-index'")
-                sys.exit(1)
+            prepare_search_index(client, deployment_folder)
 
         # Call the async chat function with a single question and print the response
         if args.stream:

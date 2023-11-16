@@ -1,4 +1,4 @@
-import os
+import os, pathlib
 
 from typing import Any, List
 from langchain import PromptTemplate
@@ -78,7 +78,8 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # convert MLIndex to a langchain retriever
     search_index_folder = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") + "-mlindex"
-    index_langchain_retriever = get_langchain_retriever_from_index(search_index_folder)
+    search_index_path = os.path.join(pathlib.Path(__file__).parent.resolve(), search_index_folder)
+    index_langchain_retriever = get_langchain_retriever_from_index(search_index_path)
 
     qa = RetrievalQA.from_chain_type(
         llm=llm,
