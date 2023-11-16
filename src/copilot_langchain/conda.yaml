@@ -9,3 +9,5 @@ dependencies:
     - openai
     - pydantic<2
     - azure-ai-generative[evaluate,index,document_parsing]
+    # inference server dependencies
+    - azureml-inference-server-http
