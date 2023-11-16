@@ -140,6 +140,20 @@ To test out the online enpoint, run:
 python src/run.py --invoke 
 ```
 
+## Step 7: Simulate a multi-turn conversation
+You can simulate a multi-turn conversation. Please note you need to provide a persona profile in json format for the simulator to start with. A sample persona profile is provided in `src/tests/example_persona.json`. You can specify the number of turns of conversation to simulate with the `--num_conversation_turns` flag.
+```
+python src/run.py --implementation aisdk --simulate_conversation --num_conversation_turns 2
+```
+You can try out different sample implementations by specifying the --implementation flag with promptflow, semantickernel, langchain or aisdk. To try running with semantic kernel:
+```
+python src/run.py --implementation semantickernel --simulate_conversation --num_conversation_turns 2
+```
+The flag `--evalute` can be used together with simulator to simulate a multi-turn conversation and evaluate:
+```
+python src/run.py --implementation aisdk --simulate_conversation --num_conversation_turns 2 --evaluate
+```
+
 ## Additional Tips and Resources
 
 ### Customize the development container
