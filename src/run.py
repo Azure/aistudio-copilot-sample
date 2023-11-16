@@ -23,6 +23,7 @@ from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 
+source_path = "./src"
 
 # build the index using the product catalog docs from data/3-product-info
 def build_cogsearch_index(index_name, path_to_data):
@@ -119,29 +120,24 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
 
     return result, tabular_result
 
-def prepare_search_index(client: AIClient):
+def prepare_search_index(client: AIClient, deployment_folder: str):
     search_index_name = os.getenv("AZURE_AI_SEARCH_INDEX_NAME")
     search_index_folder = (search_index_name if search_index_name else "") + "-mlindex"
-    if not os.path.exists(search_index_folder):
+    search_index_path = os.path.join(source_path, deployment_folder, search_index_folder)
+    if not os.path.exists(search_index_path):
         try:
             client.indexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
-                                        download_path=search_index_folder, label="latest")
-            return search_index_folder
+                                        download_path=search_index_path, label="latest")
         except:
             print("Please build the search index with 'python src/run.py --build-index'")
             sys.exit(1)
-    return search_index_folder
 
 def deploy_flow(deployment_name, deployment_folder, chat_module, use_local_index):
-    source_path = "./src"
-
     client = AIClient.from_config(DefaultAzureCredential())
 
     # Copy search index into deployment folder
     if use_local_index:
-        search_index_folder = prepare_search_index(client)
-        target_path = os.path.join(source_path, deployment_folder, search_index_folder)
-        shutil.copytree(search_index_folder, target_path, dirs_exist_ok=True)
+        prepare_search_index(client, deployment_folder)
 
     if not deployment_name:
         deployment_name = f"{client.project_name}-copilot"
@@ -281,7 +277,7 @@ if __name__ == "__main__":
 
         if use_local_index:
             client = AIClient.from_config(DefaultAzureCredential())
-            prepare_search_index(client)
+            prepare_search_index(client, deployment_folder)
 
         # Call the async chat function with a single question and print the response
         if args.stream:
