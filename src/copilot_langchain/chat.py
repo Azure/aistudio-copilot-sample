@@ -1,4 +1,4 @@
-import os
+import os, sys
 
 from typing import Any, List
 from langchain import PromptTemplate
@@ -6,6 +6,8 @@ from langchain.chains import RetrievalQA
 from langchain.chat_models import AzureChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from azure.ai.generative.index import get_langchain_retriever_from_index
+from azure.ai.resources.client import AIClient
+from azure.identity import DefaultAzureCredential
 
 def setup_credentials():
     # Azure OpenAI credentials
@@ -19,6 +21,17 @@ def setup_credentials():
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
     os.environ["AZURE_COGNITIVE_SEARCH_KEY"] = os.environ["AZURE_AI_SEARCH_KEY"]
 
+def prepare_search_index():
+    search_index_folder = os.getenv("AZURE_AI_SEARCH_INDEX_NAME") + "-mlindex"
+    if not os.path.exists(search_index_folder):
+        client = AIClient.from_config(DefaultAzureCredential())
+        try:
+            client.indexes.download(name=os.getenv("AZURE_AI_SEARCH_INDEX_NAME"),
+                                        download_path=search_index_folder, label="latest")
+        except:
+            print("Please build the search index with 'python src/run.py --build-index'")
+            sys.exit(1)
+
 def convert_chat_history_cp_to_lc(cp_messages: List[dict], lc_memory: ConversationBufferMemory):
     lc_memory.clear()
     for cp_message in cp_messages:
@@ -30,6 +43,7 @@ def convert_chat_history_cp_to_lc(cp_messages: List[dict], lc_memory: Conversati
 async def chat_completion(messages: list[dict], stream: bool = False,
     session_state: Any = None, context: dict[str, Any] = {}):
     setup_credentials()
+    prepare_search_index()
 
     # extra question from chat history messages
     question = messages[-1]["content"]
