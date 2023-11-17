@@ -1,4 +1,4 @@
-# Information about product item_number: 15
+# Information about SkyView 2-Person Tent (item_number: 15)
 SkyView 2-Person Tent, price $200,
 
 ## Brand

@@ -1,4 +1,4 @@
-# Information about product item_number: 18
+# Information about TrekStar Hiking Sandals (item_number: 18)
 TrekStar Hiking Sandals, price $70,
 
 ## Brand

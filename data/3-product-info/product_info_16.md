@@ -1,4 +1,4 @@
-# Information about product item_number: 16
+# Information about TrailLite Daypack (item_number: 16)
 TrailLite Daypack, price $60,
 
 ## Brand

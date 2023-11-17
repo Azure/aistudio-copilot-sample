@@ -1,4 +1,4 @@
-# Information about product item_number: 14
+# Information about MountainDream Sleeping Bag (item_number: 14)
 MountainDream Sleeping Bag, price $130,
 
 ## Brand

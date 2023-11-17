@@ -37,10 +37,10 @@ async def get_documents(query, num_docs=5):
         results = await search_client.search(
             search_text="",
             vector_queries=[vector_query],
-            select=["id", "content"])
+            select=["id", "title", "content"])
 
         async for result in results:
-            context += f"\n>>> From: {result['id']}\n{result['content']}"
+            context += f"\n### From: {result['title']}\n{result['content']}"
 
     return context
 

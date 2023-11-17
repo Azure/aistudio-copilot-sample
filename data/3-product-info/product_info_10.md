@@ -1,4 +1,4 @@
-# Information about product item_number: 10
+# Information about TrailBlaze Hiking Pants (item_number: 10)
 TrailBlaze Hiking Pants, price $75,
 
 ## Brand
