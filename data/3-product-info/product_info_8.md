@@ -1,4 +1,4 @@
-# Information about product item_number: 8
+# Information about Alpine Explorer Tent (item_number: 8)
 Alpine Explorer Tent, price $350,
 
 ## Brand

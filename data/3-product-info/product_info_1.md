@@ -1,4 +1,4 @@
-# Information about product item_number: 1
+# Information about TrailMaster X4 Tent (item_number: 1)
 TrailMaster X4 Tent, price $250,
 
 ## Brand

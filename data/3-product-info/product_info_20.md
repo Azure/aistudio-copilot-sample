@@ -1,4 +1,4 @@
-# Information about product item_number: 20
+# Information about CompactCook Camping Stove (item_number: 20)
 CompactCook Camping Stove, price $60,
 
 ## Brand
