@@ -145,7 +145,8 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
 
     return result, tabular_result
 
-def prepare_search_index(client: AIClient, deployment_folder: str):
+def prepare_search_index(deployment_folder: str):
+    client = AIClient.from_config(DefaultAzureCredential())
     search_index_name = os.getenv("AZURE_AI_SEARCH_INDEX_NAME")
     search_index_folder = (search_index_name if search_index_name else "") + "-mlindex"
     search_index_path = os.path.join(source_path, deployment_folder, search_index_folder)
@@ -157,12 +158,8 @@ def prepare_search_index(client: AIClient, deployment_folder: str):
             print("Please build the search index with 'python src/run.py --build-index'")
             sys.exit(1)
 
-def deploy_flow(deployment_name, deployment_folder, chat_module, use_local_index):
+def deploy_flow(deployment_name, deployment_folder, chat_module):
     client = AIClient.from_config(DefaultAzureCredential())
-
-    # Copy search index into deployment folder
-    if use_local_index:
-        prepare_search_index(client, deployment_folder)
 
     if not deployment_name:
         deployment_name = f"{client.project_name}-copilot"
@@ -348,7 +345,6 @@ if __name__ == "__main__":
                         default=0.0, type=float)
     args = parser.parse_args()
 
-    use_local_index = False
     if args.implementation:
         if args.implementation == "promptflow":
             from copilot_promptflow.chat import chat_completion
@@ -365,7 +361,9 @@ if __name__ == "__main__":
 
             deployment_folder = "copilot_langchain"
             chat_module = "copilot_langchain.chat"
-            use_local_index = True
+
+            # Only LangChain uses local search index currently
+            prepare_search_index(deployment_folder)
         elif args.implementation == "aisdk":
             from copilot_aisdk.chat import chat_completion
 
@@ -384,7 +382,7 @@ if __name__ == "__main__":
         pprint(f"View evaluation results in AI Studio: {result.studio_url}")
     elif args.deploy:
         deployment_name = args.deployment_name if args.deployment_name else None
-        deploy_flow(deployment_name, deployment_folder, chat_module, use_local_index)
+        deploy_flow(deployment_name, deployment_folder, chat_module)
     elif args.invoke_deployment:
         invoke_deployment(args.deployment_name, stream=args.stream)
     elif args.simulate_conversation and args.evaluate:
@@ -409,10 +407,6 @@ if __name__ == "__main__":
         question = "which tent is the most waterproof?"
         if args.question:
             question = args.question
-
-        if use_local_index:
-            client = AIClient.from_config(DefaultAzureCredential())
-            prepare_search_index(client, deployment_folder)
 
         # Call the async chat function with a single question and print the response
         if args.stream:
