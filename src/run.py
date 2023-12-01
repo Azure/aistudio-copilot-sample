@@ -79,6 +79,50 @@ def load_jsonl(path):
     with open(path, "r") as f:
         return [json.loads(line) for line in f.readlines()]
 
+def create_custom_metric():
+    from azure.ai.generative.evaluate.metrics.custom_metric import LLMMetric
+
+# custom_metric = LLMMetric._from_jinja2_template(path="test_template.jinja2", name="my_metrics")
+
+    metric = LLMMetric(
+        description="""
+Relevance measures how well the answer addresses the main aspects of the question,
+based on the context. Consider whether all and only the important aspects are contained in the
+answer when evaluating relevance. Given the context and question, score the relevance of the
+answer between one to five stars using the following rating scale:
+One star: the answer completely lacks relevance
+Two stars: the answer mostly lacks relevance
+Three stars: the answer is partially relevant
+Four stars: the answer is mostly relevant[
+Five stars: the answer has perfect relevance
+This rating value should always be an integer between 1 and 5. So the rating produced
+should be 1 or 2 or 3 or 4 or 5 and should be a single digit
+""",
+        examples="""
+context: Marie Curie was a Polish-born physicist and chemist who pioneered research on radioactivity 
+and was the first woman to win a Nobel Prize. 
+question: What field did Marie Curie excel in?
+answer: Marie Curie was a renowned painter who focused mainly on impressionist styles and techniques.
+stars: 1
+
+context: The Beatles were an English rock band formed in Liverpool in 1960, and they are widely 
+regarded as the most influential music band in history.
+question: Where were The Beatles formed? 
+answer: The band The Beatles began their journey in London, England, and they changed the history of 
+music.
+stars: 2
+
+context: The recent Mars rover, Perseverance, was launched in 2020 with the main goal of searching for signs of 
+ancient life on Mars. The rover also carries an experiment called MOXIE, which aims to generate oxygen from the 
+Martian atmosphere. 
+question: What are the main goals of Perseverance Mars rover mission? 
+answer: The Perseverance Mars rover mission focuses on searching for signs of ancient life on Mars. 
+stars: 3
+""",
+        name="my_relevance",
+        parameters=["question", "answer", "context"]
+    )
+    return metric
 
 def run_evaluation(chat_completion_fn, name, dataset_path):
     from azure.ai.generative.evaluate import evaluate
@@ -88,6 +132,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     path = pathlib.Path.cwd() / dataset_path
     dataset = load_jsonl(path)
 
+    custom_metric = create_custom_metric()
     # temp: generate a single-turn qna wrapper over the chat completion function
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
     output_path = "./evaluation_output"
@@ -109,9 +154,9 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             "api_base": os.getenv("OPENAI_API_BASE"),
             "api_type": "azure",
             "api_key": os.getenv("OPENAI_API_KEY"),
-            "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
+            "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT"),
         },
-        metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
+        metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence", custom_metric],
         tracking_uri=client.tracking_uri,
         output_path=output_path,
     )
