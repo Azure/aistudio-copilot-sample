@@ -4,7 +4,7 @@ ipykernel
 # generative ai SDK dependencies
 azure-ai-generative[evaluate,index,promptflow]
 azureml-metrics[generative-ai] @ https://automlcesdkdataresources.blob.core.windows.net/dev-wheels/azureml-metrics/azureml_metrics-0.1.0.0-py3-none-any.whl
-./azure_ai_generative-1.0.0a20231130004-py3-none-any.whl
+azure-ai-generative[evaluate] @ https://github.com/Azure/aistudio-copilot-sample/blob/387ed4f7558badb7e2698a9b6a45d475428a28e0/azure_ai_generative-1.0.0a20231130004-py3-none-any.whl
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
 pytest
