@@ -17,11 +17,14 @@ import json
 import pathlib
 import pandas as pd
 import shutil
+from typing import Callable, Dict, List
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
+from azure.ai.resources.entities import AzureOpenAIModelConfiguration
+from azure.ai.generative.synthetic.simulator import Simulator, SimulatorTemplates
 
 source_path = "./src"
 
@@ -73,6 +76,39 @@ def copilot_qna(question, chat_completion_fn):
         "context": response["context"]
     }
 
+def evaluate_result(task_type,
+             data_mapping,
+             metrics_list,
+             dataset,
+             target=None,
+             evaluation_name="baseline-evaluation",
+             output_path="./evaluation_output"):
+    from azure.ai.generative.evaluate import evaluate
+
+    client = AIClient.from_config(DefaultAzureCredential())
+
+    model_config = {
+                "api_version": os.getenv("OPENAI_API_VERSION"),
+                "api_base": os.getenv("OPENAI_API_BASE"),
+                "api_type": os.getenv("OPENAI_API_TYPE"),
+                "api_key": os.getenv("OPENAI_API_KEY"),
+                "deployment_id": os.environ["AZURE_OPENAI_EVALUATION_DEPLOYMENT"]
+        }
+
+    result = evaluate(
+        evaluation_name=evaluation_name,
+        data=dataset,
+        target=target,
+        task_type=task_type,
+        model_config=model_config,
+        data_mapping = data_mapping,
+        metrics_list = metrics_list,
+        tracking_uri=client.tracking_uri,
+        output_path=output_path,
+    )
+    tabular_result = pd.read_json(os.path.join(output_path, "eval_results.jsonl"), lines=True)
+    return result, tabular_result
+
 
 # Define helper methods
 def load_jsonl(path):
@@ -91,32 +127,21 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     # temp: generate a single-turn qna wrapper over the chat completion function
     qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
     output_path = "./evaluation_output"
-
-    client = AIClient.from_config(DefaultAzureCredential())
-    result = evaluate(
-        evaluation_name=name,
-        target=qna_fn,
-        data=dataset,
-        task_type="qa",
-        data_mapping={
+    data_mapping={
             "questions": "question",
             "contexts": "context",
             "y_pred": "answer",
             "y_test": "truth"
-        },
-        model_config={
-            "api_version": "2023-05-15",
-            "api_base": os.getenv("OPENAI_API_BASE"),
-            "api_type": "azure",
-            "api_key": os.getenv("OPENAI_API_KEY"),
-            "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
-        },
-        metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
-        tracking_uri=client.tracking_uri,
-        output_path=output_path,
-    )
-    
-    tabular_result = pd.read_json(os.path.join(output_path, "eval_results.jsonl"), lines=True)
+        }
+    metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"]
+
+    result, tabular_result = evaluate_result(task_type="qa",
+             data_mapping=data_mapping,
+             metrics_list=metrics_list,
+             dataset=dataset,
+             target=qna_fn,
+             evaluation_name=name,
+             output_path=output_path)
 
     return result, tabular_result
 
@@ -200,7 +225,91 @@ def invoke_deployment(deployment_name: str, stream: bool = False):
     else:
         print(response.json())
 
+def create_simulator_callback_fn(context_key, chat_completion_fn: Callable[[str, List[Dict], dict], str] = None, callback_citation_key: str = "callback_citations"):
+    async def sim_callback(question, conversation_history, meta_data):
+        # you may also await async call
+        #context_key = conv_template.context_key[0]
+        messages = []
+        for i in range(len(conversation_history)):
+            turn = conversation_history[i]
+            message = turn.to_openai_chat_format()
+            messages.append(message)
 
+        response = await chat_completion_fn(messages = messages)
+        context_dict = {"turn_" + str(i + 1): response["choices"][0]['context']}
+        meta_data[context_key]["callback_citation_key"] = callback_citation_key
+        if callback_citation_key in meta_data[context_key].keys():
+            meta_data[context_key][callback_citation_key].update(context_dict)
+        else:
+            meta_data[context_key][callback_citation_key] = context_dict
+        return response["choices"][0]["message"]['content']
+    return sim_callback
+
+def simulate_conversation(chat_completion_fn, persona_profile='./src/tests/example_persona.json',
+                          num_conv_turn=2, max_tokens=500, temperature=0.0, save=True):
+    import logging
+    logging.disable(logging.INFO)
+    client = AIClient.from_config(DefaultAzureCredential())
+
+    # initialize system bot model
+    system_bot_model = AzureOpenAIModelConfiguration.from_connection(
+        connection=client.get_default_aoai_connection(),
+        model_name= os.environ["AZURE_OPENAI_CHAT_MODEL"],
+        deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
+        max_tokens=max_tokens,
+        temperature=temperature
+    )
+    st = SimulatorTemplates()
+     # retrieve template for conversation task
+    conv_template = st.get_template("conversation")
+
+    # initialize the conversation template parameters
+    with open(persona_profile, 'r') as f:
+        content = f.read()
+    conv_parameters = json.loads(content)
+
+    # create sim_callback function with customer chat_completion function
+    try:
+        context_key = conv_template.context_key[0]
+    except:
+        raise Exception("No context key found in f{persona_profile}.")
+    sim_callback = create_simulator_callback_fn(context_key = context_key,
+                                                chat_completion_fn= chat_completion_fn)
+    # simulate the conversation
+    simulator = Simulator(simulate_callback=sim_callback, systemConnection=system_bot_model)
+    conv_callback = asyncio.run(simulator.simulate_async(
+                                conv_template,
+                                conv_parameters,
+                                max_conversation_turns=num_conv_turn,
+                                api_call_delay_sec=10,
+                                api_call_retry_sleep_sec=10,
+                                api_call_retry_max_count=2,
+                            ))
+    if save:
+        data_output_file = 'simulator_conv.jsonl'
+        with open(data_output_file, 'w', encoding='utf-8') as file:
+            json.dump(conv_callback, file)
+    return conv_callback
+
+def play_conversation(conversation_history):
+    for turn in conversation_history['messages']:
+        print(f"Conversation Turn {turn['turn_number']}:")
+        print(f"role: {turn['role']}\ncontent: {turn['content']}")
+        print('-' * 150)
+
+def simulate_conversation_and_evaluate(chat_completion_fn, persona_profile, num_conv_turn, max_tokens, temperature,
+                          eval_name = "baseline_evaluation"):
+    simulated_conversation = simulate_conversation(chat_completion_fn=chat_completion_fn, persona_profile=persona_profile,
+                          num_conv_turn=num_conv_turn, max_tokens=max_tokens, temperature=temperature, save=True)
+    play_conversation(simulated_conversation)
+    output_path = "./evaluation_output"
+    result, tabular_result = evaluate_result(task_type="chat",
+            data_mapping={"y_pred": "messages"},
+            metrics_list=['gpt_groundedness', 'gpt_relevance', 'gpt_retrieval_score'],
+            dataset='simulator_conv.jsonl',
+            evaluation_name=eval_name,
+            output_path=output_path)
+    return result, tabular_result
 
 # Run a single chat message through one of the co-pilot implementations
 if __name__ == "__main__":
@@ -226,6 +335,14 @@ if __name__ == "__main__":
     parser.add_argument("--build-index", help="Build an index with the default docs", action='store_true')
     parser.add_argument("--stream", help="Whether response from a particular implementation should be streamed or not", action="store_true")
     parser.add_argument("--invoke-deployment", help="Invoke a deployment and print out response", action="store_true")
+    parser.add_argument("--simulate_conversation", help="Simulate multi-turn conversation", action='store_true')
+    parser.add_argument("--persona_profile", help="Persona Profile to use for simulator",
+                        default="src/tests/example_persona.json", type=str)
+    parser.add_argument("--num_conversation_turns", help="Number of conversation turns to simulate", default=2, type=int)
+    parser.add_argument("--max_tokens", help="The max number of tokens to generate in simulator", default=500, type=int)
+    parser.add_argument("--temperature",
+                        help="hyperparameter that regulates the randomness, or creativity, of the model responses",
+                        default=0.0, type=float)
     args = parser.parse_args()
 
     if args.implementation:
@@ -255,7 +372,7 @@ if __name__ == "__main__":
 
     if args.build_index:
         build_cogsearch_index(os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), "./data/3-product-info")
-    elif args.evaluate:
+    elif args.evaluate and not args.simulate_conversation:
         result, tabular_result = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
                                  dataset_path=args.dataset_path)
         pprint("-----Summarized Metrics-----")
@@ -268,6 +385,24 @@ if __name__ == "__main__":
         deploy_flow(deployment_name, deployment_folder, chat_module)
     elif args.invoke_deployment:
         invoke_deployment(args.deployment_name, stream=args.stream)
+    elif args.simulate_conversation and args.evaluate:
+        result, tabular_result = simulate_conversation_and_evaluate(chat_completion_fn=chat_completion,
+                                                                    persona_profile=args.persona_profile,
+                                                                    num_conv_turn=args.num_conversation_turns,
+                                                                    max_tokens=args.max_tokens,
+                                                                    temperature=args.temperature,
+                                                                    eval_name = f"test-{args.implementation}-copilot-simulator")
+        pprint("-----Summarized Metrics-----")
+        pprint(result.metrics_summary)
+        pprint("-----Tabular Result-----")
+        pprint(tabular_result)
+        pprint(f"View evaluation results in AI Studio: {result.studio_url}")
+    elif args.simulate_conversation:
+        conversation = simulate_conversation(chat_completion_fn=chat_completion, persona_profile=args.persona_profile,
+                          num_conv_turn=args.num_conversation_turns,
+                          max_tokens=args.max_tokens,
+                          temperature=args.temperature, save=True)
+        play_conversation(conversation)
     else:
         question = "which tent is the most waterproof?"
         if args.question:
