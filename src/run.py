@@ -220,6 +220,7 @@ if __name__ == "__main__":
     parser.add_argument("--implementation", help="The implementation to use", default="aisdk", type=str)
     parser.add_argument("--deploy", help="Deploy copilot", action='store_true')
     parser.add_argument("--evaluate", help="Evaluate copilot", action='store_true')
+    parser.add_argument("--evaluation-name", help="evaluation name used to log the evaluation to AI Studio", type=str)
     parser.add_argument("--dataset-path", help="Test dataset to use with evaluation",
                         default="src/tests/evaluation_dataset.jsonl", action='store_true')
     parser.add_argument("--deployment-name", help="deployment name to use when deploying or invoking the flow", type=str)
@@ -256,7 +257,8 @@ if __name__ == "__main__":
     if args.build_index:
         build_cogsearch_index(os.getenv("AZURE_AI_SEARCH_INDEX_NAME"), "./data/3-product-info")
     elif args.evaluate:
-        result, tabular_result = run_evaluation(chat_completion, name=f"test-{args.implementation}-copilot",
+        evaluation_name = args.evaluation_name if args.evaluation_name else f"test-{args.implementation}-copilot"
+        result, tabular_result = run_evaluation(chat_completion, name=evaluation_name,
                                  dataset_path=args.dataset_path)
         pprint("-----Summarized Metrics-----")
         pprint(result.metrics_summary)
