@@ -59,18 +59,25 @@ ai init
 ```
 
 - This will first prompt to you to login to Azure
-- Then it will ask you to select or create resources, choose  **New Azure AI Project** and follow the prompts to create an Azure AI resource, project, model deployments, and Azure AI search resource
+- Then it will ask you to select or create resources, choose  **New Azure AI Project** and follow the prompts to create an:
+   - Azure AI resource
+   - Azure AI project
+   - Azure OpenAI Service model deployments (we recommend ada-embedding-002 for embedding, gpt-35-turbo-16k for chat, and gpt-35-turbo-16k or gpt4-32k evaluation)
+   - Azure AI search resource
 - This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
 Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
 
 ## Step 3: Build an Azure Search index
 
-Run the following CLI command to create an index that our code can use for data retrieval:
+Run the following CLI command to create an index using that our code can use for data retrieval:
 ```
 ai search index update --files "./data/3-product-info/*.md" --index-name "product-info"
 ```
-Note: if you've previously done this step and already have an index created, you can instead run `ai config --set search.index.name <existing-index-name>`.
+
+The ```3-product-info``` folder contains a set of markdown files with product information for the fictitious Contoso Trek retailer company. You can run this command using a different folder, or replace the contents in this folder with your own documents.
+
+Note: if you've previously done this step and already have an index created, you can instead run ```ai config --set search.index.name <existing-index-name>```.
 
 Now that we've created an index, we can generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
 ```
