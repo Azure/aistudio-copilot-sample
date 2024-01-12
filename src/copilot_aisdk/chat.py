@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 import os
-import openai
+from openai import OpenAI, AsyncOpenAI
+
+client = OpenAI()
+aclient = AsyncOpenAI()
 import jinja2
 import pathlib
 
@@ -25,7 +28,7 @@ async def get_documents(query, num_docs=5):
         index_name=os.environ["AZURE_AI_SEARCH_INDEX_NAME"])
 
     # generate a vector embedding of the user's question
-    embedding = await openai.Embedding.acreate(input=query,
+    embedding = await aclient.embeddings.create(input=query,
                                                model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
                                                deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
     embedding_to_query = embedding["data"][0]["embedding"]
@@ -60,7 +63,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     messages.insert(0, {"role": "system", "content": system_message})
 
     # call Azure OpenAI with the system prompt and user's question
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         engine=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         messages=messages, temperature=context.get("temperature", 0.7),
         stream=stream,
@@ -68,7 +71,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # add context in the returned response
     if not stream:
-        response.choices[0]['context'] = context
+        response.choices[0].context = context
     else:
         response = add_context_to_streamed_response(response, context)
     return response

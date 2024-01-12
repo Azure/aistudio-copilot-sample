@@ -1,7 +1,9 @@
 from semantic_kernel.skill_definition import (
     sk_function,
 )
-import openai
+from openai import AsyncOpenAI
+
+aclient = AsyncOpenAI()
 import json
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import AzureTextEmbedding, AzureChatCompletion
@@ -45,7 +47,7 @@ class CustomerSupport:
             index_name=os.environ["AZURE_AI_SEARCH_INDEX_NAME"])
 
         # generate a vector embedding of the user's question
-        embedding = await openai.Embedding.acreate(input=question,
+        embedding = await aclient.embeddings.create(input=question,
             model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
             deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
         query_vector = embedding["data"][0]["embedding"]

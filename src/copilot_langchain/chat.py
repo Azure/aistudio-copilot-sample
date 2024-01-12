@@ -10,10 +10,6 @@ from azure.ai.generative.index import get_langchain_retriever_from_index
 def setup_credentials():
     # Azure OpenAI credentials
     import openai
-    openai.api_type = os.environ["OPENAI_API_TYPE"]
-    openai.api_key = os.environ["OPENAI_API_KEY"]
-    openai.api_version = os.environ["OPENAI_API_VERSION"]
-    openai.api_base = os.environ["OPENAI_API_BASE"]
 
     # Azure Cognitive Search credentials
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
