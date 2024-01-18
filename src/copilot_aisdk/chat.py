@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import os
 from openai import AzureOpenAI, AsyncAzureOpenAI
-
 import jinja2
 import pathlib
 

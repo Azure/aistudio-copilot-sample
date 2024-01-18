@@ -23,6 +23,8 @@ from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 
+from openai.types.chat import ChatCompletion
+
 source_path = "./src"
 
 # build the index using the product catalog docs from data/3-product-info
@@ -66,11 +68,11 @@ def copilot_qna(question, chat_completion_fn):
     result = asyncio.run(
         chat_completion_fn([{"role": "user", "content": question}])
     )
-    response = result.choices[0]
+
     return {
         "question": question,
-        "answer": response.message.content,
-        "context": response.context
+        "answer": result.choices[0].message.content if isinstance(result, ChatCompletion) else result["choices"][0]["message"]["content"],
+        "context": result.choices[0].context if isinstance(result, ChatCompletion) else result["choices"][0]["context"]
     }
 
 
