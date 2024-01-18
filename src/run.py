@@ -66,11 +66,11 @@ def copilot_qna(question, chat_completion_fn):
     result = asyncio.run(
         chat_completion_fn([{"role": "user", "content": question}])
     )
-    response = result['choices'][0]
+    response = result.choices[0]
     return {
         "question": question,
-        "answer": response["message"]["content"],
-        "context": response["context"]
+        "answer": response.message.content,
+        "context": response.context
     }
 
 
