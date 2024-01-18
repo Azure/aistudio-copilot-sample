@@ -15,5 +15,6 @@ pytest
 # langchain dependencies, these should be optional in the future
 # langchain moved Embeddings from langchain.embeddings.base to langchain.schema.embeddings while azureml-rag is still referencing it.
 # once azureml-rag fixes, we should remove the langchain reference from this file
-langchain==0.0.324
+langchain==0.1.1
+langchain-openai==0.0.2.post1
 semantic-kernel
