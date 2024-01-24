@@ -163,7 +163,7 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
             'AZURE_OPENAI_EMBEDDING_DEPLOYMENT': os.getenv('AZURE_OPENAI_EMBEDDING_DEPLOYMENT'),
         },
     )
-    client.deployments.create_or_update(deployment)
+    client.deployments.begin_create_or_update(deployment)
 
 
 def invoke_deployment(deployment_name: str, stream: bool = False):
