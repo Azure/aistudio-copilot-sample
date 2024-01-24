@@ -162,6 +162,7 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
             'AZURE_OPENAI_EMBEDDING_MODEL': os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
             'AZURE_OPENAI_EMBEDDING_DEPLOYMENT': os.getenv('AZURE_OPENAI_EMBEDDING_DEPLOYMENT'),
         },
+        instance_count=1
     )
     client.deployments.begin_create_or_update(deployment)
 
