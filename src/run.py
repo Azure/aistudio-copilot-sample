@@ -23,6 +23,8 @@ from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
 
+from openai.types.chat import ChatCompletion
+
 source_path = "./src"
 
 # build the index using the product catalog docs from data/3-product-info
@@ -66,11 +68,11 @@ def copilot_qna(question, chat_completion_fn):
     result = asyncio.run(
         chat_completion_fn([{"role": "user", "content": question}])
     )
-    response = result['choices'][0]
+
     return {
         "question": question,
-        "answer": response["message"]["content"],
-        "context": response["context"]
+        "answer": result.choices[0].message.content if isinstance(result, ChatCompletion) else result["choices"][0]["message"]["content"],
+        "context": result.choices[0].context if isinstance(result, ChatCompletion) else result["choices"][0]["context"]
     }
 
 
@@ -160,8 +162,9 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
             'AZURE_OPENAI_EMBEDDING_MODEL': os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
             'AZURE_OPENAI_EMBEDDING_DEPLOYMENT': os.getenv('AZURE_OPENAI_EMBEDDING_DEPLOYMENT'),
         },
+        instance_count=1
     )
-    client.deployments.create_or_update(deployment)
+    client.deployments.begin_create_or_update(deployment)
 
 
 def invoke_deployment(deployment_name: str, stream: bool = False):

@@ -3,17 +3,13 @@ import os, pathlib
 from typing import Any, List
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
-from langchain.chat_models import AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from azure.ai.generative.index import get_langchain_retriever_from_index
 
 def setup_credentials():
     # Azure OpenAI credentials
     import openai
-    openai.api_type = os.environ["OPENAI_API_TYPE"]
-    openai.api_key = os.environ["OPENAI_API_KEY"]
-    openai.api_version = os.environ["OPENAI_API_VERSION"]
-    openai.api_base = os.environ["OPENAI_API_BASE"]
 
     # Azure Cognitive Search credentials
     os.environ["AZURE_COGNITIVE_SEARCH_TARGET"] = os.environ["AZURE_AI_SEARCH_ENDPOINT"]
@@ -42,8 +38,8 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     convert_chat_history_cp_to_lc(messages[:-1], memory)
 
     llm = AzureChatOpenAI(
-        deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
-        model_name=os.environ["AZURE_OPENAI_CHAT_MODEL"],
+        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        azure_deployment=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
         temperature=context.get('temperature', 0.7)
     )
 

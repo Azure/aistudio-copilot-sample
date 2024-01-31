@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import os
-import openai
+from openai import AzureOpenAI, AsyncAzureOpenAI
 import jinja2
 import pathlib
 
@@ -24,11 +24,16 @@ async def get_documents(query, num_docs=5):
         credential=AzureKeyCredential(os.environ["AZURE_AI_SEARCH_KEY"]),
         index_name=os.environ["AZURE_AI_SEARCH_INDEX_NAME"])
 
+    aclient = AsyncAzureOpenAI(
+        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        api_key=os.environ["AZURE_OPENAI_KEY"],    
+        api_version=os.environ["AZURE_OPENAI_API_VERSION"]
+    )
+
     # generate a vector embedding of the user's question
-    embedding = await openai.Embedding.acreate(input=query,
-                                               model=os.environ["AZURE_OPENAI_EMBEDDING_MODEL"],
-                                               deployment_id=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
-    embedding_to_query = embedding["data"][0]["embedding"]
+    embedding = await aclient.embeddings.create(input=query,
+                                               model=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
+    embedding_to_query = embedding.data[0].embedding
 
     context = ""
     async with search_client:
@@ -59,16 +64,22 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     system_message = system_message_template.render(context=context)
     messages.insert(0, {"role": "system", "content": system_message})
 
+    aclient = AsyncAzureOpenAI(
+        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        api_key=os.environ["AZURE_OPENAI_KEY"],    
+        api_version=os.environ["AZURE_OPENAI_API_VERSION"]
+    )
+
     # call Azure OpenAI with the system prompt and user's question
-    response = openai.ChatCompletion.create(
-        engine=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
+    response = await aclient.chat.completions.create(
+        model=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         messages=messages, temperature=context.get("temperature", 0.7),
         stream=stream,
         max_tokens=800)
 
     # add context in the returned response
     if not stream:
-        response.choices[0]['context'] = context
+        response.choices[0].context = context
     else:
         response = add_context_to_streamed_response(response, context)
     return response

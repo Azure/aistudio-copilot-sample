@@ -10,8 +10,9 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/run.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/src",
-            "justMyCode": true
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false,
+            // "args": ["--build-index"]
         },
         {
             "name": "Python: Debug Test",
