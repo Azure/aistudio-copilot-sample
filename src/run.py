@@ -6,6 +6,7 @@ from pprint import pprint
 
 # set environment variables before importing any other code (in particular the openai module)
 from dotenv import load_dotenv
+from tenacity import retry, wait_exponential
 
 load_dotenv()
 
@@ -22,8 +23,6 @@ from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
 from azure.ai.resources.entities.deployment import Deployment
 from azure.identity import DefaultAzureCredential
-
-from openai.types.chat import ChatCompletion
 
 source_path = "./src"
 
@@ -68,11 +67,11 @@ def copilot_qna(question, chat_completion_fn):
     result = asyncio.run(
         chat_completion_fn([{"role": "user", "content": question}])
     )
-
+    response = result['choices'][0]
     return {
         "question": question,
-        "answer": result.choices[0].message.content if isinstance(result, ChatCompletion) else result["choices"][0]["message"]["content"],
-        "context": result.choices[0].context if isinstance(result, ChatCompletion) else result["choices"][0]["context"]
+        "answer": response["message"]["content"],
+        "context": response["context"]
     }
 
 
@@ -80,6 +79,21 @@ def copilot_qna(question, chat_completion_fn):
 def load_jsonl(path):
     with open(path, "r") as f:
         return [json.loads(line) for line in f.readlines()]
+    
+
+def call_deployed_chat_app(question, **kwargs):
+    print("Calling : call_deployed_chat_app")
+    response = invoke_deployment(question=question)
+    # print(response)
+    print(response["choices"])
+    answer = response["choices"][0]["message"]["content"]
+    context = str(response["choices"][0]["context"])
+
+    return {
+        "question" : question,
+        "answer" : answer,
+        "context" : context
+    }
 
 
 def run_evaluation(chat_completion_fn, name, dataset_path):
@@ -97,7 +111,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     client = AIClient.from_config(DefaultAzureCredential())
     result = evaluate(
         evaluation_name=name,
-        target=qna_fn,
+        target=call_deployed_chat_app,
         data=dataset,
         task_type="qa",
         data_mapping={
@@ -113,7 +127,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
             "api_key": os.getenv("OPENAI_API_KEY"),
             "deployment_id": os.getenv("AZURE_OPENAI_EVALUATION_DEPLOYMENT")
         },
-        metrics_list=["exact_match", "gpt_groundedness", "gpt_relevance", "gpt_coherence"],
+        metrics_list=["exact_match", "gpt_groundedness"],
         tracking_uri=client.tracking_uri,
         output_path=output_path,
     )
@@ -162,12 +176,12 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
             'AZURE_OPENAI_EMBEDDING_MODEL': os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
             'AZURE_OPENAI_EMBEDDING_DEPLOYMENT': os.getenv('AZURE_OPENAI_EMBEDDING_DEPLOYMENT'),
         },
-        instance_count=1
     )
-    client.deployments.begin_create_or_update(deployment)
+    client.deployments.create_or_update(deployment)
 
 
-def invoke_deployment(deployment_name: str, stream: bool = False):
+@retry(wait=wait_exponential(multiplier=1, min=4, max=10))
+def invoke_deployment(question, deployment_name:str = None, stream: bool = False):
     client = AIClient.from_config(DefaultAzureCredential())
     if not deployment_name:
         deployment_name = f"{client.project_name}-copilot"
@@ -192,7 +206,7 @@ def invoke_deployment(deployment_name: str, stream: bool = False):
         scoring_url,
         headers=headers,
         json={
-            "messages": [{"role": "user", "content": "What tent has the highest rainfly rating?"}],
+            "messages": [{"role": "user", "content": question}],
             "stream": stream,
         },
         stream=stream
@@ -201,7 +215,13 @@ def invoke_deployment(deployment_name: str, stream: bool = False):
         for item in response.iter_lines(chunk_size=None):
             print(item)
     else:
-        print(response.json())
+        try:
+            print(response.json())
+        except Exception as ex:
+            print(response)
+            print(ex)
+    
+    return response.json()
 
 
 
