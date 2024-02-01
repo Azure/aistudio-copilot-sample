@@ -3,7 +3,7 @@ ipykernel
 
 openai>1.0 
 
-azure-ai-generative[evaluate,index,promptflow]==1.0.0b3
+azure-ai-generative[evaluate,index,promptflow]==1.0.0b4
 
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
