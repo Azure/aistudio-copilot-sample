@@ -150,8 +150,11 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
         environment_variables={
             'OPENAI_API_TYPE': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiType}}",
             'OPENAI_API_BASE': "${{azureml://connections/Default_AzureOpenAI/target}}",
+            'AZURE_OPENAI_ENDPOINT': "${{azureml://connections/Default_AzureOpenAI/target}}",
             'OPENAI_API_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
+            'AZURE_OPENAI_KEY': "${{azureml://connections/Default_AzureOpenAI/credentials/key}}",
             'OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
+            'AZURE_OPENAI_API_VERSION': "${{azureml://connections/Default_AzureOpenAI/metadata/ApiVersion}}",
             'AZURE_AI_SEARCH_ENDPOINT': "${{azureml://connections/AzureAISearch/target}}",
             'AZURE_AI_SEARCH_KEY': "${{azureml://connections/AzureAISearch/credentials/key}}",
             'AZURE_AI_SEARCH_INDEX_NAME': os.getenv('AZURE_AI_SEARCH_INDEX_NAME'),
