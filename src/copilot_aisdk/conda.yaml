@@ -10,3 +10,4 @@ dependencies:
       - jinja2
       - azureml-inference-server-http
       - azureml-contrib-services
+      - aiohttp>=3.0
