@@ -89,7 +89,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
 
     # add context in the returned response
     if not stream:
-        response.choices[0].context = context
+        response["choices"][0]["context"] = context
     else:
         response = add_context_to_streamed_response(response, context)
     return response
