@@ -71,15 +71,25 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     )
 
     # call Azure OpenAI with the system prompt and user's question
-    response = await aclient.chat.completions.create(
+    chat_completion = await aclient.chat.completions.create(
         model=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
         messages=messages, temperature=context.get("temperature", 0.7),
         stream=stream,
         max_tokens=800)
 
+    response = {
+        "choices": [{
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": chat_completion.choices[0].message.content
+            },
+        }]
+    }
+
     # add context in the returned response
     if not stream:
-        response.choices[0].context = context
+        response["choices"][0]["context"] = context
     else:
         response = add_context_to_streamed_response(response, context)
     return response
