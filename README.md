@@ -1,4 +1,9 @@
-## ❗Important
+| :warning: WARNING: **This repository is known to not be functioning currently** :warning: |
+|---------------------------|
+|We are actively working on the issue, and will update this repository as soon as possible. For now, **please do not attempt to use this repository as it does not work as expected**. We appreciate your patience and thank you for trying our experiences.|
+
+
+#### ❗Important
 
 **Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/).**
 
