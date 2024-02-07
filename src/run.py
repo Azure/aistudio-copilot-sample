@@ -16,7 +16,8 @@ import platform
 import json
 import pathlib
 import pandas as pd
-import shutil
+
+from functools import partial
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
@@ -59,7 +60,7 @@ def build_cogsearch_index(index_name, path_to_data):
 
 
 # TEMP: wrapper around chat completion function until chat_completion protocol is supported
-def copilot_qna(question, chat_completion_fn):
+def copilot_qna(*, question, chat_completion_fn, **kwargs):
     # Call the async chat function with a single question and print the response
 
     if platform.system() == 'Windows':
@@ -91,7 +92,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
     dataset = load_jsonl(path)
 
     # temp: generate a single-turn qna wrapper over the chat completion function
-    qna_fn = lambda question: copilot_qna(question, chat_completion_fn)
+    qna_fn = partial(copilot_qna, chat_completion_fn=chat_completion_fn)
     output_path = "./evaluation_output"
 
     client = AIClient.from_config(DefaultAzureCredential())
@@ -101,10 +102,7 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
         data=dataset,
         task_type="qa",
         data_mapping={
-            "questions": "question",
-            "contexts": "context",
-            "y_pred": "answer",
-            "y_test": "truth"
+            "ground_truth": "truth"
         },
         model_config={
             "api_version": "2023-05-15",
