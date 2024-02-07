@@ -101,7 +101,8 @@ def run_evaluation(chat_completion_fn, name, dataset_path):
         target=qna_fn,
         data=dataset,
         task_type="qa",
-        data_mapping={
+        data_mapping={ 
+            # Your data or output of target function need to contain "question", "answer", "context" and "grounth_truth" columns. Use data_mapping to match.
             "ground_truth": "truth"
         },
         model_config={
