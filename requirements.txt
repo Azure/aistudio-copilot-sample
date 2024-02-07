@@ -3,11 +3,11 @@ ipykernel
 
 openai>1.0 
 
-# /workspaces/aistudio-copilot-sample/azure_ai_resources-1.0.0a20240207004-py3-none-any.whl
 azure_ai_resources-1.0.0a20240207004-py3-none-any.whl
-# /workspaces/aistudio-copilot-sample/azure_ai_generative-1.0.0a20240207004-py3-none-any.whl[evaluate,index,promptflow]
 azure_ai_generative-1.0.0a20240207004-py3-none-any.whl[evaluate,index,promptflow]
 # azure-ai-generative[evaluate,index,promptflow]==1.0.0b6
+azure_ai_generative-1.0.0a20240207004-py3-none-any.whl
+keyrings.alt # This is for promptflow
 
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0

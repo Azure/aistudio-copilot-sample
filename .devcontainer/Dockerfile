@@ -12,6 +12,8 @@ RUN apt update && apt install -y fuse
 
 # Install Python SDK
 COPY requirements.txt .
+COPY azure_ai_resources-1.0.0a20240207004-py3-none-any.whl .
+COPY azure_ai_generative-1.0.0a20240207004-py3-none-any.whl .
 RUN pip install -r requirements.txt 
 
 # Adding this install under root's path for the custom AI Studio container solution
@@ -22,4 +24,4 @@ WORKDIR /home/vscode
 USER vscode
 
 # Install Azure AI CLI (which installs `az` CLI and `ai` CLI + dependencies)
-RUN curl -sL https://csspeechstorage.blob.core.windows.net/drop/private/ai/InstallAzureAICLIDeb-0.0.0-dev2023.42887045.sh | /bin/bash
+RUN curl -sL https://csspeechstorage.blob.core.windows.net/drop/private/ai/InstallAzureAICLIDeb-0.0.0-dev2024.43309113.sh | /bin/bash
