@@ -12,8 +12,6 @@ RUN apt update && apt install -y fuse
 
 # Install Python SDK
 COPY requirements.txt .
-COPY azure_ai_resources-1.0.0a20240207004-py3-none-any.whl .
-COPY azure_ai_generative-1.0.0a20240207004-py3-none-any.whl .
 RUN pip install -r requirements.txt 
 
 # Adding this install under root's path for the custom AI Studio container solution
