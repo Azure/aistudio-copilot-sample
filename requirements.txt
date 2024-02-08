@@ -3,7 +3,9 @@ ipykernel
 
 openai>1.0 
 
-azure-ai-generative[evaluate,index,promptflow]==1.0.0b6
+azure_ai_resources @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-resources/1a20240207004/azure_ai_resources-1.0.0a20240207004-py3-none-any.whl
+azure-ai-generative[evaluate,index,promptflow] @https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/3572dbf9-b5ef-433b-9137-fc4d7768e7cc/pypi/download/azure-ai-generative/1a20240207004/azure_ai_generative-1.0.0a20240207004-py3-none-any.whl
+keyrings.alt # This is for promptflow
 
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
