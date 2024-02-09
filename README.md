@@ -46,7 +46,7 @@ cd aistudio-copilot-sample
  * On MacOS and Linux run:
    ```
    python3 -m venv .venv
-   # if 3.12: python3 -m venv .venv
+   # if 3.12: python3.11 -m venv .venv
    ```
    ```
    source .venv/bin/activate
