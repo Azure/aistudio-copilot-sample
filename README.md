@@ -5,7 +5,7 @@
 
 #### ❗Important
 
-**Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/).**
+**Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).**
 
 # Getting Started
 
@@ -29,7 +29,7 @@ NOTE: We do not guarantee the quality of responses produced by this sample copil
 
 - **If you are viewing this README from within that VS Code container already, you can proceed directly to step 2!**
 
-- You can get started with this cloud environment from the Azure AI Studio by following these steps: [Work with Azure AI projects in VS Code](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/develop-in-vscode)
+- You can get started with this cloud environment from the Azure AI Studio by following these steps: [Work with Azure AI projects in VS Code](https://learn.microsoft.com/azure/ai-studio/how-to/develop-in-vscode)
 
 ### Step 1b: Alternatively, set up your local development environment
 
@@ -41,10 +41,11 @@ cd aistudio-copilot-sample
 
 2. Next, create a new Python virtual environment where we can safely install the SDK packages:
 
-:warning: If you are using Python 3.12, there is a package dependency we are working to resolve. Check your python version with `py -3 --version`, and if the version is 3.12, use the commented 3.12 alternative for creating the virtual environment
+:warning: If you are using Python 3.12, there is a package dependency issue we are working to resolve. Check your python version, and if the version is 3.12, use the commented 3.12 alternative for creating the virtual environment
 
  * On MacOS and Linux run:
    ```
+   python3 --version
    python3 -m venv .venv
    # if 3.12: python3.11 -m venv .venv
    ```
@@ -53,6 +54,7 @@ cd aistudio-copilot-sample
    ```
 * On Windows run:
    ```
+   py -3 --version
    py -3 -m venv .venv
    # if 3.12: py -3.11 -m venv .venv
    ```
@@ -190,6 +192,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
 trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
