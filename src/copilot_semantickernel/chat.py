@@ -46,7 +46,7 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     # Create and run plan based on the customer ask
     planner = StepwisePlanner(kernel, config=StepwisePlannerConfig(max_iterations=5))
     plan = planner.create_plan(ask)
-    result = await kernel.run_async(plan)
+    result = await plan.invoke_async()
 
     # limit size of returned context
     context = customer_support_plugin.context
