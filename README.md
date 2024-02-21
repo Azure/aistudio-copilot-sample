@@ -113,17 +113,15 @@ To run a single question & answer through the sample co-pilot:
 ```bash
 python src/run.py --question "which tent is the most waterproof?"
 ```
-Note: you may see a warning about a RuntimeError; it can be safely ignored - evaluation will be unaffected. We are working to resolve this output issue.
+_Note: you may see a warning about a RuntimeError; it can be safely ignored - evaluation will be unaffected. We are working to resolve this output issue._
 
-You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`.
 
-To try out the promptflow implementation, check deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
+:grey_exclamation: If you try out the `promptflow` implementation, first check that your deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
 
 ```bash
 python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
 ```
-
-The `--implementation` flag can be used in combination with the evaluate command below as well.
 
 You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
 
