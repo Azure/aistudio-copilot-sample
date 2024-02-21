@@ -50,7 +50,7 @@ nodes:
     deployment_name: gpt-35-turbo
     prompt_text: ${customer_prompt.output}
     question: ${inputs.question}
-    model: gpt-3.5-turbo-0613
+    model: gpt-35-turbo
   provider: AzureOpenAI
   connection: Default_AzureOpenAI
   api: chat

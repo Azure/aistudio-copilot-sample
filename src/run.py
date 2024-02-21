@@ -240,11 +240,6 @@ if __name__ == "__main__":
 
             deployment_folder = "copilot_promptflow"
             chat_module = "copilot_promptflow.chat"
-        elif args.implementation == "semantickernel":
-            from copilot_semantickernel.chat import chat_completion
-
-            deployment_folder = "copilot_semantickernel"
-            chat_module = "copilot_semantickernel.chat"
         elif args.implementation == "langchain":
             from copilot_langchain.chat import chat_completion
 
