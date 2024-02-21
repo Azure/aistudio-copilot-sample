@@ -1,11 +1,6 @@
-| :warning: WARNING: **This repository is known to not be functioning currently** :warning: |
-|---------------------------|
-|We are actively working on the issue, and will update this repository as soon as possible. For now, **please do not attempt to use this repository as it does not work as expected**. We appreciate your patience and thank you for trying our experiences.|
+### ❗Important
 
-
-#### ❗Important
-
-**Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/).**
+**Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).**
 
 # Getting Started
 
@@ -17,52 +12,70 @@ NOTE: We do not guarantee the quality of responses produced by this sample copil
 
 ## Step 1: Set up your development environment
 
-#### Use a pre-built development environment
-To get started quickly, you can use a pre-built development environment. **Click the button below** to open the repo in GitHub Codespaces, and then continue the readme!
-
+### Step 1a: Use a cloud development environment
+#### Explore sample with Codespaces
+- To get started quickly with this sample, you can use a pre-built Codespaces development environment. **Click the button below** to open this repo in GitHub Codespaces, and then continue the readme!
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure/aistudio-copilot-sample?quickstart=1)
 
-Once you've opened in Codespaces you can proceed to the next step.
+- Once you've launched Codespaces you can proceed to step 2.
 
-#### Alternatively, set up your local development environment
+#### Start developing in an Azure AI curated VS Code development environment
+- If you intend to develop your own code following this sample, we recommend you use the **Azure AI curated VS Code development environment**. It comes preconfigured with the Azure AI SDK and CLI that you will use to run this sample.
+- You can get started with this cloud environment from the Azure AI Studio by following these steps: [Work with Azure AI projects in VS Code](https://learn.microsoft.com/azure/ai-studio/how-to/develop-in-vscode)
 
-First, clone the code sample locally:
+:grey_exclamation: **Important: If you are viewing this README from within this cloud VS Code environment, you can proceed directly to step 2!** This case will apply to you if you launched VS Code from an Azure AI Studio project. The AI SDK packages and AI CLI are already installed.
+
+
+### Step 1b: Alternatively, set up your local development environment
+
+1. First, clone the code sample locally:
 ```
 git clone https://github.com/azure/aistudio-copilot-sample
 cd aistudio-copilot-sample
 ```
 
-Create a new Python virtual environment where we can safely install the SDK packages:
+2. Next, create a new Python virtual environment where we can safely install the SDK packages:
+
+:warning: If you are using Python 3.12, there is a package dependency issue we are working to resolve. Check your python version, and if the version is 3.12, use the commented 3.12 alternative for creating the virtual environment
+
  * On MacOS and Linux run:
    ```
+   python3 --version
    python3 -m venv .venv
+   # if 3.12: python3.11 -m venv .venv
+   ```
+   ```
    source .venv/bin/activate
    ```
 * On Windows run:
    ```
+   py -3 --version
    py -3 -m venv .venv
+   # if 3.12: py -3.11 -m venv .venv
+   ```
+   ```
    .venv\scripts\activate
    ```
 
-Now that your environment is activated, install the SDK packages
+3. Now that your environment is activated, install the SDK packages
 ```
 pip install -r requirements.txt
 ```
 
-Finally, install the Azure AI CLI. On Ubuntu you can use this all-in-one installer command:
+4. Finally, install the Azure AI CLI. On Ubuntu you can use this all-in-one installer command:
 ```
 curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
 ```
 
-To install the CLI on Windows and MacOS, follow the instructions [here](https://aka.ms/aistudio/docs/cli).
+- To install the CLI on Windows and MacOS, follow the instructions [here](https://aka.ms/aistudio/docs/cli).
 
-## Step 2: Create and connect to Azure Resources
+## Step 2: Create or connect to Azure Resources
 
-Run ai init to create and/or connect to existing Azure resources:
+Run `ai init` to create and/or connect to existing Azure resources:
 ```
 ai init
 ```
-
+**If you are working locally**, `ai init` will:
 - This will first prompt to you to login to Azure
 - Then it will ask you to select or create resources, choose  **New Azure AI Project** and follow the prompts to create an:
    - Azure AI resource
@@ -70,6 +83,11 @@ ai init
    - Azure OpenAI Service model deployments (we recommend ada-embedding-002 for embedding, gpt-35-turbo-16k for chat, and gpt-35-turbo-16k or gpt4-32k evaluation)
    - Azure AI search resource
 - This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
+
+**If you are working in the Azure AI curated VS Code development environment**:
+- The container already has a config.json file populated with the details of the project you launched from. The SDK will use this when authenticating to Azure AI services.
+- `ai init` will capture the project you are working in, and ask you to confirm your preferred model deployments
+- :warning: _If `ai init` doesn't capture your current project, but instead shows a warning that the "configuration could not be validated", your compute may not have the latest updates. We suggest you copy the config.json that exists at the project directory root into your `code` directory to get the streamlined `ai init` experience. Soon you will have the option to update your compute instance before you launch for the latest experience._
 
 Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
 
@@ -89,22 +107,21 @@ Now that we've created an index, we can generate a .env file that will be used t
 ai dev new .env
 ```
 
-## Step 4: Run the co-pilot with a sample question
+## Step 4: Run the copilot with a sample question
 
 To run a single question & answer through the sample co-pilot:
 ```bash
 python src/run.py --question "which tent is the most waterproof?"
 ```
+_Note: you may see a warning about a RuntimeError; it can be safely ignored - evaluation will be unaffected. We are working to resolve this output issue._
 
-You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`. To try running with semantic kernel:
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `langchain` or `aisdk`.
 
-To try out the promptflow implementation, check deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
+:grey_exclamation: If you try out the `promptflow` implementation, first check that your deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
 
 ```bash
 python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
 ```
-
-The `--implementation` flag can be used in combination with the evaluate command below as well.
 
 You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
 
@@ -113,7 +130,7 @@ ai chat --interactive # uses default "chat with your data" copilot
 ai chat --interactive --function src/copilot_aisdk/chat:chat_completion
 ```
 
-## Step 5: Test the co-pilots using chatgpt to evaluate results
+## Step 5: Test the copilots using a chat completion model to evaluate results
 
 To run evaluation on a copilot implementations:
 ```
@@ -121,20 +138,6 @@ python src/run.py --evaluate --implementation aisdk
 ```
 
 You can change `aisdk` to any of the other implementation names to run an evaluation on them.
-
-You can also use the `ai` CLI to do bulk runs and evaluations:
-
-```bash
-ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl # uses default "chat with your data" copilot
-ai chat evaluate --input-data src/tests/evaluation_dataset.jsonl --function src/copilot_aisdk/chat:chat_completion
-```
-
-You can also run all of the evaluations using pytest, and where tests will fail if the metrics are less than 4:
-```
-pytest
-```
-
-This will run the tests named `src/test_copilot_<implementation>.py` using the `evaluation_dataset.jsonl` as a test dataset. This will compute a set of metrics calculated by chatgpt on a 1-5 scale, and will fail that metric if the average score is less than 4. Not all tests are currently passing (this is expected as we work to improve the sample copilot implementations).
 
 ## Step 6: Deploy the sample code
 
@@ -174,6 +177,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
 trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
