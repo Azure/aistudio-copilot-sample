@@ -115,7 +115,7 @@ python src/run.py --question "which tent is the most waterproof?"
 ```
 _Note: you may see a warning about a RuntimeError; it can be safely ignored - evaluation will be unaffected. We are working to resolve this output issue._
 
-You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `semantickernel`, `langchain` or `aisdk`.
+You can try out different sample implementations by specifying the `--implementation` flag with `promptflow`, `langchain` or `aisdk`.
 
 :grey_exclamation: If you try out the `promptflow` implementation, first check that your deployment names (both embedding and chat) and index name (if it's changed from the previous steps) in `src/copilot_promptflow/flow.dag.yaml` match what's in the `.env` file.
 
