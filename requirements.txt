@@ -13,4 +13,3 @@ pytest
 
 langchain==0.1.1
 langchain-openai==0.0.2.post1
-semantic-kernel
