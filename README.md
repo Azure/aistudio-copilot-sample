@@ -77,11 +77,11 @@ ai init
 ```
 **If you are working locally**, `ai init` will:
 - This will first prompt to you to login to Azure
-- Then it will ask you to select or create resources, choose  **New Azure AI Project** and follow the prompts to create an:
-   - Azure AI resource
+- Then it will ask you to select or create resources. Select **New AI Project** > **(Create w/ integrated Open AI + AI Services)** and follow the prompts to create an:
+   - Azure AI hub resource
    - Azure AI project
    - Azure OpenAI Service model deployments (we recommend ada-embedding-002 for embedding, gpt-35-turbo-16k for chat, and gpt-35-turbo-16k or gpt4-32k evaluation)
-   - Azure AI search resource
+   - Azure AI Search resource
 - This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
 
 **If you are working in the Azure AI curated VS Code development environment**:
@@ -91,7 +91,7 @@ ai init
 
 Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
 
-## Step 3: Build an Azure Search index
+## Step 3: Build an Azure AI Search index
 
 Run the following CLI command to create an index using that our code can use for data retrieval:
 ```
