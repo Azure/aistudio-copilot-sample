@@ -21,7 +21,7 @@ from functools import partial
 
 from azure.ai.resources.client import AIClient
 from azure.ai.resources.entities.models import Model
-from azure.ai.resources.entities.deployment import Deployment
+from azure.ai.resources.entities.single_deployment import SingleDeployment
 from azure.identity import DefaultAzureCredential
 
 from openai.types.chat import ChatCompletion
@@ -139,7 +139,7 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
 
     if not deployment_name:
         deployment_name = f"{client.project_name}-copilot"
-    deployment = Deployment(
+    deployment = SingleDeployment(
         name=deployment_name,
         model=Model(
             path=source_path,
@@ -166,7 +166,7 @@ def deploy_flow(deployment_name, deployment_folder, chat_module):
         },
         instance_count=1
     )
-    client.deployments.begin_create_or_update(deployment)
+    client._single_deployments.begin_create_or_update(deployment)
 
 
 def invoke_deployment(deployment_name: str, stream: bool = False):
@@ -180,8 +180,8 @@ def invoke_deployment(deployment_name: str, stream: bool = False):
     else:
         accept_header = "application/json"
 
-    scoring_url = client.deployments.get(deployment_name).scoring_uri
-    primary_key = client.deployments.get_keys(deployment_name).primary_key
+    scoring_url = client._single_deployments.get(deployment_name).scoring_uri
+    primary_key = client._single_deployments.get_keys(deployment_name).primary_key
 
     headers = {
         "Content-Type": "application/json",
