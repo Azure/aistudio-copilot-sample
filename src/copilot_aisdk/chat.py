@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import os
-from openai import AzureOpenAI, AsyncAzureOpenAI
+from openai import AsyncAzureOpenAI
 import jinja2
 import pathlib
 
@@ -16,7 +16,6 @@ templateLoader = jinja2.FileSystemLoader(pathlib.Path(__file__).parent.resolve()
 templateEnv = jinja2.Environment(loader=templateLoader)
 system_message_template = templateEnv.get_template("system-message.jinja2")
 
-
 async def get_documents(query, num_docs=5):
     #  retrieve documents relevant to the user's question from Cognitive Search
     search_client = SearchClient(
@@ -24,16 +23,16 @@ async def get_documents(query, num_docs=5):
         credential=AzureKeyCredential(os.environ["AZURE_AI_SEARCH_KEY"]),
         index_name=os.environ["AZURE_AI_SEARCH_INDEX_NAME"])
 
-    aclient = AsyncAzureOpenAI(
+    async with AsyncAzureOpenAI(
         azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
         api_key=os.environ["AZURE_OPENAI_KEY"],    
         api_version=os.environ["AZURE_OPENAI_API_VERSION"]
-    )
+    ) as aclient:
 
-    # generate a vector embedding of the user's question
-    embedding = await aclient.embeddings.create(input=query,
-                                               model=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
-    embedding_to_query = embedding.data[0].embedding
+        # generate a vector embedding of the user's question
+        embedding = await aclient.embeddings.create(input=query,
+                                                model=os.environ["AZURE_OPENAI_EMBEDDING_DEPLOYMENT"])
+        embedding_to_query = embedding.data[0].embedding
 
     context = ""
     async with search_client:
@@ -64,18 +63,18 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     system_message = system_message_template.render(context=context)
     messages.insert(0, {"role": "system", "content": system_message})
 
-    aclient = AsyncAzureOpenAI(
+    async with AsyncAzureOpenAI(
         azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
         api_key=os.environ["AZURE_OPENAI_KEY"],    
         api_version=os.environ["AZURE_OPENAI_API_VERSION"]
-    )
+    ) as aclient:
 
-    # call Azure OpenAI with the system prompt and user's question
-    chat_completion = await aclient.chat.completions.create(
-        model=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
-        messages=messages, temperature=context.get("temperature", 0.7),
-        stream=stream,
-        max_tokens=800)
+        # call Azure OpenAI with the system prompt and user's question
+        chat_completion = await aclient.chat.completions.create(
+            model=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT"),
+            messages=messages, temperature=context.get("temperature", 0.7),
+            stream=stream,
+            max_tokens=800)
 
     response = {
         "choices": [{

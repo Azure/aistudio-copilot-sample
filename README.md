@@ -20,10 +20,10 @@ NOTE: We do not guarantee the quality of responses produced by this sample copil
 - Once you've launched Codespaces you can proceed to step 2.
 
 #### Start developing in an Azure AI curated VS Code development environment
-- If you intend to develop your own code following this sample, we recommend you use the **Azure AI curated VS Code development environment**. It comes preconfigured with the Azure AI SDK and CLI that you will use to run this sample.
+- If you intend to develop your own code following this sample, we recommend you use the **Azure AI curated VS Code development environment**. It comes preconfigured with the Azure AI SDK packages that you will use to run this sample.
 - You can get started with this cloud environment from the Azure AI Studio by following these steps: [Work with Azure AI projects in VS Code](https://learn.microsoft.com/azure/ai-studio/how-to/develop-in-vscode)
 
-:grey_exclamation: **Important: If you are viewing this README from within this cloud VS Code environment, you can proceed directly to step 2!** This case will apply to you if you launched VS Code from an Azure AI Studio project. The AI SDK packages and AI CLI are already installed.
+:grey_exclamation: **Important: If you are viewing this README from within this cloud VS Code environment, you can proceed directly to step 2!** This case will apply to you if you launched VS Code from an Azure AI Studio project. The AI SDK packages are already installed.
 
 
 ### Step 1b: Alternatively, set up your local development environment
@@ -62,50 +62,27 @@ cd aistudio-copilot-sample
 pip install -r requirements.txt
 ```
 
-4. Finally, install the Azure AI CLI. On Ubuntu you can use this all-in-one installer command:
+## Step 2: Build an Azure Search index
+In order to retrieve our product data through code, you'll create a search index. The ```3-product-info``` folder contains a set of markdown files with product information for the fictitious Contoso Trek retailer company.In the run.py, you'll see an argument for --build-index, which will create a Azure Search index via the SDK. If you want to follow this sample directly, follow the steps below. You can also run this command using a different folder of data, or replace the contents of the folder with your own documents.
+
+In the run.py file, find where the method `build_cogsearch_index` is invoked, and specify your index name and dataset path. The method invocation should look like this:
+```python
+build_cogsearch_index("product-info", "./data/3-product-info")
 ```
-curl -sL https://aka.ms/InstallAzureAICLIDeb | sudo bash
-```
+Then, run the following command in the command line to create the search index:
 
-- To install the CLI on Windows and MacOS, follow the instructions [here](https://aka.ms/aistudio/docs/cli).
-
-## Step 2: Create or connect to Azure Resources
-
-Run `ai init` to create and/or connect to existing Azure resources:
-```
-ai init
-```
-**If you are working locally**, `ai init` will:
-- This will first prompt to you to login to Azure
-- Then it will ask you to select or create resources, choose  **New Azure AI Project** and follow the prompts to create an:
-   - Azure AI resource
-   - Azure AI project
-   - Azure OpenAI Service model deployments (we recommend ada-embedding-002 for embedding, gpt-35-turbo-16k for chat, and gpt-35-turbo-16k or gpt4-32k evaluation)
-   - Azure AI search resource
-- This will generate a config.json file in the root of the repo, the SDK will use this when authenticating to Azure AI services.
-
-**If you are working in the Azure AI curated VS Code development environment**:
-- The container already has a config.json file populated with the details of the project you launched from. The SDK will use this when authenticating to Azure AI services.
-- `ai init` will capture the project you are working in, and ask you to confirm your preferred model deployments
-- :warning: _If `ai init` doesn't capture your current project, but instead shows a warning that the "configuration could not be validated", your compute may not have the latest updates. We suggest you copy the config.json that exists at the project directory root into your `code` directory to get the streamlined `ai init` experience. Soon you will have the option to update your compute instance before you launch for the latest experience._
-
-Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints)
-
-## Step 3: Build an Azure Search index
-
-Run the following CLI command to create an index using that our code can use for data retrieval:
-```
-ai search index update --files "./data/3-product-info/*.md" --index-name "product-info"
+```bash
+python src/run.py --build-index
 ```
 
-The ```3-product-info``` folder contains a set of markdown files with product information for the fictitious Contoso Trek retailer company. You can run this command using a different folder, or replace the contents in this folder with your own documents.
+## Step 3: Set your Azure resource environment variables
 
-Note: if you've previously done this step and already have an index created, you can instead run ```ai config --set search.index.name <existing-index-name>```.
+There is an example .env file in this repo, called .env.sample. This is where you will reference environment variables in the code.
+Add your Azure resources connections, deployments and keys to your .env file, and then remove the "sample" part of the file name.
+Also, add your new index name value to your .env file as AZURE_AI_SEARCH_INDEX_NAME. 
+Now your code can reference these resources via environment variables.
 
-Now that we've created an index, we can generate a .env file that will be used to configure the running code to use the resources we've created in the subsequent steps
-```
-ai dev new .env
-```
+Note: You can open your project in [AI Studio](https://aka.ms/AzureAIStudio) to view your projects configuration and components (generated indexes, evaluation runs, and endpoints). You can also create new resources, deployments and connections here to use in your code.
 
 ## Step 4: Run the copilot with a sample question
 
@@ -121,13 +98,6 @@ You can try out different sample implementations by specifying the `--implementa
 
 ```bash
 python src/run.py --question "which tent is the most waterproof?" --implementation promptflow
-```
-
-You can also use the `ai` CLI to submit a single question and/or chat interactively with the sample co-pilots, or the default "chat with your data" co-pilot:
-
-```bash
-ai chat --interactive # uses default "chat with your data" copilot
-ai chat --interactive --function src/copilot_aisdk/chat:chat_completion
 ```
 
 ## Step 5: Test the copilots using a chat completion model to evaluate results
