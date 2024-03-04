@@ -62,7 +62,7 @@ cd aistudio-copilot-sample
 pip install -r requirements.txt
 ```
 
-## Step 2: Build an Azure Search index
+## Step 2: Build an Azure AI Search index
 In order to retrieve our product data through code, you'll create a search index. The ```3-product-info``` folder contains a set of markdown files with product information for the fictitious Contoso Trek retailer company.In the run.py, you'll see an argument for --build-index, which will create a Azure Search index via the SDK. If you want to follow this sample directly, follow the steps below. You can also run this command using a different folder of data, or replace the contents of the folder with your own documents.
 
 In the run.py file, find where the method `build_cogsearch_index` is invoked, and specify your index name and dataset path. The method invocation should look like this:
