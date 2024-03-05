@@ -9,6 +9,7 @@ keyrings.alt # This is for promptflow
 
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
+azureml-metrics==0.0.041.post1 # Due to bug in latest metrics package.
 pytest
 
 langchain==0.1.1
