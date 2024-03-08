@@ -1,0 +1,12 @@
+{
+    "id": "docker-existing-dockerfile",
+    "version": "1.2.1",
+    "name": "AI Studio",
+    "description": "AI Studio",
+    "documentationURL": "https://github.com/danielv2dot0/aistudio-copilot-sample/blob/main/.devcontainer/Dockerfile",
+    "publisher": "Microsoft",
+    "licenseURL": "https://github.com/danielv2dot0/aistudio-copilot-sample/blob/main/LICENSE",
+    "platforms": [
+        "Any"
+    ]
+}
