@@ -36,13 +36,10 @@ cd aistudio-copilot-sample
 
 2. Next, create a new Python virtual environment where we can safely install the SDK packages:
 
-:warning: If you are using Python 3.12, there is a package dependency issue we are working to resolve. Check your python version, and if the version is 3.12, use the commented 3.12 alternative for creating the virtual environment
-
  * On MacOS and Linux run:
    ```
    python3 --version
    python3 -m venv .venv
-   # if 3.12: python3.11 -m venv .venv
    ```
    ```
    source .venv/bin/activate
@@ -51,7 +48,6 @@ cd aistudio-copilot-sample
    ```
    py -3 --version
    py -3 -m venv .venv
-   # if 3.12: py -3.11 -m venv .venv
    ```
    ```
    .venv\scripts\activate
