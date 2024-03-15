@@ -43,13 +43,16 @@ cd aistudio-copilot-sample
 
 - On macOS:
 
-  - Install miniconda from [Miniconda3 macOS Intel x86 64-bit pkg](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)
-    > Note, you must run the x86_64 version of miniconda on Apple Silicon Macs
-  - Run the following commands:
-    ```
-    conda create --name .venv python=3.11
-    conda activate .venv
-    ```
+  Install miniconda from [Miniconda3 macOS Intel x86 64-bit pkg](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)
+
+  > Note, you must run the x86_64 version of miniconda on Apple Silicon Macs
+
+  Run the following commands:
+
+  ```
+  conda create --name .venv python=3.11
+  conda activate .venv
+  ```
 
 - On Linux run:
   ```
