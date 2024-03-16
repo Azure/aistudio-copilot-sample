@@ -4,7 +4,7 @@
 
 # Getting Started
 
-This repository contains a copilot getting sample that can be used with the the [Azure AI Studio preview](https://aka.ms/azureai/docs).
+This repository contains a copilot sample that can be used with the the [Azure AI Studio preview](https://aka.ms/azureai/docs).
 
 The sample walks through creating a copilot enterprise chat API that uses custom Python code to ground the copilot responses in your company data and APIs. The sample is meant to provide a starting point that you can further customize to add additional intelligence or capabilities. Following the below steps in the README, you will be able to: set up your development environment, create your Azure AI resources and project, build an index containing product information, run your co-pilot, evaluate it, and deploy & invoke an API.
 
@@ -38,8 +38,6 @@ cd aistudio-copilot-sample
 ```
 
 2. Next, create a new Python virtual environment where we can safely install the SDK packages:
-
-:warning: If you are using Python 3.12, there is a package dependency issue we are working to resolve. Check your python version, and if the version is 3.12, use the commented 3.12 alternative for creating the virtual environment
 
 - On macOS:
 

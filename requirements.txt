@@ -9,6 +9,8 @@ keyrings.alt # This is for promptflow
 
 # hardcoded the version of azureml-mlflow here for faster Docker image building speed
 azureml-mlflow==1.53.0
+# hardcoded the version of rtoml because version 0.9.0 causes a strange issue which asks the user to install Rust Cargo
+rtoml>=0.10.0
 pytest
 
 langchain==0.1.1
