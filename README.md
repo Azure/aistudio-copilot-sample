@@ -1,4 +1,8 @@
-### ❗Important
+
+ ### :warning: WARNING: **This repository is deprecated and no longer maintained** :warning:
+|There is a new repository that covers the latest Azure AI code-first experiences. Navigate to and star this one instead: https://github.com/Azure-Samples/rag-data-openai-python-promptflow/tree/main|
+|---------------------------|
+#### ❗Important
 
 **Features used in this repository are in preview. Preview versions are provided without a service level agreement, and they are not recommended for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).**
 
