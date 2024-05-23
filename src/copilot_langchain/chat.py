@@ -38,8 +38,10 @@ async def chat_completion(messages: list[dict], stream: bool = False,
     convert_chat_history_cp_to_lc(messages[:-1], memory)
 
     llm = AzureChatOpenAI(
+        openai_api_version=os.environ["AZURE_OPENAI_API_VERSION"],
         azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
         azure_deployment=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
+        openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
         temperature=context.get('temperature', 0.7)
     )
 
